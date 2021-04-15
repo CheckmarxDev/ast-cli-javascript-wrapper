@@ -30,10 +30,7 @@ let scanCreate = function(cxScanConfig) {
                 params.push(cxScanConfig.paramMap.get(indKey));
             }
         }
-        //console.log(params);
-        // prc = spawn("cx.exe",['scan','create','--base-uri','http://demo.ast-cloud.com','--client-id','CxFlow','--secret','440b05e6-0503-455b-9361-8ee91a6c24cc','--project-name','JayJSWrapper','--project-type',
-        //         'sast','--preset-name','Checkmarx Default', '-d', '.'
-        // ]);
+
         prc = spawn(loc,params)
         //prc.stdout.setEncoding('utf8');
         prc.stdout.on('data', function (data) {
@@ -57,5 +54,4 @@ let scanCreate = function(cxScanConfig) {
 // paramMap.set("--project-type","sast");
 // paramMap.set("--preset-name","Checkmarx Default");
 // paramMap.set("-d",".");
-// let scanConfig = new CxScanConfig("http://demo.ast-cloud.com",null,"CxFlow","440b05e6-0503-455b-9361-8ee91a6c24cc",null,paramMap)
 // scanCreate(scanConfig);
