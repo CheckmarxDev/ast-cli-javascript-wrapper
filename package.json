@@ -1,0 +1,19 @@
+{
+  "name": "ast-cli-javascript-wrapper",
+  "version": "1.0.0",
+  "description": "AST CLI Javascript wrapper",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CheckmarxDev/ast-cli-javascript-wrapper.git"
+  },
+  "author": "Jay Nanduri",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CheckmarxDev/ast-cli-javascript-wrapper/issues"
+  },
+  "homepage": "https://github.com/CheckmarxDev/ast-cli-javascript-wrapper#readme"
+}
