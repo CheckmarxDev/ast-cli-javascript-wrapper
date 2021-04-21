@@ -1,8 +1,10 @@
 let spawn = require('child_process').spawn;
 let CxScanConfig = require('./CxScanConfig.js');
 let loc = "cx.exe ";
+let path = require('path');
 let prc = null;
-let scanCreate = function(cxScanConfig) {
+
+function scanCreate(cxScanConfig) {
 
     if(cxScanConfig != null) {
         var params = ['scan','create','-v','--format','json'];
@@ -30,9 +32,11 @@ let scanCreate = function(cxScanConfig) {
                 params.push(cxScanConfig.paramMap.get(indKey));
             }
         }
-
-        prc = spawn(loc,params)
-        //prc.stdout.setEncoding('utf8');
+        let appRoot = path.resolve(__dirname);
+        let newPath = appRoot.replace("src","cx.exe")
+        console.log(newPath);
+        prc = spawn(newPath,params)
+        prc.stdout.setEncoding('utf8');
         prc.stdout.on('data', function (data) {
             var str = data.toString()
             var lines = str.split(/(\r?\n)/g);
@@ -42,12 +46,27 @@ let scanCreate = function(cxScanConfig) {
         prc.on('close', function (code) {
             console.log('process exit code ' + code);
         });
+
+        // spawn(newPath,params, (error, stdout, stderr) => {
+        //     if (error) {
+        //         console.error(`error: ${error.message}`);
+        //         return;
+        //     }
+        //
+        //     if (stderr) {
+        //         console.error(`stderr: ${stderr}`);
+        //         return;
+        //     }
+        //
+        //     console.log(`stdout:\n${stdout}`);
+        // });
     }
     else {
         console.log("Pass the Cx Scan Config object");
     }
 
 }
+module.exports = { scanCreate }
 
 // let paramMap = new Map();
 // paramMap.set("--project-name","JSScanTest");
