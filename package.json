@@ -2,8 +2,15 @@
   "name": "ast-cli-javascript-wrapper",
   "version": "1.0.0",
   "description": "AST CLI Javascript wrapper",
-  "main": "CxAuth.js",
-  "files": ["src","cx.exe"],
+  "main": "CxAuthCall.js",
+  "files": [
+    "src",
+    "cx.exe"
+  ],
+  "dependencies": {
+    "log4js": "6.3.0",
+    "typescript-logging": "^1.0.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -16,5 +23,8 @@
   "bugs": {
     "url": "https://github.com/CheckmarxDev/ast-cli-javascript-wrapper/issues"
   },
-  "homepage": "https://github.com/CheckmarxDev/ast-cli-javascript-wrapper#readme"
+  "homepage": "https://github.com/CheckmarxDev/ast-cli-javascript-wrapper#readme",
+  "devDependencies": {
+    "@types/node": "^15.3.1"
+  }
 }

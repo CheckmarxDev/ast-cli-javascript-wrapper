@@ -1,0 +1,13 @@
+import { CxScanConfigCall } from './CxScanConfigCall';
+import { CxAuthCall } from './CxAuthCall';
+import {CxParamType } from './CxParamType';
+let cxScanConfig = new CxScanConfigCall();
+cxScanConfig.baseUri = "https://master.cxast.com";
+cxScanConfig.clientId = "CxFlow";
+let params: Map<CxParamType,string> = new Map<CxParamType,string>();
+params.set(CxParamType.PROJECT_NAME,"JayWrapperTest");
+params.set(CxParamType.SCAN_TYPES,"sast");
+params.set(CxParamType.SAST_PRESET_NAME,"Checkmarx Default");
+params.set(CxParamType.D,".");
+const auth = new CxAuthCall(cxScanConfig);
+const result = auth.scanCreate(params);
