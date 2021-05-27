@@ -1,5 +1,4 @@
-import {loggerService,logger} from "./loggerConfig";
-import {resolve} from "dns/promises";
+
 const spawn = require('child_process').spawn;
 
 function isJsonString(s: string) {

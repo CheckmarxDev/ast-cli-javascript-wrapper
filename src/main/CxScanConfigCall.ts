@@ -1,4 +1,3 @@
-import {CxAuthType} from "./CxAuthType";
 
 export class CxScanConfigCall {
     baseUri: string = "";

@@ -9,13 +9,11 @@
 8. Add the executables for other environments.
 */
 
-import { CxScanConfigCall } from "./CxScanConfigCall";
+import {CxScanConfigCall} from "./CxScanConfigCall";
 import { CxParamType } from "./CxParamType";
 import {ExecutionService} from "./ExecutionService";
-import {match} from "assert";
-import {CxScan} from "./CxScan";
 type ParamTypeMap = Map<CxParamType, string>;
-export class CxAuthCall {
+export  class CxAuthCall {
     baseUri: string = "";
     clientId: string = "";
     clientSecret: string = "";
@@ -24,7 +22,7 @@ export class CxAuthCall {
     pathToExecutable: string;
 
     constructor(cxScanConfig: CxScanConfigCall) {
-
+        let path = require("path");
         if (cxScanConfig.clientId !== null && cxScanConfig.clientSecret !== null) {
             console.log("Received clientId and clientSecret");
             this.clientId = cxScanConfig.clientId;
@@ -37,13 +35,16 @@ export class CxAuthCall {
         if (cxScanConfig.pathToExecutable !== null && cxScanConfig.pathToExecutable !== "") {
             this.pathToExecutable = cxScanConfig.pathToExecutable;
         } else if(process.platform === 'win32'){
-            this.pathToExecutable = 'src/main/resources/cx.exe';
+            let executablePath = path.join(__dirname,'/resources/cx.exe');
+            this.pathToExecutable = executablePath;
         }
         else if(process.platform === 'darwin'){
-            this.pathToExecutable = 'src/main/resources/cx-mac';
+            let executablePath = path.join(__dirname,'/resources/cx-mac');
+            this.pathToExecutable = executablePath;
         }
         else {
-            this.pathToExecutable = 'src/main/resources/cx-linux';
+            let executablePath = path.join(__dirname,'/resources/cx-linux');
+            this.pathToExecutable = executablePath;
         }
         if (cxScanConfig.baseUri !== null) {
             this.baseUri = cxScanConfig.baseUri;

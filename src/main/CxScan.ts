@@ -1,4 +1,4 @@
-export class CxScan {
+export default class CxScan {
     ID: string = " ";
     ProjectID: string= " ";
     Status: string = " ";
