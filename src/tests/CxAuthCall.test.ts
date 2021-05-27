@@ -26,3 +26,9 @@ test('ScanList Successful case', async () => {
         const cxScanObject: CxScan[] = JSON.parse(data);
         expect(cxScanObject.length).toBeGreaterThan(0);
 });
+
+test('ProjectList Successful case', async () => {
+        const data = await auth.projectList();
+        const cxScanObject: CxScan[] = JSON.parse(data);
+        expect(cxScanObject.length).toBeGreaterThan(0);
+});

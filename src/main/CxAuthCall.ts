@@ -10,8 +10,11 @@
 */
 
 import {CxScanConfigCall} from "./CxScanConfigCall";
-import { CxParamType } from "./CxParamType";
+import {CxParamType} from "./CxParamType";
 import {ExecutionService} from "./ExecutionService";
+import {spawn} from "child_process";
+
+
 type ParamTypeMap = Map<CxParamType, string>;
 export  class CxAuthCall {
     baseUri: string = "";
@@ -51,7 +54,7 @@ export  class CxAuthCall {
         }
     }
 
-    initializeCommands(): string[] {
+    initializeCommands(formatRequired:boolean): string[] {
         let list: string[] = [];
         if (this.clientId !== null && this.clientId !== "") {
             list.push("--client-id");
@@ -69,14 +72,16 @@ export  class CxAuthCall {
             list.push("--base-uri");
             list.push(this.baseUri);
         }
-        list.push("--format");
-        list.push("json");
-        list.push("-v");
+        if(formatRequired) {
+            list.push("--format");
+            list.push("json");
+            list.push("-v");
+        }
         return list;
     }
 
     async scanCreate(params: ParamTypeMap): Promise<string> {
-        this.commands = this.initializeCommands();
+        this.commands = this.initializeCommands(true);
         this.commands.push("scan");
         this.commands.push("create");
         params.forEach((value: string, key: CxParamType) => {
@@ -102,7 +107,7 @@ export  class CxAuthCall {
     }
 
     async scanShow(id: string): Promise<string> {
-        this.commands = this.initializeCommands();
+        this.commands = this.initializeCommands(true);
         this.commands.push("scan");
         this.commands.push("show");
         this.commands.push(id);
@@ -111,7 +116,7 @@ export  class CxAuthCall {
     }
 
     async scanList(): Promise<string> {
-        this.commands = this.initializeCommands();
+        this.commands = this.initializeCommands(true);
         this.commands.push("scan");
         this.commands.push("list");
         let exec = new ExecutionService();
@@ -119,14 +124,61 @@ export  class CxAuthCall {
     }
 
     async projectList(): Promise<string> {
-        this.commands = this.initializeCommands();
+        this.commands = this.initializeCommands(true);
         this.commands.push("project");
         this.commands.push("list");
         let exec = new ExecutionService();
         return await exec.executeCommands(this.pathToExecutable, this.commands);
     }
 
+     async getResults(scanId:string, target:string) {
+        this.commands = this.initializeCommands(false);
+        this.commands.push("result");
+        this.commands.push("list-simple");
+        if(target !== null && target !== ""){
+            this.commands.push("--target");
+            this.commands.push(target);
+        }
+         const cp = spawn(this.pathToExecutable, this.commands);
+         cp.stdout.on('data', (data: any) => {
+             console.log(`stdout: ${data}`);
+                 const fs = require('fs');
+                 fs.readFile((target)?target:"./simple-results.json", 'utf-8', (err: any, data: any) => {
+                     if(err) {
+                         throw err;
+                     }
+                     const val = JSON.stringify(JSON.parse(data),null,2);
+                     fs.writeFile((target)?target:"./simple-results.json",val, (err: any) => {
+                         if(err) {
+                             throw err;
+                         }
+                         console.log("Data has been written to file successfully.");
+                     });
 
+                 });
+
+
+
+                 // const val = fs.readFileSync(resultPath)
+                 // fs.writeFileSync(resultPath,JSON.stringify(val,null,4))
+
+
+                 });
+        // let exec = new ExecutionService();
+        // await exec.executeCommands(this.pathToExecutable, this.commands)
+        //     .then(value => {
+        //         const fs = require('fs');
+        //         let resultPath:string= "";
+        //         if(target !== null && target !== "") {
+        //             resultPath = "./simple-results.json"
+        //         }
+        //         else {
+        //             resultPath = target;
+        //         }
+        //         const data = fs.readFileSync(resultPath)
+        //         fs.writeFileSync(resultPath,JSON.stringify(data,null,4))
+        //     });
+    }
 }
 
 

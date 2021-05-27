@@ -1,6 +1,6 @@
 {
   "name": "ast-cli-javascript-wrapper",
-  "version": "0.0.8",
+  "version": "1.0.3",
   "description": "AST CLI Javascript wrapper",
   "main": "dist/CxAuthCall.js",
   "typings": "dist/CxAuthCall.d.ts",
