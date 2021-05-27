@@ -118,6 +118,14 @@ export  class CxAuthCall {
         return await exec.executeCommands(this.pathToExecutable, this.commands);
     }
 
+    async projectList(): Promise<string> {
+        this.commands = this.initializeCommands();
+        this.commands.push("project");
+        this.commands.push("list");
+        let exec = new ExecutionService();
+        return await exec.executeCommands(this.pathToExecutable, this.commands);
+    }
+
 
 }
 

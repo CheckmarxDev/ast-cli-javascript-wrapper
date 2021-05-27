@@ -14,5 +14,6 @@ params.set(CxParamType.S,".");
 const auth = new CxAuthCall(cxScanConfig);
 //const result = auth.scanCreate(params).then(value => {console.log("Resolved value*****: " + value + " **********")});
 //const result = auth.scanShow("8f777b95-18a9-408b-81f1-623e647527df").then( value => { console.log("Resolved value*****: " + value + " **********")});
-const result = auth.scanList().then( value => { console.log("Resolved value*****: " + value + " **********")});
+//const result = auth.scanList().then( value => { console.log("Resolved value*****: " + value + " **********")});
+const result = auth.projectList().then( value => { console.log("Resolved value*****: " + value + " **********")});
 console.log(result);
