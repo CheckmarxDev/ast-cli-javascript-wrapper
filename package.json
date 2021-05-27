@@ -1,14 +1,20 @@
 {
   "name": "ast-cli-javascript-wrapper",
-  "version": "1.0.0",
+  "version": "0.0.8",
   "description": "AST CLI Javascript wrapper",
-  "main": "CxAuthCall.js",
+  "main": "dist/CxAuthCall.js",
+  "typings": "dist/CxAuthCall.d.ts",
   "jest": {
     "verbose": true
   },
+  "type": "commonjs",
   "files": [
-    "src",
-    "cx.exe"
+    "src/*",
+    "out/*",
+    "babel.config.js",
+    "jest.config.js",
+    "jest.setup.js",
+    "README.md"
   ],
   "dependencies": {
     "@babel/plugin-proposal-class-properties": "^7.13.0",

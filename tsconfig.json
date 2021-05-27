@@ -1,14 +1,32 @@
+//{
+//    "compilerOptions": {
+//        "rootDir": "./src",
+//        "outDir": "./out",
+//        "lib": [ "es2015" ],
+//        "target": "es2015",
+//        "module": "commonjs",
+//        "sourceMap": true,
+//        "strict": true,
+//        "esModuleInterop": true
+//    },
+//    "include": ["./src/**/*","./typings-custom/**/*.ts"],
+//    "exclude": ["node_modules"]
+//}
 {
     "compilerOptions": {
         "rootDir": "./src",
-        "outDir": "./out",
-        "lib": [ "es2015" ],
-        "target": "es2015",
-        "module": "commonjs",
+        "outDir": "dist/",
         "sourceMap": true,
-        "strict": true,
-        "esModuleInterop": true
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "noEmitOnError": true,
+        "target": "es5",
+        "declaration": true,
+        "removeComments": false,
+        "noImplicitAny": true,
+        "forceConsistentCasingInFileNames": true,
+        "noUnusedLocals": true,
+        "pretty": true
     },
-    "include": ["./src/**/*"],
-    "exclude": ["node_modules"]
+    "include": ["./src/**/*","./src/main/resources/**/*"]
 }
