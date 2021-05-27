@@ -6,5 +6,4 @@ export class CxScanConfigCall {
     clientId: string = " ";
     clientSecret: string = " ";
     apiKey: string = " ";
-
 }

@@ -6,100 +6,118 @@
 5. Create a function to return mandatory auth parameters that needs to be passed with every call.
 6. Create scanCreate, scanShow, scanList functions
 7. Check if the returned object is of CxScan object or not and return it for each function call.
+8. Add the executables for other environments.
 */
-import { factory } from "./ConfigLog4j";
-import { CxScan } from "./CxScan";
+
 import { CxScanConfigCall } from "./CxScanConfigCall";
 import { CxParamType } from "./CxParamType";
-const spawn = require('child_process').spawn;
+import {ExecutionService} from "./ExecutionService";
+import {match} from "assert";
+import {CxScan} from "./CxScan";
 type ParamTypeMap = Map<CxParamType, string>;
 export class CxAuthCall {
-    baseUri: string = " ";
-    clientId: string = " ";
-    clientSecret: string = " ";
-    apiKey: string = " ";
+    baseUri: string = "";
+    clientId: string = "";
+    clientSecret: string = "";
+    apiKey: string = "";
     commands: string[] = [];
-    log = factory.getLogger("CxAuth");
     pathToExecutable: string;
+
     constructor(cxScanConfig: CxScanConfigCall) {
 
         if (cxScanConfig.clientId !== null && cxScanConfig.clientSecret !== null) {
             console.log("Received clientId and clientSecret");
             this.clientId = cxScanConfig.clientId;
             this.clientSecret = cxScanConfig.clientSecret;
-        }
-        else if (cxScanConfig.apiKey != null) {
+        } else if (cxScanConfig.apiKey != null) {
             this.apiKey = cxScanConfig.apiKey;
-        }
-        else {
+        } else {
             console.log("Did not receive ClientId/Secret or ApiKey");
         }
-        if (cxScanConfig.pathToExecutable !== null) {
+        if (cxScanConfig.pathToExecutable !== null && cxScanConfig.pathToExecutable !== "") {
             this.pathToExecutable = cxScanConfig.pathToExecutable;
+        } else if(process.platform === 'win32'){
+            this.pathToExecutable = 'src/main/resources/cx.exe';
+        }
+        else if(process.platform === 'darwin'){
+            this.pathToExecutable = 'src/main/resources/cx-mac';
         }
         else {
-            this.pathToExecutable = './cx.exe';
+            this.pathToExecutable = 'src/main/resources/cx-linux';
+        }
+        if (cxScanConfig.baseUri !== null) {
+            this.baseUri = cxScanConfig.baseUri;
         }
     }
-
-    scanCreate(params: ParamTypeMap): void {
-        this.commands = this.initializeCommands();
-        this.commands.push("scan");
-        this.commands.push("create");
-        // for (const paramKey of params.keys()) {
-        //     if (paramKey !== CxParamType.ADDITIONAL_PARAMETERS) {
-        //          this.commands.push(paramKey.toString().replace("/_/i", "-").toLowerCase());
-        //          this.commands.push(params.get(paramKey) + " ");
-        //     }
-        //     else {
-        //         // TODO: logic to seperate each param and add to the list
-        //     }
-        // }
-        params.forEach((value: string, key: CxParamType) => {
-            if (key !== CxParamType.ADDITIONAL_PARAMETERS) {
-                this.commands.push(key.toString().replace("/_/i", "-").toLowerCase());
-                this.commands.push(value);
-            }
-            else {
-                // TODO: logic to seperate each param and add to the list
-            }
-        });
-        let prc = null;
-        prc = spawn(this.pathToExecutable, this.commands)
-        prc.stdout.setEncoding('utf8');
-        prc.stdout.on('data', (data: any) => {
-            var str = data.toString()
-            var lines = str.split(/(\r?\n)/g);
-            console.log(lines.join(""));
-        });
-
-        prc.on('close', (code: any) => {
-            console.log('process exit code ' + code);
-        });
-    };
 
     initializeCommands(): string[] {
         let list: string[] = [];
-        list.push(this.pathToExecutable);
-        if (this.clientId !== null) {
+        if (this.clientId !== null && this.clientId !== "") {
             list.push("--client-id");
             list.push(this.clientId);
         }
-        if (this.clientSecret !== null) {
+        if (this.clientSecret !== null && this.clientSecret !== "") {
             list.push("--client-secret");
             list.push(this.clientSecret);
         }
-        if (this.apiKey !== null) {
+        if (this.apiKey !== null && this.apiKey !== "") {
             list.push("--apikey");
             list.push(this.apiKey);
         }
-        if (this.baseUri !== null) {
+        if (this.baseUri !== null && this.baseUri !== "") {
             list.push("--base-uri");
             list.push(this.baseUri);
         }
-        list.push();
+        list.push("--format");
+        list.push("json");
+        list.push("-v");
         return list;
     }
+
+    async scanCreate(params: ParamTypeMap): Promise<string> {
+        this.commands = this.initializeCommands();
+        this.commands.push("scan");
+        this.commands.push("create");
+        params.forEach((value: string, key: CxParamType) => {
+            if (key !== CxParamType.ADDITIONAL_PARAMETERS && key.length !== 1) {
+                this.commands.push("--" + key.toString().replace(/_/g, "-").toLowerCase());
+                this.commands.push(value);
+            } else if (key.length === 1) {
+                this.commands.push("-" + key.toString().replace(/_/g, "-").toLowerCase());
+                this.commands.push(value);
+            } else {
+                let paramList = value.match(/(?:[^\s"]+|"[^"]*")+/g);
+                console.log("Additional parameters refined: " + paramList)
+                if (paramList !== null) {
+                    paramList.forEach((element) => {
+                        this.commands.push(element);
+                    });
+                }
+            }
+        });
+
+        let exec = new ExecutionService();
+        return await exec.executeCommands(this.pathToExecutable, this.commands);
+    }
+
+    async scanShow(id: string): Promise<string> {
+        this.commands = this.initializeCommands();
+        this.commands.push("scan");
+        this.commands.push("show");
+        this.commands.push(id);
+        let exec = new ExecutionService();
+        return await exec.executeCommands(this.pathToExecutable, this.commands);
+    }
+
+    async scanList(): Promise<string> {
+        this.commands = this.initializeCommands();
+        this.commands.push("scan");
+        this.commands.push("list");
+        let exec = new ExecutionService();
+        return await exec.executeCommands(this.pathToExecutable, this.commands);
+    }
+
+
 }
 
 
