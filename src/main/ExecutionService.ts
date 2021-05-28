@@ -1,4 +1,3 @@
-
 const spawn = require('child_process').spawn;
 
 function isJsonString(s: string) {
@@ -12,7 +11,7 @@ function isJsonString(s: string) {
 }
 
 export class ExecutionService {
-    resultObject :string = "";
+    resultObject: string = "";
     // async executeCommands(path: string, commands: string[]): Promise<string>{
     //     // let prc = spawn(path, commands)
     //     // prc.stdout.on('data', (data: any) => {
@@ -93,7 +92,7 @@ export class ExecutionService {
                 });
             cp.stdout.on('data', (data: any) => {
                 console.log(`${data}`);
-                if(isJsonString(data.toString())) {
+                if (isJsonString(data.toString())) {
                     resolve(data.toString().split('\n')[0]);
                     reject(data.toString().split('\n')[0]);
                 }

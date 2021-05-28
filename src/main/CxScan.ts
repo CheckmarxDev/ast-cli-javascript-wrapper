@@ -1,8 +1,8 @@
 export default class CxScan {
     ID: string = " ";
-    ProjectID: string= " ";
+    ProjectID: string = " ";
     Status: string = " ";
-    CreatedAt: string= " ";
+    CreatedAt: string = " ";
     UpdatedAt: string = " ";
     Tags: object = {};
     Initiator: string = " ";

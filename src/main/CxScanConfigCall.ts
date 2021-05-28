@@ -1,4 +1,3 @@
-
 export class CxScanConfigCall {
     baseUri: string = "";
     pathToExecutable: string = "";

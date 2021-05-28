@@ -8,15 +8,15 @@
 7. Check if the returned object is of CxScan object or not and return it for each function call.
 8. Add the executables for other environments.
 */
-
+import 'regenerator-runtime/runtime'
 import {CxScanConfigCall} from "./CxScanConfigCall";
 import {CxParamType} from "./CxParamType";
 import {ExecutionService} from "./ExecutionService";
 import {spawn} from "child_process";
 
-
 type ParamTypeMap = Map<CxParamType, string>;
-export  class CxAuthCall {
+
+export class CxAuthCall {
     baseUri: string = "";
     clientId: string = "";
     clientSecret: string = "";
@@ -37,16 +37,14 @@ export  class CxAuthCall {
         }
         if (cxScanConfig.pathToExecutable !== null && cxScanConfig.pathToExecutable !== "") {
             this.pathToExecutable = cxScanConfig.pathToExecutable;
-        } else if(process.platform === 'win32'){
-            let executablePath = path.join(__dirname,'/resources/cx.exe');
+        } else if (process.platform === 'win32') {
+            let executablePath = path.join(__dirname, '/resources/cx.exe');
             this.pathToExecutable = executablePath;
-        }
-        else if(process.platform === 'darwin'){
-            let executablePath = path.join(__dirname,'/resources/cx-mac');
+        } else if (process.platform === 'darwin') {
+            let executablePath = path.join(__dirname, '/resources/cx-mac');
             this.pathToExecutable = executablePath;
-        }
-        else {
-            let executablePath = path.join(__dirname,'/resources/cx-linux');
+        } else {
+            let executablePath = path.join(__dirname, '/resources/cx-linux');
             this.pathToExecutable = executablePath;
         }
         if (cxScanConfig.baseUri !== null) {
@@ -54,7 +52,7 @@ export  class CxAuthCall {
         }
     }
 
-    initializeCommands(formatRequired:boolean): string[] {
+    initializeCommands(formatRequired: boolean): string[] {
         let list: string[] = [];
         if (this.clientId !== null && this.clientId !== "") {
             list.push("--client-id");
@@ -72,7 +70,7 @@ export  class CxAuthCall {
             list.push("--base-uri");
             list.push(this.baseUri);
         }
-        if(formatRequired) {
+        if (formatRequired) {
             list.push("--format");
             list.push("json");
             list.push("-v");
@@ -131,39 +129,38 @@ export  class CxAuthCall {
         return await exec.executeCommands(this.pathToExecutable, this.commands);
     }
 
-     async getResults(scanId:string, target:string) {
+    async getResults(scanId: string, target: string) {
         this.commands = this.initializeCommands(false);
         this.commands.push("result");
         this.commands.push("list-simple");
-        if(target !== null && target !== ""){
+        if (target !== null && target !== "") {
             this.commands.push("--target");
             this.commands.push(target);
         }
-         const cp = spawn(this.pathToExecutable, this.commands);
-         cp.stdout.on('data', (data: any) => {
-             console.log(`stdout: ${data}`);
-                 const fs = require('fs');
-                 fs.readFile((target)?target:"./simple-results.json", 'utf-8', (err: any, data: any) => {
-                     if(err) {
-                         throw err;
-                     }
-                     const val = JSON.stringify(JSON.parse(data),null,2);
-                     fs.writeFile((target)?target:"./simple-results.json",val, (err: any) => {
-                         if(err) {
-                             throw err;
-                         }
-                         console.log("Data has been written to file successfully.");
-                     });
+        const cp = spawn(this.pathToExecutable, this.commands);
+        cp.stdout.on('data', (data: any) => {
+            console.log(`stdout: ${data}`);
+            const fs = require('fs');
+            fs.readFile((target) ? target : "./simple-results.json", 'utf-8', (err: any, data: any) => {
+                if (err) {
+                    throw err;
+                }
+                const val = JSON.stringify(JSON.parse(data), null, 2);
+                fs.writeFile((target) ? target : "./simple-results.json", val, (err: any) => {
+                    if (err) {
+                        throw err;
+                    }
+                    console.log("Data has been written to file successfully.");
+                });
 
-                 });
-
-
-
-                 // const val = fs.readFileSync(resultPath)
-                 // fs.writeFileSync(resultPath,JSON.stringify(val,null,4))
+            });
 
 
-                 });
+            // const val = fs.readFileSync(resultPath)
+            // fs.writeFileSync(resultPath,JSON.stringify(val,null,4))
+
+
+        });
         // let exec = new ExecutionService();
         // await exec.executeCommands(this.pathToExecutable, this.commands)
         //     .then(value => {
