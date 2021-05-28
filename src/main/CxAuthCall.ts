@@ -13,6 +13,7 @@ import {CxScanConfigCall} from "./CxScanConfigCall";
 import {CxParamType} from "./CxParamType";
 import {ExecutionService} from "./ExecutionService";
 import {spawn} from "child_process";
+import {CxResultType} from "./CxResultType";
 
 type ParamTypeMap = Map<CxParamType, string>;
 
@@ -129,24 +130,24 @@ export class CxAuthCall {
         return await exec.executeCommands(this.pathToExecutable, this.commands);
     }
 
-    async getResults(scanId: string, target: string) {
+    async getResults(scanId: string, targetPath: string, resultParam: CxResultType ) {
         this.commands = this.initializeCommands(false);
         this.commands.push("result");
-        this.commands.push("list-simple");
-        if (target !== null && target !== "") {
+        this.commands.push(resultParam);
+        if (targetPath !== null && targetPath !== "") {
             this.commands.push("--target");
-            this.commands.push(target);
+            this.commands.push(targetPath);
         }
         const cp = spawn(this.pathToExecutable, this.commands);
         cp.stdout.on('data', (data: any) => {
             console.log(`stdout: ${data}`);
             const fs = require('fs');
-            fs.readFile((target) ? target : "./simple-results.json", 'utf-8', (err: any, data: any) => {
+            fs.readFile((targetPath) ? targetPath : "./simple-results.json", 'utf-8', (err: any, data: any) => {
                 if (err) {
                     throw err;
                 }
                 const val = JSON.stringify(JSON.parse(data), null, 2);
-                fs.writeFile((target) ? target : "./simple-results.json", val, (err: any) => {
+                fs.writeFile((targetPath) ? targetPath : "./simple-results.json", val, (err: any) => {
                     if (err) {
                         throw err;
                     }

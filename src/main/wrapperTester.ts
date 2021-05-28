@@ -1,6 +1,7 @@
 import {CxScanConfigCall} from './CxScanConfigCall';
 import {CxParamType} from './CxParamType';
 import {CxAuthCall} from "./CxAuthCall";
+import {CxResultType} from "./CxResultType";
 
 let cxScanConfig = new CxScanConfigCall();
 cxScanConfig.baseUri = "https://eu.ast.checkmarx.net";
@@ -16,5 +17,5 @@ const auth = new CxAuthCall(cxScanConfig);
 //const result = auth.scanShow("8f777b95-18a9-408b-81f1-623e647527df").then( value => { console.log("Resolved value*****: " + value + " **********")});
 //const result = auth.scanList().then( value => { console.log("Resolved value*****: " + value + " **********")});
 //const result = auth.projectList().then( value => { console.log("Resolved value*****: " + value + " **********")});
-const result = auth.getResults("", "red.json");
+const result = auth.getResults("", "red.json",CxResultType.LIST_SIMPLE);
 console.log(result);
