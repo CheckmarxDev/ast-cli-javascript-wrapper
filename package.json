@@ -1,6 +1,6 @@
 {
   "name": "ast-cli-javascript-wrapper",
-  "version": "1.0.4",
+  "version": "0.0.11",
   "description": "AST CLI Javascript wrapper",
   "main": "dist/CxAuthCall.js",
   "typings": "dist/CxAuthCall.d.ts",
@@ -48,5 +48,8 @@
     "@types/node": "^15.6.1",
     "jest": "^27.0.1",
     "ts-jest": "^26.5.6"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
   }
 }
