@@ -5,8 +5,12 @@ import CxScan from "../main/CxScan";
 import 'babel-polyfill';
 
 let cxScanConfig = new CxScanConfigCall();
-cxScanConfig.baseUri = "https://eu.ast.checkmarx.net";
-cxScanConfig.clientId = "ast-github-action";
+cxScanConfig.baseUri = process.env["CX_BASE_URI"];
+cxScanConfig.clientId = process.env["CX_CLIENT_ID"];
+cxScanConfig.clientSecret = process.env["CX_CLIENT_SECRET"];
+if(process.env["PATH_TO_EXECUTABLE"] !== null && process.env["PATH_TO_EXECUTABLE"] !== '' ) {
+    cxScanConfig.pathToExecutable = process.env["CX_CLIENT_SECRET"];
+}
 let params = new Map();
 params.set(CxParamType.PROJECT_NAME, "JayJavascriptWrapperTest");
 params.set(CxParamType.SCAN_TYPES, "sast");
