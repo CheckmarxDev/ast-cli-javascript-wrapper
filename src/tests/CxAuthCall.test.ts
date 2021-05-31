@@ -9,7 +9,7 @@ cxScanConfig.baseUri = process.env["CX_BASE_URI"];
 cxScanConfig.clientId = process.env["CX_CLIENT_ID"];
 cxScanConfig.clientSecret = process.env["CX_CLIENT_SECRET"];
 if(process.env["PATH_TO_EXECUTABLE"] !== null && process.env["PATH_TO_EXECUTABLE"] !== '' ) {
-    cxScanConfig.pathToExecutable = process.env["PATH_TO_EXECUTABLE"].toString();
+    cxScanConfig.pathToExecutable = process.env["PATH_TO_EXECUTABLE"];
 }
 let params = new Map();
 params.set(CxParamType.PROJECT_NAME, "JayJavascriptWrapperTest");
