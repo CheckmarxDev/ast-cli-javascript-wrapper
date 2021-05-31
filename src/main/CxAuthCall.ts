@@ -1,13 +1,3 @@
-/*
-1. Create CxScanConfig object, CxScan object, ExecutionService call, CxParamType enum, CxAuthType enum, CxException exception class, CxAuth class
-2. Create global variables for this class(CxAuth)
-3. Based on the passed CxScanConfig object, grab the authentication credentials and save them in global variables
-4. Check if path to the executable is provided. if not, use the packaged module
-5. Create a function to return mandatory auth parameters that needs to be passed with every call.
-6. Create scanCreate, scanShow, scanList functions
-7. Check if the returned object is of CxScan object or not and return it for each function call.
-8. Add the executables for other environments.
-*/
 import 'regenerator-runtime/runtime'
 import {CxScanConfigCall} from "./CxScanConfigCall";
 import {CxParamType} from "./CxParamType";
@@ -36,16 +26,18 @@ export class CxAuthCall {
         } else {
             console.log("Did not receive ClientId/Secret or ApiKey");
         }
+        let executablePath: string;
         if (cxScanConfig.pathToExecutable !== null && cxScanConfig.pathToExecutable !== "") {
             this.pathToExecutable = cxScanConfig.pathToExecutable;
         } else if (process.platform === 'win32') {
-            let executablePath = path.join(__dirname, '/resources/cx.exe');
+            executablePath = path.join(__dirname, '/resources/cx.exe');
             this.pathToExecutable = executablePath;
         } else if (process.platform === 'darwin') {
-            let executablePath = path.join(__dirname, '/resources/cx-mac');
+            executablePath = path.join(__dirname, '/resources/cx-mac');
             this.pathToExecutable = executablePath;
         } else {
-            let executablePath = path.join(__dirname, '/resources/cx-linux');
+
+            executablePath = path.join(__dirname, '/resources/cx-linux');
             this.pathToExecutable = executablePath;
         }
         if (cxScanConfig.baseUri !== null) {
@@ -130,7 +122,7 @@ export class CxAuthCall {
         return await exec.executeCommands(this.pathToExecutable, this.commands);
     }
 
-    async getResults(scanId: string, targetPath: string, resultParam: CxResultType ) {
+    async getResults(scanId: string, targetPath: string, resultParam: CxResultType) {
         this.commands = this.initializeCommands(false);
         this.commands.push("result");
         this.commands.push(resultParam);
@@ -156,26 +148,7 @@ export class CxAuthCall {
 
             });
 
-
-            // const val = fs.readFileSync(resultPath)
-            // fs.writeFileSync(resultPath,JSON.stringify(val,null,4))
-
-
         });
-        // let exec = new ExecutionService();
-        // await exec.executeCommands(this.pathToExecutable, this.commands)
-        //     .then(value => {
-        //         const fs = require('fs');
-        //         let resultPath:string= "";
-        //         if(target !== null && target !== "") {
-        //             resultPath = "./simple-results.json"
-        //         }
-        //         else {
-        //             resultPath = target;
-        //         }
-        //         const data = fs.readFileSync(resultPath)
-        //         fs.writeFileSync(resultPath,JSON.stringify(data,null,4))
-        //     });
     }
 }
 
