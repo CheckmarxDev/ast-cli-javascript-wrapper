@@ -33,10 +33,7 @@
     "build": "tsc",
     "test": "jest"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/CheckmarxDev/ast-cli-javascript-wrapper.git"
-  },
+  "repository": "https://github.com/CheckmarxDev/ast-cli-javascript-wrapper.git",
   "author": "Jay Nanduri",
   "license": "ISC",
   "bugs": {
