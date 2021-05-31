@@ -35,6 +35,4 @@ jobs:
         CX_CLIENT_SECRET: ${{ secrets.CLIENT_SECRET}}
         CX_BASE_URI: ${{ secrets.BASE_URI }}
         PATH_TO_EXECUTABLE: /tmp/cx-linux
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm test
+      run: npm ci | npm run build --if-present | npm test
