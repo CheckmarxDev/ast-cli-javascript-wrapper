@@ -8,7 +8,7 @@ let cxScanConfig = new CxScanConfigCall();
 cxScanConfig.baseUri = process.env["CX_BASE_URI"];
 cxScanConfig.clientId = process.env["CX_CLIENT_ID"];
 cxScanConfig.clientSecret = process.env["CX_CLIENT_SECRET"];
-if(process.env["PATH_TO_EXECUTABLE"] !== null && process.env["PATH_TO_EXECUTABLE"] !== '' ) {
+if(process.env["PATH_TO_EXECUTABLE"] !== null && process.env["PATH_TO_EXECUTABLE"] !== undefined ) {
     cxScanConfig.pathToExecutable = process.env["PATH_TO_EXECUTABLE"];
 }
 let params = new Map();
@@ -19,20 +19,26 @@ params.set(CxParamType.SAST_PRESET_NAME, "Checkmarx Default");
 params.set(CxParamType.S, ".");
 const auth = new CxAuthCall(cxScanConfig);
 
-test('ScanCreate Successful case', async () => {
+describe("ScanCreate cases",() => {
+it('ScanCreate Successful case', async () => {
     const data = await auth.scanCreate(params);
     const cxScanObject: CxScan = JSON.parse(data);
     expect(cxScanObject.Status).toContain("Queued");
+})
 });
 
-test('ScanList Successful case', async () => {
-    const data = await auth.scanList();
-    const cxScanObject: CxScan[] = JSON.parse(data);
-    expect(cxScanObject.length).toBeGreaterThan(0);
+describe("ScanList cases",() => {
+    it('ScanList Successful case', async () => {
+        const data = await auth.scanList();
+        const cxScanObject: CxScan[] = JSON.parse(data);
+        expect(cxScanObject.length).toBeGreaterThan(0);
+    });
 });
 
-test('ProjectList Successful case', async () => {
-    const data = await auth.projectList();
-    const cxScanObject: CxScan[] = JSON.parse(data);
-    expect(cxScanObject.length).toBeGreaterThan(0);
+describe("ProjectList cases",() => {
+    it('ProjectList Successful case', async () => {
+        const data = await auth.projectList();
+        const cxScanObject: CxScan[] = JSON.parse(data);
+        expect(cxScanObject.length).toBeGreaterThan(0);
+    });
 });
