@@ -1,17 +1,3 @@
-//{
-//    "compilerOptions": {
-//        "rootDir": "./src",
-//        "outDir": "./out",
-//        "lib": [ "es2015" ],
-//        "target": "es2015",
-//        "module": "commonjs",
-//        "sourceMap": true,
-//        "strict": true,
-//        "esModuleInterop": true
-//    },
-//    "include": ["./src/**/*","./typings-custom/**/*.ts"],
-//    "exclude": ["node_modules"]
-//}
 {
     "compilerOptions": {
         "rootDir": "./src",
