@@ -17,16 +17,6 @@
     "README.md"
   ],
   "dependencies": {
-    "@babel/plugin-proposal-class-properties": "^7.13.0",
-    "@babel/preset-env": "^7.14.2",
-    "@babel/preset-react": "^7.13.13",
-    "@babel/preset-typescript": "^7.13.0",
-    "babel-core": "^6.26.3",
-    "babel-jest": "^27.0.1",
-    "babel-polyfill": "^6.26.0",
-    "log4js": "6.3.0",
-    "ts-node": "^9.1.1",
-    "typescript": "^4.3.2",
     "typescript-logging": "^1.0.0"
   },
   "scripts": {
@@ -41,10 +31,21 @@
   },
   "homepage": "https://github.com/CheckmarxDev/ast-cli-javascript-wrapper#readme",
   "devDependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.13.0",
+    "babel-plugin-transform-regenerator": "^6.26.0",
+    "@babel/preset-env": "^7.14.2",
+    "@babel/preset-react": "^7.13.13",
+    "@babel/preset-typescript": "^7.13.0",
     "@types/jest": "^26.0.23",
     "@types/node": "^15.6.1",
+    "@types/regenerator-runtime": "^0.13.0",
+    "babel-core": "^6.26.3",
+    "babel-jest": "^27.0.1",
+    "babel-polyfill": "^6.26.0",
     "jest": "^27.0.1",
-    "ts-jest": "^26.5.6"
+    "ts-jest": "^26.5.6",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.3.2"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
