@@ -1,6 +1,6 @@
 {
   "name": "@CheckmarxDev/ast-cli-javascript-wrapper",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "AST CLI Javascript wrapper",
   "main": "dist/CxAuthCall.js",
   "typings": "dist/CxAuthCall.d.ts",
@@ -17,10 +17,12 @@
     "README.md"
   ],
   "dependencies": {
-    "typescript-logging": "^1.0.0"
+    "typescript-logging": "^1.0.0",
+    "cpy-cli": "^2.0.0"
   },
   "scripts": {
     "build": "tsc",
+    "postbuild": "cpy **/* !**/*.ts ../dist --cwd=src --no-overwrite --parents",
     "test": "jest"
   },
   "repository": "https://github.com/CheckmarxDev/ast-cli-javascript-wrapper.git",
@@ -32,7 +34,6 @@
   "homepage": "https://github.com/CheckmarxDev/ast-cli-javascript-wrapper#readme",
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.13.0",
-    "babel-plugin-transform-regenerator": "^6.26.0",
     "@babel/preset-env": "^7.14.2",
     "@babel/preset-react": "^7.13.13",
     "@babel/preset-typescript": "^7.13.0",
@@ -41,7 +42,9 @@
     "@types/regenerator-runtime": "^0.13.0",
     "babel-core": "^6.26.3",
     "babel-jest": "^27.0.1",
+    "babel-plugin-transform-regenerator": "^6.26.0",
     "babel-polyfill": "^6.26.0",
+    "copyfiles": "^2.4.1",
     "jest": "^27.0.1",
     "ts-jest": "^26.5.6",
     "ts-node": "^9.1.1",

@@ -27,11 +27,27 @@ export class CxAuthCall {
             console.log("Did not receive ClientId/Secret or ApiKey");
         }
         let executablePath: string;
+
+
         if (cxScanConfig.pathToExecutable !== null && cxScanConfig.pathToExecutable !== "") {
             this.pathToExecutable = cxScanConfig.pathToExecutable;
         } else if (process.platform === 'win32') {
             executablePath = path.join(__dirname, '/resources/cx.exe');
             this.pathToExecutable = executablePath;
+            // fs.copyFile(executablePath,"/tmp/",(err) => {
+            //     if (err) throw err;
+            //     console.log('File was copied to destination');
+            // });
+
+            // this.pathToExecutable = fs.chmod(executablePath, 0o600, () => {
+            //     fs.copyFile(executablePath, "/tmp/", (err) => {
+            //         if (err) throw err;
+            //         console.log("File copied****")
+            //     })
+            // })
+            // console.log("Current File Mode:", fs.statSync("/tmp/cx.exe").mode);
+            // this.pathToExecutable = "/tmp/cx.exe";
+            // console.log(this.pathToExecutable)
         } else if (process.platform === 'darwin') {
             executablePath = path.join(__dirname, '/resources/cx-mac');
             this.pathToExecutable = executablePath;
