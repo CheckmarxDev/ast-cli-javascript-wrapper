@@ -1,6 +1,6 @@
 {
   "name": "@CheckmarxDev/ast-cli-javascript-wrapper",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "AST CLI Javascript wrapper",
   "main": "dist/CxAuthCall.js",
   "typings": "dist/CxAuthCall.d.ts",
@@ -9,16 +9,17 @@
   },
   "type": "commonjs",
   "files": [
-    "src/*",
-    "dist/*",
+    "dist/main/resources/cx*",
+    "dist/main/*.ts",
+    "dist/main/*.js",
+    "dist/main/*.map",
     "babel.config.js",
     "jest.config.js",
     "jest.setup.js",
     "README.md"
   ],
   "dependencies": {
-    "typescript-logging": "^1.0.0",
-    "cpy-cli": "^2.0.0"
+    "typescript-logging": "^1.0.0"
   },
   "scripts": {
     "build": "tsc",
@@ -48,7 +49,8 @@
     "jest": "^27.0.1",
     "ts-jest": "^26.5.6",
     "ts-node": "^9.1.1",
-    "typescript": "^4.3.2"
+    "typescript": "^4.3.2",
+    "cpy-cli": "^2.0.0"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"

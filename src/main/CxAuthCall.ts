@@ -92,13 +92,13 @@ export class CxAuthCall {
         this.commands.push("scan");
         this.commands.push("create");
         params.forEach((value: string, key: CxParamType) => {
-            if (key !== CxParamType.ADDITIONAL_PARAMETERS && key.length !== 1) {
+            if (key !== CxParamType.ADDITIONAL_PARAMETERS && key.length !== 1 && value !== null && value!== '' ) {
                 this.commands.push("--" + key.toString().replace(/_/g, "-").toLowerCase());
                 this.commands.push(value);
-            } else if (key.length === 1) {
+            } else if (key.length === 1 && value !== null && value!== '') {
                 this.commands.push("-" + key.toString().replace(/_/g, "-").toLowerCase());
                 this.commands.push(value);
-            } else {
+            } else if(key === CxParamType.ADDITIONAL_PARAMETERS) {
                 let paramList = value.match(/(?:[^\s"]+|"[^"]*")+/g);
                 console.log("Additional parameters refined: " + paramList)
                 if (paramList !== null) {
