@@ -17,6 +17,7 @@ params.set(CxParamType.SCAN_TYPES, "sast");
 params.set(CxParamType.ADDITIONAL_PARAMETERS, "--nowait");
 params.set(CxParamType.SAST_PRESET_NAME, "Checkmarx Default");
 params.set(CxParamType.S, ".");
+params.set(CxParamType.FILTER, "*.ts");
 const auth = new CxAuthCall(cxScanConfig);
 
 describe("ScanCreate cases",() => {

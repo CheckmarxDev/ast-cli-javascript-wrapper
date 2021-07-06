@@ -17,14 +17,14 @@ export class CxAuthCall {
 
     constructor(cxScanConfig: CxScanConfigCall) {
         let path = require("path");
-        if (cxScanConfig.clientId !== null && cxScanConfig.clientSecret !== null) {
+        if (cxScanConfig.clientId !== null && cxScanConfig.clientSecret !== null && cxScanConfig.clientId !== '' && cxScanConfig.clientId !== '') {
             console.log("Received clientId and clientSecret");
             this.clientId = cxScanConfig.clientId;
             this.clientSecret = cxScanConfig.clientSecret;
         } else if (cxScanConfig.apiKey != null) {
             this.apiKey = cxScanConfig.apiKey;
         } else {
-            console.log("Did not receive ClientId/Secret or ApiKey");
+            console.log("Did not receive ClientId/Secret or ApiKey from cli arguments");
         }
         let executablePath: string;
 
@@ -56,26 +56,26 @@ export class CxAuthCall {
             executablePath = path.join(__dirname, '/resources/cx-linux');
             this.pathToExecutable = executablePath;
         }
-        if (cxScanConfig.baseUri !== null) {
+        if (cxScanConfig.baseUri !== null && cxScanConfig.baseUri !== '') {
             this.baseUri = cxScanConfig.baseUri;
         }
     }
 
     initializeCommands(formatRequired: boolean): string[] {
         let list: string[] = [];
-        if (this.clientId !== null && this.clientId !== "") {
+        if (this.clientId !== null && this.clientId.length > 1) {
             list.push("--client-id");
             list.push(this.clientId);
         }
-        if (this.clientSecret !== null && this.clientSecret !== "") {
+        if (this.clientSecret !== null && this.clientSecret.length > 1) {
             list.push("--client-secret");
             list.push(this.clientSecret);
         }
-        if (this.apiKey !== null && this.apiKey !== "") {
+        if (this.apiKey !== null && this.apiKey.length > 1) {
             list.push("--apikey");
             list.push(this.apiKey);
         }
-        if (this.baseUri !== null && this.baseUri !== "") {
+        if (this.baseUri !== null && this.baseUri.length > 1) {
             list.push("--base-uri");
             list.push(this.baseUri);
         }
@@ -92,10 +92,10 @@ export class CxAuthCall {
         this.commands.push("scan");
         this.commands.push("create");
         params.forEach((value: string, key: CxParamType) => {
-            if (key !== CxParamType.ADDITIONAL_PARAMETERS && key.length !== 1 && value !== null && value!== '' ) {
+            if (key !== CxParamType.ADDITIONAL_PARAMETERS && key.length !== 1 && value !== null && value!== undefined && value.length > 1) {
                 this.commands.push("--" + key.toString().replace(/_/g, "-").toLowerCase());
                 this.commands.push(value);
-            } else if (key.length === 1 && value !== null && value!== '') {
+            } else if (key.length === 1 && value !== null && value!== undefined) {
                 this.commands.push("-" + key.toString().replace(/_/g, "-").toLowerCase());
                 this.commands.push(value);
             } else if(key === CxParamType.ADDITIONAL_PARAMETERS) {
