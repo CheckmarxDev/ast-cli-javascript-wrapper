@@ -1,6 +1,6 @@
 {
   "name": "@CheckmarxDev/ast-cli-javascript-wrapper",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "AST CLI Javascript wrapper",
   "main": "dist/CxAuthCall.js",
   "typings": "dist/CxAuthCall.d.ts",
