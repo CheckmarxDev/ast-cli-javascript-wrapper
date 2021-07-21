@@ -68,9 +68,7 @@ describe("ScanCreate cases",() => {
         else {
             expect(cxCommandOutput.exitCode).toEqual(0)
         }
-        // expect(await auth.scanShow(cxCommandOutput.scanObjectList.pop().ID).then(data => {
-        //     return JSON.stringify(data.scanObjectList.pop().Status)
-        // })).toContain("Completed" || "Running" || "Queued");
+
     })
 
 });
