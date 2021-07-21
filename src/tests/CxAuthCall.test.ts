@@ -26,8 +26,10 @@ describe("ScanCreate cases",() => {
         if(cxCommandOutput.scanObjectList.length !== 0) {
             const scanID = cxCommandOutput.scanObjectList.pop().ID
             const scanObject = await auth.scanShow(scanID);
-            const status = scanObject.scanObjectList.pop().Status
-            expect(status).toMatch(/(Complete|Running|Queued)/i)
+            if(scanObject !== null && scanObject !== undefined) {
+                const status = scanObject.scanObjectList.pop().Status
+                expect(status).toMatch(/(Complete|Running|Queued)/i)
+            }
         }
         else {
             expect(cxCommandOutput.exitCode).toEqual(0)
@@ -40,8 +42,10 @@ describe("ScanCreate cases",() => {
         if(cxCommandOutput.scanObjectList.length !== 0) {
             const scanID = cxCommandOutput.scanObjectList.pop().ID
             const scanObject = await auth.scanShow(scanID);
-            const status = scanObject.scanObjectList.pop().Status
-            expect(status).toMatch(/(Complete|Running|Queued)/i)
+            if(scanObject !== null && scanObject !== undefined) {
+                const status = scanObject.scanObjectList.pop().Status
+                expect(status).toMatch(/(Complete|Running|Queued)/i)
+            }
         }
         else {
             expect(cxCommandOutput.exitCode).toEqual(0)
@@ -55,9 +59,11 @@ describe("ScanCreate cases",() => {
         if(cxCommandOutput.scanObjectList.length !== 0) {
             const scanID = cxCommandOutput.scanObjectList.pop().ID
             const scanObject = await auth.scanShow(scanID);
-            const status = scanObject.scanObjectList.pop().Status
-            //expect(status).toContain("Completed" || "Running" || "Queued")
-            expect(status).toMatch(/(Complete|Running|Queued)/i)
+            if(scanObject !== null && scanObject !== undefined) {
+                const status = scanObject.scanObjectList.pop().Status
+                //expect(status).toContain("Completed" || "Running" || "Queued")
+                expect(status).toMatch(/(Complete|Running|Queued)/i)
+            }
         }
         else {
             expect(cxCommandOutput.exitCode).toEqual(0)
@@ -77,9 +83,11 @@ describe("ScanCreate cases",() => {
         if(cxCommandOutput.scanObjectList.length !== 0) {
             const scanID = cxCommandOutput.scanObjectList.pop().ID
             const scanObject = await auth.scanShow(scanID);
-            const status = scanObject.scanObjectList.pop().Status
-            //expect(status).toContain("Failed" || "Running" || "Queued")
-            expect(status).toMatch(/(Failed|Running|Queued)/i)
+            if(scanObject !== null && scanObject !== undefined) {
+                const status = scanObject.scanObjectList.pop().Status
+                //expect(status).toContain("Failed" || "Running" || "Queued")
+                expect(status).toMatch(/(Failed|Running|Queued)/i)
+            }
         }
         else {
             expect(cxCommandOutput.exitCode).toEqual(1)
