@@ -1,3 +1,6 @@
+import {CxCommandOutput} from "./CxCommandOutput";
+import CxScan from "./CxScan";
+
 const spawn = require('child_process').spawn;
 
 function isJsonString(s: string) {
@@ -11,24 +14,34 @@ function isJsonString(s: string) {
 }
 
 export class ExecutionService {
-    executeCommands(pathToExecutable: string, commands: string[]): Promise<string> {
+    executeCommands(pathToExecutable: string, commands: string[]): Promise<CxCommandOutput> {
         return new Promise(function (resolve, reject) {
             let stderr = '';
+            let cxCommandOutput = new CxCommandOutput();
             const cp = spawn(pathToExecutable, commands);
             cp.stderr.on('data', function (chunk: string) {
                 stderr += chunk;
             });
             cp.on('error', reject)
                 .on('close', function (code: number) {
-                    if (code !== 0) {
-                        reject(stderr);
-                    }
+                    cxCommandOutput.exitCode = code;
+                    console.log("Exit code received from AST-CLI: " + code)
+                    resolve(cxCommandOutput);
+                    reject(stderr)
                 });
             cp.stdout.on('data', (data: any) => {
                 console.log(`${data}`);
                 if (isJsonString(data.toString())) {
-                    resolve(data.toString().split('\n')[0]);
-                    reject(data.toString().split('\n')[0]);
+                    let resultObject = JSON.parse(data.toString().split('\n')[0]);
+                    if (resultObject instanceof Array) {
+                        console.log(resultObject)
+                        cxCommandOutput.scanObjectList = resultObject
+                    } else {
+                        let resultArray: CxScan[] = [];
+                        resultArray.push(resultObject);
+                        cxCommandOutput.scanObjectList = resultArray;
+
+                    }
                 }
             });
         });
