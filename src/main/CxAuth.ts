@@ -1,5 +1,5 @@
 import 'regenerator-runtime/runtime'
-import {CxScanConfigCall} from "./CxScanConfigCall";
+import {CxScanConfig} from "./CxScanConfig";
 import {CxParamType} from "./CxParamType";
 import {ExecutionService} from "./ExecutionService";
 import {spawn} from "child_process";
@@ -8,7 +8,7 @@ import {CxCommandOutput} from "./CxCommandOutput";
 
 type ParamTypeMap = Map<CxParamType, string>;
 
-export class CxAuthCall {
+export class CxAuth {
     baseUri: string = "";
     clientId: string = "";
     clientSecret: string = "";
@@ -16,7 +16,7 @@ export class CxAuthCall {
     commands: string[] = [];
     pathToExecutable: string;
 
-    constructor(cxScanConfig: CxScanConfigCall) {
+    constructor(cxScanConfig: CxScanConfig) {
         let path = require("path");
         if (cxScanConfig.clientId !== null && cxScanConfig.clientSecret !== null && cxScanConfig.clientId !== '' && cxScanConfig.clientId !== '') {
             console.log("Received clientId and clientSecret");
@@ -35,20 +35,6 @@ export class CxAuthCall {
         } else if (process.platform === 'win32') {
             executablePath = path.join(__dirname, '/resources/cx.exe');
             this.pathToExecutable = executablePath;
-            // fs.copyFile(executablePath,"/tmp/",(err) => {
-            //     if (err) throw err;
-            //     console.log('File was copied to destination');
-            // });
-
-            // this.pathToExecutable = fs.chmod(executablePath, 0o600, () => {
-            //     fs.copyFile(executablePath, "/tmp/", (err) => {
-            //         if (err) throw err;
-            //         console.log("File copied****")
-            //     })
-            // })
-            // console.log("Current File Mode:", fs.statSync("/tmp/cx.exe").mode);
-            // this.pathToExecutable = "/tmp/cx.exe";
-            // console.log(this.pathToExecutable)
         } else if (process.platform === 'darwin') {
             executablePath = path.join(__dirname, '/resources/cx-mac');
             this.pathToExecutable = executablePath;

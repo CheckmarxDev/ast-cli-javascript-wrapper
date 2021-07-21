@@ -5,7 +5,7 @@ name: Integration Tests
 
 on:
   push:
-    branches: [ master ]
+    branches: [ feature/add-exit-code ]
   pull_request:
     branches: [ master ]
 

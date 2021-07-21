@@ -1,4 +1,4 @@
-export class CxScanConfigCall {
+export class CxScanConfig {
     baseUri: string = "";
     pathToExecutable: string = "";
     clientId: string = " ";
