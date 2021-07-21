@@ -4,6 +4,7 @@ import {CxParamType} from "./CxParamType";
 import {ExecutionService} from "./ExecutionService";
 import {spawn} from "child_process";
 import {CxResultType} from "./CxResultType";
+import {CxCommandOutput} from "./CxCommandOutput";
 
 type ParamTypeMap = Map<CxParamType, string>;
 
@@ -87,7 +88,7 @@ export class CxAuthCall {
         return list;
     }
 
-    async scanCreate(params: ParamTypeMap): Promise<string> {
+    async scanCreate(params: ParamTypeMap): Promise<CxCommandOutput> {
         this.commands = this.initializeCommands(true);
         this.commands.push("scan");
         this.commands.push("create");
@@ -113,7 +114,7 @@ export class CxAuthCall {
         return await exec.executeCommands(this.pathToExecutable, this.commands);
     }
 
-    async scanShow(id: string): Promise<string> {
+    async scanShow(id: string): Promise<CxCommandOutput> {
         this.commands = this.initializeCommands(true);
         this.commands.push("scan");
         this.commands.push("show");
@@ -122,7 +123,7 @@ export class CxAuthCall {
         return await exec.executeCommands(this.pathToExecutable, this.commands);
     }
 
-    async scanList(): Promise<string> {
+    async scanList(): Promise<CxCommandOutput> {
         this.commands = this.initializeCommands(true);
         this.commands.push("scan");
         this.commands.push("list");
@@ -130,7 +131,7 @@ export class CxAuthCall {
         return await exec.executeCommands(this.pathToExecutable, this.commands);
     }
 
-    async projectList(): Promise<string> {
+    async projectList(): Promise<CxCommandOutput> {
         this.commands = this.initializeCommands(true);
         this.commands.push("project");
         this.commands.push("list");
