@@ -104,6 +104,7 @@ export class CxAuth {
         this.commands = this.initializeCommands(true);
         this.commands.push("scan");
         this.commands.push("show");
+        this.commands.push("--scan-id");
         this.commands.push(id);
         let exec = new ExecutionService();
         return await exec.executeCommands(this.pathToExecutable, this.commands);
