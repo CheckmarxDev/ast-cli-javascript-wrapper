@@ -16,81 +16,120 @@ params.set(CxParamType.PROJECT_NAME, "ASTJavascriptWrapperTest");
 params.set(CxParamType.SCAN_TYPES, "sast");
 
 params.set(CxParamType.S, ".");
-params.set(CxParamType.FILTER, "*.ts");
+params.set(CxParamType.FILTER, "*.ts,!**/node_modules/**/*");
 const auth = new CxAuth(cxScanConfig);
 
 describe("ScanCreate cases",() => {
     it('ScanCreate Successful case wait mode', async () => {
     const data = await auth.scanCreate(params);
     const cxCommandOutput: CxCommandOutput =JSON.parse(JSON.stringify(data))
-        if(cxCommandOutput.scanObjectList.length !== 0) {
-            const scanID = cxCommandOutput.scanObjectList.pop().ID
-            const scanObject = await auth.scanShow(scanID);
-            if(scanObject !== null && scanObject !== undefined) {
-                const status = scanObject.scanObjectList.pop().Status
-                expect(status).toMatch(/(Complete|Running|Queued)/i)
-            }
-        }
-        else {
-            expect(cxCommandOutput.exitCode).toEqual(0)
-        }
+        // if(cxCommandOutput.scanObjectList.length !== 0) {
+        //     const scanID = cxCommandOutput.scanObjectList.pop().ID
+        //     const scanObject = await auth.scanShow(scanID);
+        //     if(scanObject !== null && scanObject !== undefined) {
+        //         const status = scanObject.scanObjectList.pop().Status
+        //         expect(status).toMatch(/(Complete|Running|Queued)/i)
+        //     }
+        // }
+        // else {
+        //     expect(cxCommandOutput.exitCode).toEqual(0)
+        // }
+        console.log(JSON.stringify(cxCommandOutput))
+        const ScanObject = cxCommandOutput.scanObjectList.pop()
+        const scanShowObject = await auth.scanShow(ScanObject.ID);
+        expect(scanShowObject.scanObjectList.pop().Status).toEqual("Completed")   
 })
-    it('ScanCreate Successful case no wait mode', async () => {
-        params.set(CxParamType.ADDITIONAL_PARAMETERS, "--nowait");
-        const data = await auth.scanCreate(params);
-        const cxCommandOutput: CxCommandOutput =JSON.parse(JSON.stringify(data))
-        if(cxCommandOutput.scanObjectList.length !== 0) {
-            const scanID = cxCommandOutput.scanObjectList.pop().ID
-            const scanObject = await auth.scanShow(scanID);
-            if(scanObject !== null && scanObject !== undefined) {
-                const status = scanObject.scanObjectList.pop().Status
-                expect(status).toMatch(/(Complete|Running|Queued)/i)
-            }
-        }
-        else {
-            expect(cxCommandOutput.exitCode).toEqual(0)
-        }
-    })
+    // it('ScanCreate Successful case no wait mode', async () => {
+    //     params.set(CxParamType.PROJECT_NAME, "ASTJavascriptWrapperTestNoWait");
+    //     params.set(CxParamType.ADDITIONAL_PARAMETERS, "--nowait");
+    //     const data = await auth.scanCreate(params);
+    //     const cxCommandOutput: CxCommandOutput =JSON.parse(JSON.stringify(data))
+    //     // if(cxCommandOutput.scanObjectList.length !== 0) {
+    //     //     const scanID = cxCommandOutput.scanObjectList.pop().ID
+    //     //     const scanObject = await auth.scanShow(scanID);
+    //     //     if(scanObject !== null && scanObject !== undefined) {
+    //     //         const status = scanObject.scanObjectList.pop().Status
+    //     //         expect(status).toMatch(/(Complete|Running|Queued)/i)
+    //     //     }
+    //     // }
+    //     // else {
+    //     //     expect(cxCommandOutput.exitCode).toEqual(0)
+    //     // }
+        
+    //     const ScanObject = cxCommandOutput.scanObjectList.pop()
+    //     const scanShowObject = await auth.scanShow(ScanObject.ID);
+    //     expect(scanShowObject.scanObjectList.pop().Status).toEqual("Queued")
+    // })
 
     it('ScanCreate Successful case with Branch', async () => {
         params.set(CxParamType.BRANCH, "main");
+        //params.set(CxParamType.PROJECT_NAME, "ASTJavascriptWrapperTest");
         const data = await auth.scanCreate(params);
         const cxCommandOutput: CxCommandOutput =JSON.parse(JSON.stringify(data))
-        if(cxCommandOutput.scanObjectList.length !== 0) {
-            const scanID = cxCommandOutput.scanObjectList.pop().ID
-            const scanObject = await auth.scanShow(scanID);
-            if(scanObject !== null && scanObject !== undefined) {
-                const status = scanObject.scanObjectList.pop().Status
-                //expect(status).toContain("Completed" || "Running" || "Queued")
-                expect(status).toMatch(/(Complete|Running|Queued)/i)
-            }
-        }
-        else {
-            expect(cxCommandOutput.exitCode).toEqual(0)
-        }
+        console.log(JSON.stringify(cxCommandOutput))
+        const ScanObject = cxCommandOutput.scanObjectList.pop()
+        const scanShowObject = await auth.scanShow(ScanObject.ID);
+        expect(scanShowObject.scanObjectList.pop().Status).toEqual("Completed")
+        
+        // if(cxCommandOutput.scanObjectList.length !== 0) {
+        //     const scanID = cxCommandOutput.scanObjectList.pop().ID
+        //     const scanObject = await auth.scanShow(scanID);
+        //     if(scanObject !== null && scanObject !== undefined) {
+        //         const status = scanObject.scanObjectList.pop().Status
+        //         //expect(status).toContain("Completed" || "Running" || "Queued")
+        //         expect(status).toMatch(/(Complete|Running|Queued)/i)
+        //     }
+        // }
+        // else {
+        //     expect(cxCommandOutput.exitCode).toEqual(0)
+        // }
+       // expect(cxCommandOutput.exitCode).toEqual(0)
 
     })
 
-});
-
-describe("ScanCreate cases",() => {
     it('ScanCreate Failure case', async () => {
         params.set(CxParamType.SAST_PRESET_NAME, "Checkmarx Default Jay");
         const data = await auth.scanCreate(params);
         const cxCommandOutput: CxCommandOutput =JSON.parse(JSON.stringify(data))
-        if(cxCommandOutput.scanObjectList.length !== 0) {
-            const scanID = cxCommandOutput.scanObjectList.pop().ID
-            const scanObject = await auth.scanShow(scanID);
-            if(scanObject !== null && scanObject !== undefined) {
-                const status = scanObject.scanObjectList.pop().Status
-                //expect(status).toContain("Failed" || "Running" || "Queued")
-                expect(status).toMatch(/(Failed|Running|Queued)/i)
-            }
-        }
-        else {
-            expect(cxCommandOutput.exitCode).toEqual(1)
-        }
+        console.log(JSON.stringify(cxCommandOutput))
+        // if(cxCommandOutput.scanObjectList.length !== 0) {
+        //     const scanID = cxCommandOutput.scanObjectList.pop().ID
+        //     const scanObject = await auth.scanShow(scanID);
+        //     if(scanObject !== null && scanObject !== undefined) {
+        //         const status = scanObject.scanObjectList.pop().Status
+        //         //expect(status).toContain("Failed" || "Running" || "Queued")
+        //         expect(status).toMatch(/(Failed|Running|Queued)/i)
+        //     }
+        // }
+        // else {
+        //     expect(cxCommandOutput.exitCode).toEqual(1)
+        // }
+        expect(cxCommandOutput.exitCode).toEqual(1)
     })
+
+    it('ScanCreate Successful case no wait mode', async () => {
+        params.set(CxParamType.PROJECT_NAME, "ASTJavascriptWrapperTestNoWait");
+        params.set(CxParamType.ADDITIONAL_PARAMETERS, "--nowait");
+        const data = await auth.scanCreate(params);
+        const cxCommandOutput: CxCommandOutput =JSON.parse(JSON.stringify(data))
+        console.log(JSON.stringify(cxCommandOutput))
+        // if(cxCommandOutput.scanObjectList.length !== 0) {
+        //     const scanID = cxCommandOutput.scanObjectList.pop().ID
+        //     const scanObject = await auth.scanShow(scanID);
+        //     if(scanObject !== null && scanObject !== undefined) {
+        //         const status = scanObject.scanObjectList.pop().Status
+        //         expect(status).toMatch(/(Complete|Running|Queued)/i)
+        //     }
+        // }
+        // else {
+        //     expect(cxCommandOutput.exitCode).toEqual(0)
+        // }
+        
+        const ScanObject = cxCommandOutput.scanObjectList.pop()
+        const scanShowObject = await auth.scanShow(ScanObject.ID);
+        expect(scanShowObject.scanObjectList.pop().Status).toEqual("Running")
+    })
+
 });
 
 describe("ScanList cases",() => {
@@ -105,6 +144,17 @@ describe("ProjectList cases",() => {
     it('ProjectList Successful case', async () => {
         const data = await auth.projectList();
         const cxCommandOutput: CxCommandOutput =JSON.parse(JSON.stringify(data))
+        expect(cxCommandOutput.scanObjectList.length).toBeGreaterThan(0);
+    });
+});
+
+describe("Results cases",() => {
+    it('Result List Successful case', async () => {
+        const data = await auth.scanList();
+        const cxCommandOutput: CxCommandOutput =JSON.parse(JSON.stringify(data))
+        let sampleId  = cxCommandOutput.scanObjectList.pop().ID;
+        const written = await auth.getResults(sampleId,"./test.json",null)
+        console.log(written)
         expect(cxCommandOutput.scanObjectList.length).toBeGreaterThan(0);
     });
 });

@@ -1,6 +1,13 @@
 import {CxCommandOutput} from "./CxCommandOutput";
 import CxScan from "./CxScan";
+import { configure, getLogger } from "log4js";
 
+const logger = getLogger();
+logger.level = "info";
+configure({
+    appenders: { ExecutionService: { type: "file", filename: "./cxAST.log" } },
+    categories: { default: { appenders: ["ExecutionService"], level: "info" } }
+  });
 const spawn = require('child_process').spawn;
 
 function isJsonString(s: string) {
@@ -25,16 +32,16 @@ export class ExecutionService {
             cp.on('error', reject)
                 .on('close', function (code: number) {
                     cxCommandOutput.exitCode = code;
-                    console.log("Exit code received from AST-CLI: " + code)
+                    logger.info("Exit code received from AST-CLI: " + code)
                     resolve(cxCommandOutput);
                     reject(stderr)
                 });
             cp.stdout.on('data', (data: any) => {
-                console.log(`${data}`);
+                logger.info(`${data}`);
                 if (isJsonString(data.toString())) {
                     let resultObject = JSON.parse(data.toString().split('\n')[0]);
                     if (resultObject instanceof Array) {
-                        console.log(resultObject)
+                        logger.info(JSON.stringify(resultObject))
                         cxCommandOutput.scanObjectList = resultObject
                     } else {
                         let resultArray: CxScan[] = [];
