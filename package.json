@@ -26,7 +26,7 @@
   "scripts": {
     "build": "tsc",
     "postbuild": "copyfiles -u 1 src/main/resources/cx* dist/",
-    "test": "jest -i"
+    "test": "jest -i --silent=false"
   },
   "repository": "https://github.com/CheckmarxDev/ast-cli-javascript-wrapper.git",
   "author": "Jay Nanduri",

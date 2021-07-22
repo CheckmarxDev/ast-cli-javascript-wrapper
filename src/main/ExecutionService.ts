@@ -1,13 +1,7 @@
 import {CxCommandOutput} from "./CxCommandOutput";
 import CxScan from "./CxScan";
-import { configure, getLogger } from "log4js";
+import { logger } from "./loggerConfig";
 
-const logger = getLogger();
-logger.level = "info";
-configure({
-    appenders: { ExecutionService: { type: "file", filename: "./cxAST.log" } },
-    categories: { default: { appenders: ["ExecutionService"], level: "info" } }
-  });
 const spawn = require('child_process').spawn;
 
 function isJsonString(s: string) {
