@@ -28,7 +28,7 @@ export class ExecutionService {
                     cxCommandOutput.exitCode = code;
                     logger.info("Exit code received from AST-CLI: " + code)
                     resolve(cxCommandOutput);
-                    reject(stderr)
+                    logger.error(stderr)
                 });
             cp.stdout.on('data', (data: any) => {
                 logger.info(`${data}`);
