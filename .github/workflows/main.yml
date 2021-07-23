@@ -39,3 +39,10 @@ jobs:
           CX_BASE_URI: ${{ secrets.BASE_URI }}
           PATH_TO_EXECUTABLE: /tmp/cx-linux
         run: npm test
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v2
+        with:
+          name: cxAST.log
+          path: cxAST.log
+          retention-days: 30
+  
