@@ -1,12 +1,22 @@
-import {Category, CategoryConfiguration, CategoryServiceFactory, LogLevel} from "typescript-logging";
+import { configure, getLogger } from 'log4js';
 
-// Optionally change default settings, in this example set default logging to Info.
-// Without changing configuration, categories will log to Error.
-CategoryServiceFactory.setDefaultConfiguration(new CategoryConfiguration(LogLevel.Info));
+// appenders
+configure({
+  appenders: {
+    console: { type: 'stdout', layout: { type: 'colored' } },
+    dateFile: {
+      type: 'dateFile',
+      filename: `cxAST.log`,
+      layout: { type: 'basic' },
+      compress: true,
+      daysToKeep: 14,
+      keepFileExt: true
+    }
+  },
+  categories: {
+    default: { appenders: ['console', 'dateFile'], level: "info" }
+  }
+});
 
-// Create categories, they will autoregister themselves, one category without parent (root) and a child category.
-export const loggerService = new Category("service");
-export const logger = new Category("product", loggerService);
-
-// Optionally get a logger for a category, since 0.5.0 this is not necessary anymore, you can use the category itself to log.
-// export const log: CategoryLogger = CategoryServiceFactory.getLogger(cat);
+// fetch logger and export
+export const logger = getLogger();
