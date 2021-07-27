@@ -5,7 +5,7 @@ name: Integration Tests
 
 on:
   push:
-    branches: [ master ]
+    branches: [ check-regenerator-runtime-error ]
   pull_request:
     branches: [ master ]
 
