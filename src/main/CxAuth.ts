@@ -1,10 +1,12 @@
-import 'regenerator-runtime/runtime'
 import {CxScanConfig} from "./CxScanConfig";
 import {CxParamType} from "./CxParamType";
 import {ExecutionService} from "./ExecutionService";
 import {spawn} from "child_process";
 import {CxResultType} from "./CxResultType";
 import {CxCommandOutput} from "./CxCommandOutput";
+
+require("babel-core/register");
+require("babel-polyfill");
 
 type ParamTypeMap = Map<CxParamType, string>;
 
