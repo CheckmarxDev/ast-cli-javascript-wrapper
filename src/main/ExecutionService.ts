@@ -27,7 +27,7 @@ export class ExecutionService {
                 .on('close', function (code: number) {
                     cxCommandOutput.exitCode = code;
                     logger.info("Exit code received from AST-CLI: " + code)
-                    resolve(cxCommandOutput);
+                    code === 0 ? resolve(cxCommandOutput) : reject(code);
                     logger.info(stderr)
                 });
             cp.stdout.on('data', (data: any) => {
