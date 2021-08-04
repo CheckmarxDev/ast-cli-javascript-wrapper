@@ -5,8 +5,6 @@ import {spawn} from "child_process";
 import {CxResultType} from "./CxResultType";
 import {CxCommandOutput} from "./CxCommandOutput";
 
-require("babel-core/register");
-require("babel-polyfill");
 
 type ParamTypeMap = Map<CxParamType, string>;
 

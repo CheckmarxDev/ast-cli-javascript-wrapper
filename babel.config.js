@@ -1,4 +1,10 @@
 module.exports = {
     presets: ['@babel/typescript', ['@babel/env', {loose: true}], '@babel/react'],
-    plugins: [['@babel/proposal-class-properties', {loose: true}]]
+    "plugins": [
+        ["@babel/plugin-transform-runtime",
+          {
+            "regenerator": true
+          }
+        ]
+      ],
 };

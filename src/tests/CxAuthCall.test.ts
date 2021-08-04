@@ -1,7 +1,6 @@
 import {CxScanConfig} from '../main/CxScanConfig';
 import {CxAuth} from '../main/CxAuth';
 import {CxParamType} from '../main/CxParamType';
-import 'babel-polyfill';
 import {CxCommandOutput} from "../main/CxCommandOutput";
 import {logger} from "../main/loggerConfig"
 
