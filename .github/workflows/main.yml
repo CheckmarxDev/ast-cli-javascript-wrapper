@@ -5,7 +5,7 @@ name: Integration Tests
 
 on:
   push:
-    branches: [ master ]
+    branches: [ remove-babel-config ]
   pull_request:
     branches: [ master ]
 
