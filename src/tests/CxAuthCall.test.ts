@@ -4,6 +4,7 @@ import {CxParamType} from '../main/CxParamType';
 import {CxCommandOutput} from "../main/CxCommandOutput";
 import {logger} from "../main/loggerConfig";
 
+
 let cxScanConfig = new CxScanConfig();
 cxScanConfig.baseUri = process.env["CX_BASE_URI"];
 cxScanConfig.clientId = process.env["CX_CLIENT_ID"];
@@ -12,7 +13,7 @@ if(process.env["PATH_TO_EXECUTABLE"] !== null && process.env["PATH_TO_EXECUTABLE
     cxScanConfig.pathToExecutable = process.env["PATH_TO_EXECUTABLE"];
 }
 let params = new Map();
-params.set(CxParamType.PROJECT_NAME, "ASTJavascriptWrapperIntegrationTest");
+params.set(CxParamType.PROJECT_NAME, "ASTJSWrapperIntegrationTests");
 params.set(CxParamType.SCAN_TYPES, "sast");
 
 params.set(CxParamType.S, ".");
@@ -25,7 +26,7 @@ describe("ScanCreate cases",() => {
     const cxCommandOutput: CxCommandOutput =JSON.parse(JSON.stringify(data))    
     const ScanObject = cxCommandOutput.scanObjectList.pop()
     const scanShowObject = await auth.scanShow(ScanObject.ID);
-    logger.debug(" Json object from successful wait mode case: " + JSON.stringify(scanShowObject))
+    console.log(" Json object from successful wait mode case: " + JSON.stringify(scanShowObject))
     expect(scanShowObject.scanObjectList.pop().Status).toEqual("Completed")   
 })
 
@@ -36,7 +37,7 @@ describe("ScanCreate cases",() => {
         const cxCommandOutput: CxCommandOutput =JSON.parse(JSON.stringify(data))
         const ScanObject = cxCommandOutput.scanObjectList.pop()
         const scanShowObject = await auth.scanShow(ScanObject.ID);
-        logger.debug(" Json object from successful wait mode case with branch: " +JSON.stringify(scanShowObject))
+        console.log(" Json object from successful wait mode case with branch: " +JSON.stringify(scanShowObject))
         expect(scanShowObject.scanObjectList.pop().Status).toEqual("Completed")
 
     })
@@ -47,18 +48,18 @@ describe("ScanCreate cases",() => {
         const cxCommandOutput: CxCommandOutput =JSON.parse(JSON.stringify(data))
         const ScanObject = cxCommandOutput.scanObjectList.pop()
         const scanShowObject = await auth.scanShow(ScanObject.ID);
-        logger.debug(" Json object from failure case: " + JSON.stringify(scanShowObject))
+        console.log(" Json object from failure case: " + JSON.stringify(scanShowObject))
         expect(scanShowObject.scanObjectList.pop().Status).toEqual("Failed")
     })
 
     it('ScanCreate Successful case no wait mode', async () => {
-        params.set(CxParamType.PROJECT_NAME, "ASTJavascriptWrapperTestNoWait");
+        params.set(CxParamType.PROJECT_NAME, "ASTJSWrapperTestNoWait");
         params.set(CxParamType.ADDITIONAL_PARAMETERS, "--nowait");
         const data = await auth.scanCreate(params);
         const cxCommandOutput: CxCommandOutput =JSON.parse(JSON.stringify(data))     
         const ScanObject = cxCommandOutput.scanObjectList.pop()
         const scanShowObject = await auth.scanShow(ScanObject.ID);
-        logger.debug(" Json object from successful no wait mode case: " + JSON.stringify(scanShowObject))
+        console.log(" Json object from successful no wait mode case: " + JSON.stringify(scanShowObject))
         expect(scanShowObject.scanObjectList.pop().Status).toEqual("Running")
     })
 
@@ -86,7 +87,7 @@ describe("Results cases",() => {
         const cxCommandOutput: CxCommandOutput =JSON.parse(JSON.stringify(data))
         let sampleId  = cxCommandOutput.scanObjectList.pop().ID;
         const written = await auth.getResults(sampleId,"test.json",null)
-        logger.debug(written)
+        console.log(written)
         expect(cxCommandOutput.scanObjectList.length).toBeGreaterThan(0);
     });
 });

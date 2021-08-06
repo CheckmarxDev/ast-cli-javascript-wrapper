@@ -1,14 +1,21 @@
 {
   "name": "@CheckmarxDev/ast-cli-javascript-wrapper",
-  "version": "0.0.18",
+  "version": "0.0.17",
   "description": "AST CLI Javascript wrapper",
   "main": "dist/CxAuth.js",
   "typings": "dist/CxAuth.d.ts",
+  "jest": {
+    "verbose": true,
+    "transform": {},
+    "testEnvironment": "jest-environment-jsdom-sixteen"
+  },
+  "type": "module",
   "files": [
     "dist/main/resources/cx*",
     "dist/main/*.ts",
     "dist/main/*.js",
     "dist/main/*.map",
+    "babel.config.js",
     "jest.config.js",
     "jest.setup.js",
     "README.md"
@@ -21,7 +28,7 @@
   "scripts": {
     "build": "tsc",
     "postbuild": "copyfiles -u 1 src/main/resources/cx* dist/",
-    "test": "jest"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "repository": "https://github.com/CheckmarxDev/ast-cli-javascript-wrapper.git",
   "author": "Jay Nanduri",
@@ -31,26 +38,13 @@
   },
   "homepage": "https://github.com/CheckmarxDev/ast-cli-javascript-wrapper#readme",
   "devDependencies": {
-    "@types/jest": "^25.2.3",
-    "@types/node": "^14.0.4",
-    "@typescript-eslint/eslint-plugin": "^2.34.0",
-    "@typescript-eslint/parser": "^2.34.0",
-    "eslint": "^7.0.0",
-    "eslint-config-airbnb": "^18.1.0",
-    "eslint-config-prettier": "^6.11.0",
-    "eslint-config-typescript": "^3.0.0",
-    "eslint-formatter-pretty": "^3.0.1",
-    "eslint-plugin-import": "^2.7.0",
-    "eslint-plugin-jsx-a11y": "^6.0.2",
-    "eslint-plugin-prettier": "^3.0.0",
-    "eslint-plugin-react": "^7.20.0",
-    "eslint-plugin-typescript": "^0.14.0",
-    "jest": "^26.0.1",
-    "prettier": "^2.0.5",
-    "ts-jest": "^26.0.0",
-    "ts-node": "^8.10.1",
-    "typescript": "^3.9.3",
-    "typescript-eslint-parser": "^22.0.0"
+    "@types/jest": "^26.0.24",
+    "copyfiles": "^2.4.1",
+    "jest": "^27.0.6",
+    "jest-extended": "^0.11.5",
+    "ts-jest": "^26.5.6",
+    "jest-environment-jsdom-sixteen": "^1.0.3",
+    "jest-environment-node": "^26.1.0"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
