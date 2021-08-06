@@ -2,7 +2,6 @@ import {CxScanConfig} from '../main/CxScanConfig';
 import {CxAuth} from '../main/CxAuth';
 import {CxParamType} from '../main/CxParamType';
 import {CxCommandOutput} from "../main/CxCommandOutput";
-import {logger} from "../main/loggerConfig";
 
 
 let cxScanConfig = new CxScanConfig();
