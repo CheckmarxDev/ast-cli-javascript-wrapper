@@ -1,6 +1,6 @@
 {
   "name": "@CheckmarxDev/ast-cli-javascript-wrapper",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "description": "AST CLI Javascript wrapper",
   "main": "dist/CxAuth.js",
   "typings": "dist/CxAuth.d.ts",
@@ -46,7 +46,7 @@
     "eslint-plugin-prettier": "^3.0.0",
     "eslint-plugin-react": "^7.20.0",
     "eslint-plugin-typescript": "^0.14.0",
-    "jest": "^26.0.1",
+    "jest": "^26.6.3",
     "prettier": "^2.0.5",
     "ts-jest": "^26.0.0",
     "ts-node": "^8.10.1",
