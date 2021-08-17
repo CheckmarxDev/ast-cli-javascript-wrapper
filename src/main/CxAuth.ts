@@ -40,7 +40,7 @@ export class CxAuth {
             executablePath = path.join(__dirname, '/resources/cx-mac');
             this.pathToExecutable = executablePath;
             fs.chmod(this.pathToExecutable, 7, function(err){
-                console.log("Permission function output: ",err)
+                console.log("Permission function error output: ",err)
             })          
         } 
         else {
@@ -48,7 +48,7 @@ export class CxAuth {
             executablePath = path.join(__dirname, '/resources/cx-linux');
             this.pathToExecutable = executablePath;
             fs.chmod(this.pathToExecutable, 7, function(err){
-                console.log("Permission function output: ",err)
+                console.log("Permission function error output: ",err)
             })
 
         }
