@@ -4,6 +4,7 @@ import {ExecutionService} from "./ExecutionService";
 import {spawn} from "child_process";
 import {CxResultType} from "./CxResultType";
 import {CxCommandOutput} from "./CxCommandOutput";
+import * as fs from "fs"
 
 
 type ParamTypeMap = Map<CxParamType, string>;
@@ -38,10 +39,18 @@ export class CxAuth {
         } else if (process.platform === 'darwin') {
             executablePath = path.join(__dirname, '/resources/cx-mac');
             this.pathToExecutable = executablePath;
-        } else {
+            fs.chmod(this.pathToExecutable, 7, function(err){
+                console.log("Permission function output: ",err)
+            })          
+        } 
+        else {
 
             executablePath = path.join(__dirname, '/resources/cx-linux');
             this.pathToExecutable = executablePath;
+            fs.chmod(this.pathToExecutable, 7, function(err){
+                console.log("Permission function output: ",err)
+            })
+
         }
         if (cxScanConfig.baseUri !== null && cxScanConfig.baseUri !== '') {
             this.baseUri = cxScanConfig.baseUri;
