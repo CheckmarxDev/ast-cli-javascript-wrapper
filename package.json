@@ -1,6 +1,6 @@
 {
   "name": "@CheckmarxDev/ast-cli-javascript-wrapper",
-  "version": "0.0.21",
+  "version": "0.0.22",
   "description": "AST CLI Javascript wrapper",
   "main": "dist/CxAuth.js",
   "typings": "dist/CxAuth.d.ts",
@@ -51,7 +51,8 @@
     "ts-jest": "^26.0.0",
     "ts-node": "^8.10.1",
     "typescript": "^3.9.3",
-    "typescript-eslint-parser": "^22.0.0"
+    "typescript-eslint-parser": "^22.0.0",
+    "jest-cli": "26.6.3"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
