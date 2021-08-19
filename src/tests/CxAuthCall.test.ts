@@ -106,7 +106,7 @@ describe("Results cases",() => {
         let sampleId  = cxCommandOutput.scanObjectList.pop().ID;
         const written = await auth.getResultsSummary(sampleId,"html","./test.html")
         console.log(written)
-        const file = fileExists("./test.html");
+        const file = await fileExists("./test.html");
         expect(file).toBe(true);
     });
 
