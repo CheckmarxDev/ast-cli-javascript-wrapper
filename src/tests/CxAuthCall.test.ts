@@ -2,6 +2,7 @@ import {CxScanConfig} from '../main/CxScanConfig';
 import {CxAuth} from '../main/CxAuth';
 import {CxParamType} from '../main/CxParamType';
 import {CxCommandOutput} from "../main/CxCommandOutput";
+import * as fs from "fs";
 
 
 let cxScanConfig = new CxScanConfig();
@@ -81,7 +82,7 @@ describe("ProjectList cases",() => {
 });
 
 describe("Results cases",() => {
-    it('Result List Successful case', async () => {
+    it('Result Test Successful case', async () => {
         const data = await auth.scanList();
         const cxCommandOutput: CxCommandOutput =JSON.parse(JSON.stringify(data))
         let sampleId  = cxCommandOutput.scanObjectList.pop().ID;
@@ -89,4 +90,41 @@ describe("Results cases",() => {
         console.log(written)
         expect(cxCommandOutput.scanObjectList.length).toBeGreaterThan(0);
     });
+
+    it('Result List Successful case', async () => {
+        const data = await auth.scanList();
+        const cxCommandOutput: CxCommandOutput =JSON.parse(JSON.stringify(data))
+        let sampleId  = cxCommandOutput.scanObjectList.pop().ID;
+        const written = await auth.getResultsList(sampleId,"json")
+        console.log(written)
+        expect(written.length).toBeGreaterThan(0);
+    });
+
+    it('Result summary html file generation successful case', async () => {
+        const data = await auth.scanList();
+        const cxCommandOutput: CxCommandOutput =JSON.parse(JSON.stringify(data))
+        let sampleId  = cxCommandOutput.scanObjectList.pop().ID;
+        const written = await auth.getResultsSummary(sampleId,"html","./test.html")
+        console.log(written)
+        const file = fileExists("./test.html");
+        expect(file).toBe(true);
+    });
+
+    it('Result summary html string successful case', async () => {
+        const data = await auth.scanList();
+        const cxCommandOutput: CxCommandOutput =JSON.parse(JSON.stringify(data))
+        let sampleId  = cxCommandOutput.scanObjectList.pop().ID;
+        const written = await auth.getResultsSummary(sampleId,"html",null)
+        console.log(written)
+        expect(written.length).toBeGreaterThan(0);
+    });
+
 });
+
+const fileExists = (file:any) => {
+    return new Promise((resolve) => {
+        fs.access(file, fs.constants.F_OK, (err) => {
+            err ? resolve(false) : resolve(true)
+        });
+    })
+}

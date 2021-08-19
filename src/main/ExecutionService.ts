@@ -47,4 +47,24 @@ export class ExecutionService {
             });
         });
     }
+    executeResultsCommands(pathToExecutable: string, commands: string[]): Promise<string> {
+        return new Promise(function (resolve, reject) {
+            let stderr = '';
+            let results:string = '';
+            const cp = spawn(pathToExecutable, commands);
+            cp.stderr.on('data', function (chunk: string) {
+                stderr += chunk;
+            });
+            cp.on('error', reject)
+                .on('close', function (code: number) {
+                    logger.info("Exit code received from AST-CLI: " + code)
+                    resolve(results)
+                    logger.info(stderr)
+                });
+            cp.stdout.on('data', (data: any) => {
+                logger.info(`${data}`);
+                results += data;
+            });
+        });
+    }
 }
