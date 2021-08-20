@@ -42,6 +42,18 @@ describe("ScanCreate cases",() => {
 
     })
 
+    it('ScanCreate Successful case with additional params test', async () => {
+        params.delete(CxParamType.SCAN_TYPES)
+        params.set(CxParamType.ADDITIONAL_PARAMETERS,"--scan-types 'sast,sca'")
+        const data = await auth.scanCreate(params);
+        const cxCommandOutput: CxCommandOutput =JSON.parse(JSON.stringify(data))
+        const ScanObject = cxCommandOutput.scanObjectList.pop()
+        const scanShowObject = await auth.scanShow(ScanObject.ID);
+        console.log(" Json object from successful wait mode case with branch: " +JSON.stringify(scanShowObject))
+        expect(scanShowObject.scanObjectList.pop().Status).toEqual("Completed")
+
+    })
+
     it('ScanCreate Failure case', async () => {
         params.set(CxParamType.SAST_PRESET_NAME, "Checkmarx Default Jay");
         const data = await auth.scanCreate(params);
