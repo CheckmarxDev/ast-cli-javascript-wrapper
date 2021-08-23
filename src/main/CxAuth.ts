@@ -135,6 +135,48 @@ export class CxAuth {
         return await exec.executeCommands(this.pathToExecutable, this.commands);
     }
 
+    async getResultsList(scanId: string, formatType: string) {
+        this.commands = this.initializeCommands(false);
+        this.commands.push("result");
+        this.commands.push("list");
+        if(scanId !== null && scanId !== "") {
+            this.commands.push("--scan-id")
+            this.commands.push(scanId)
+        }
+        else{
+            console.log("Scan Id not provided")
+        }
+        if(formatType !== null && formatType != '') {
+            this.commands.push("--format")
+            this.commands.push(formatType)
+        }
+        let exec = new ExecutionService();
+        return await exec.executeResultsCommands(this.pathToExecutable,this.commands)
+}
+
+    async getResultsSummary(scanId: string, formatType: string, target:string) {
+        this.commands = this.initializeCommands(false);
+        this.commands.push("result");
+        this.commands.push("summary");
+        if(scanId !== null && scanId !== "") {
+            this.commands.push("--scan-id")
+            this.commands.push(scanId)
+        }
+        else{
+            console.log("Scan Id not provided")
+        }
+        if(formatType !== null && formatType != '') {
+            this.commands.push("--format")
+            this.commands.push(formatType)
+        }
+        if(target !== null && target != '') {
+            this.commands.push("--target")
+            this.commands.push(target)
+        }
+        let exec = new ExecutionService();
+        return await exec.executeResultsCommands(this.pathToExecutable,this.commands)
+    }
+
     async getResults(scanId: string, targetPath: string, resultParam: CxResultType) {
         this.commands = this.initializeCommands(false);
         this.commands.push("result");
