@@ -16,7 +16,7 @@ let params = new Map();
 params.set(CxParamType.PROJECT_NAME, "ASTJSWrapperIntegrationTests");
 params.set(CxParamType.SCAN_TYPES, "sast");
 
-params.set(CxParamType.S, ".");
+params.set(CxParamType.S, "./src/tests");
 params.set(CxParamType.FILTER, "*.ts,!**/node_modules/**/*");
 const auth = new CxAuth(cxScanConfig);
 
