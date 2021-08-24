@@ -42,7 +42,7 @@ export class ExecutionService {
                 });
             cp.stdout.on('data', (data: any) => {
                 if (data) {
-                    logger.info(`${data}`);
+                    logger.info(`test ${data}`);
                     if (isJsonString(data.toString())) {
                         let resultObject = JSON.parse(data.toString().split('\n')[0]);
                         if (resultObject instanceof Array) {
