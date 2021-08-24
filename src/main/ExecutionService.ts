@@ -16,7 +16,6 @@ function isJsonString(s: string) {
 
 function transformation(commands: string[]):string[] {
     const result:string[] = commands.map(transform);
-    console.log(JSON.stringify(result))
     return result;
 }
 

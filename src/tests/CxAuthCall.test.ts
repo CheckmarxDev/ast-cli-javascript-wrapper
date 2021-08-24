@@ -22,13 +22,13 @@ const auth = new CxAuth(cxScanConfig);
 
 describe("ScanCreate cases",() => {
     it('ScanCreate Successful case wait mode', async () => {
-    const data = await auth.scanCreate(params);
-    const cxCommandOutput: CxCommandOutput =JSON.parse(JSON.stringify(data))    
-    const ScanObject = cxCommandOutput.scanObjectList.pop()
-    const scanShowObject = await auth.scanShow(ScanObject.ID);
-    console.log(" Json object from successful wait mode case: " + JSON.stringify(scanShowObject))
-    expect(scanShowObject.scanObjectList.pop().Status).toEqual("Completed")   
-})
+        const data = await auth.scanCreate(params);
+        const cxCommandOutput: CxCommandOutput =JSON.parse(JSON.stringify(data))
+        const ScanObject = cxCommandOutput.scanObjectList.pop()
+        const scanShowObject = await auth.scanShow(ScanObject.ID);
+        console.log(" Json object from successful wait mode case: " + JSON.stringify(scanShowObject))
+        expect(scanShowObject.scanObjectList.pop().Status).toEqual("Completed")
+    })
 
     it('ScanCreate Successful case with Branch', async () => {
         params.set(CxParamType.BRANCH, "master");

@@ -30,7 +30,6 @@ export class CxAuth {
         }
         let executablePath: string;
 
-
         if (cxScanConfig.pathToExecutable !== null && cxScanConfig.pathToExecutable !== "") {
             this.pathToExecutable = cxScanConfig.pathToExecutable;
         } else if (process.platform === 'win32') {
@@ -39,19 +38,13 @@ export class CxAuth {
         } else if (process.platform === 'darwin') {
             executablePath = path.join(__dirname, '/resources/cx-mac');
             this.pathToExecutable = executablePath;
-            fs.chmod(this.pathToExecutable, 7, function(err){
-                console.log("Permission function output: ",err)
-            })          
-        } 
-        else {
-
+            fs.chmodSync(this.pathToExecutable, 0o777);
+        } else {
             executablePath = path.join(__dirname, '/resources/cx-linux');
             this.pathToExecutable = executablePath;
-            fs.chmod(this.pathToExecutable, 7, function(err){
-                console.log("Permission function output: ",err)
-            })
-
+            fs.chmodSync(this.pathToExecutable, 0o777);
         }
+
         if (cxScanConfig.baseUri !== null && cxScanConfig.baseUri !== '') {
             this.baseUri = cxScanConfig.baseUri;
         }
@@ -88,13 +81,13 @@ export class CxAuth {
         this.commands.push("scan");
         this.commands.push("create");
         params.forEach((value: string, key: CxParamType) => {
-            if (key !== CxParamType.ADDITIONAL_PARAMETERS && key.length !== 1 && value !== null && value!== undefined && value.length > 1) {
+            if (key !== CxParamType.ADDITIONAL_PARAMETERS && key.length !== 1 && value !== null && value !== undefined && value.length > 1) {
                 this.commands.push("--" + key.toString().replace(/_/g, "-").toLowerCase());
                 this.commands.push(value);
-            } else if (key.length === 1 && value !== null && value!== undefined) {
+            } else if (key.length === 1 && value !== null && value !== undefined) {
                 this.commands.push("-" + key.toString().replace(/_/g, "-").toLowerCase());
                 this.commands.push(value);
-            } else if(key === CxParamType.ADDITIONAL_PARAMETERS) {
+            } else if (key === CxParamType.ADDITIONAL_PARAMETERS) {
                 let paramList = value.match(/(?:[^\s"]+|"[^"]*")+/g);
                 console.log("Additional parameters refined: " + paramList)
                 if (paramList !== null) {
@@ -139,42 +132,40 @@ export class CxAuth {
         this.commands = this.initializeCommands(false);
         this.commands.push("result");
         this.commands.push("list");
-        if(scanId !== null && scanId !== "") {
+        if (scanId !== null && scanId !== "") {
             this.commands.push("--scan-id")
             this.commands.push(scanId)
-        }
-        else{
+        } else {
             console.log("Scan Id not provided")
         }
-        if(formatType !== null && formatType != '') {
+        if (formatType !== null && formatType != '') {
             this.commands.push("--format")
             this.commands.push(formatType)
         }
         let exec = new ExecutionService();
-        return await exec.executeResultsCommands(this.pathToExecutable,this.commands)
-}
+        return await exec.executeResultsCommands(this.pathToExecutable, this.commands)
+    }
 
-    async getResultsSummary(scanId: string, formatType: string, target:string) {
+    async getResultsSummary(scanId: string, formatType: string, target: string) {
         this.commands = this.initializeCommands(false);
         this.commands.push("result");
         this.commands.push("summary");
-        if(scanId !== null && scanId !== "") {
+        if (scanId !== null && scanId !== "") {
             this.commands.push("--scan-id")
             this.commands.push(scanId)
-        }
-        else{
+        } else {
             console.log("Scan Id not provided")
         }
-        if(formatType !== null && formatType != '') {
+        if (formatType !== null && formatType != '') {
             this.commands.push("--format")
             this.commands.push(formatType)
         }
-        if(target !== null && target != '') {
+        if (target !== null && target != '') {
             this.commands.push("--target")
             this.commands.push(target)
         }
         let exec = new ExecutionService();
-        return await exec.executeResultsCommands(this.pathToExecutable,this.commands)
+        return await exec.executeResultsCommands(this.pathToExecutable, this.commands)
     }
 
     async getResults(scanId: string, targetPath: string, resultParam: CxResultType) {
