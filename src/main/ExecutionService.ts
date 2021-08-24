@@ -16,7 +16,6 @@ function isJsonString(s: string) {
 
 function transformation(commands: string[]):string[] {
     const result:string[] = commands.map(transform);
-    console.log(JSON.stringify(result))
     return result;
 }
 
@@ -42,17 +41,18 @@ export class ExecutionService {
                     logger.info(stderr)
                 });
             cp.stdout.on('data', (data: any) => {
-                logger.info(`${data}`);
-                if (isJsonString(data.toString())) {
-                    let resultObject = JSON.parse(data.toString().split('\n')[0]);
-                    if (resultObject instanceof Array) {
-                        logger.info(JSON.stringify(resultObject))
-                        cxCommandOutput.scanObjectList = resultObject
-                    } else {
-                        let resultArray: CxScan[] = [];
-                        resultArray.push(resultObject);
-                        cxCommandOutput.scanObjectList = resultArray;
-
+                if (data) {
+                    logger.info(`${data.toString().trim()}`);
+                    if (isJsonString(data.toString())) {
+                        let resultObject = JSON.parse(data.toString().split('\n')[0]);
+                        if (resultObject instanceof Array) {
+                            logger.info(JSON.stringify(resultObject))
+                            cxCommandOutput.scanObjectList = resultObject
+                        } else {
+                            let resultArray: CxScan[] = [];
+                            resultArray.push(resultObject);
+                            cxCommandOutput.scanObjectList = resultArray;
+                        }
                     }
                 }
             });
