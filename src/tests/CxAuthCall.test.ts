@@ -16,19 +16,19 @@ let params = new Map();
 params.set(CxParamType.PROJECT_NAME, "ASTJSWrapperIntegrationTests");
 params.set(CxParamType.SCAN_TYPES, "sast");
 
-params.set(CxParamType.S, ".");
+params.set(CxParamType.S, "./src/tests");
 params.set(CxParamType.FILTER, "*.ts,!**/node_modules/**/*");
 const auth = new CxAuth(cxScanConfig);
 
 describe("ScanCreate cases",() => {
     it('ScanCreate Successful case wait mode', async () => {
-    const data = await auth.scanCreate(params);
-    const cxCommandOutput: CxCommandOutput =JSON.parse(JSON.stringify(data))    
-    const ScanObject = cxCommandOutput.scanObjectList.pop()
-    const scanShowObject = await auth.scanShow(ScanObject.ID);
-    console.log(" Json object from successful wait mode case: " + JSON.stringify(scanShowObject))
-    expect(scanShowObject.scanObjectList.pop().Status).toEqual("Completed")   
-})
+        const data = await auth.scanCreate(params);
+        const cxCommandOutput: CxCommandOutput =JSON.parse(JSON.stringify(data))
+        const ScanObject = cxCommandOutput.scanObjectList.pop()
+        const scanShowObject = await auth.scanShow(ScanObject.ID);
+        console.log(" Json object from successful wait mode case: " + JSON.stringify(scanShowObject))
+        expect(scanShowObject.scanObjectList.pop().Status).toEqual("Completed")
+    })
 
     it('ScanCreate Successful case with Branch', async () => {
         params.set(CxParamType.BRANCH, "master");
@@ -43,7 +43,7 @@ describe("ScanCreate cases",() => {
     })
 
     it('ScanCreate Failure case', async () => {
-        params.set(CxParamType.SAST_PRESET_NAME, "Checkmarx Default Jay");
+        params.set(CxParamType.SAST_PRESET_NAME, "Checkmarx Default Fake");
         const data = await auth.scanCreate(params);
         const cxCommandOutput: CxCommandOutput =JSON.parse(JSON.stringify(data))
         const ScanObject = cxCommandOutput.scanObjectList.pop()
@@ -54,6 +54,7 @@ describe("ScanCreate cases",() => {
 
     it('ScanCreate Successful case no wait mode', async () => {
         params.set(CxParamType.PROJECT_NAME, "ASTJSWrapperTestNoWait");
+        params.set(CxParamType.SAST_PRESET_NAME, "Checkmarx Default");
         params.set(CxParamType.ADDITIONAL_PARAMETERS, "--nowait");
         const data = await auth.scanCreate(params);
         const cxCommandOutput: CxCommandOutput =JSON.parse(JSON.stringify(data))     
