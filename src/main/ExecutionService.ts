@@ -52,7 +52,6 @@ export class ExecutionService {
                             let resultArray: CxScan[] = [];
                             resultArray.push(resultObject);
                             cxCommandOutput.scanObjectList = resultArray;
-
                         }
                     }
                 }
