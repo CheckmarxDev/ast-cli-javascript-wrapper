@@ -9,6 +9,7 @@ let cxScanConfig = new CxScanConfig();
 cxScanConfig.baseUri = process.env["CX_BASE_URI"];
 cxScanConfig.clientId = process.env["CX_CLIENT_ID"];
 cxScanConfig.clientSecret = process.env["CX_CLIENT_SECRET"];
+cxScanConfig.tenant = "Galactica"
 if(process.env["PATH_TO_EXECUTABLE"] !== null && process.env["PATH_TO_EXECUTABLE"] !== undefined ) {
     cxScanConfig.pathToExecutable = process.env["PATH_TO_EXECUTABLE"];
 }

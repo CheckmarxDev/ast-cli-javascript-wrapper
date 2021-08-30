@@ -20,18 +20,18 @@ export class CxAuth {
 
     constructor(cxScanConfig: CxScanConfig) {
         let path = require("path");
-        if (cxScanConfig.clientId !== null && cxScanConfig.clientSecret !== null && cxScanConfig.clientId !== '' && cxScanConfig.clientId !== '') {
+        if (cxScanConfig.clientId  && cxScanConfig.clientSecret) {
             console.log("Received clientId and clientSecret");
             this.clientId = cxScanConfig.clientId;
             this.clientSecret = cxScanConfig.clientSecret;
-        } else if (cxScanConfig.apiKey != null) {
+        } else if (cxScanConfig.apiKey) {
             this.apiKey = cxScanConfig.apiKey;
         } else {
             console.log("Did not receive ClientId/Secret or ApiKey from cli arguments");
         }
         let executablePath: string;
 
-        if (cxScanConfig.pathToExecutable !== null && cxScanConfig.pathToExecutable !== "") {
+        if (cxScanConfig.pathToExecutable) {
             this.pathToExecutable = cxScanConfig.pathToExecutable;
         } else if (process.platform === 'win32') {
             executablePath = path.join(__dirname, '/resources/cx.exe');
@@ -46,34 +46,34 @@ export class CxAuth {
             fs.chmodSync(this.pathToExecutable, 0o777);
         }
 
-        if (cxScanConfig.baseUri !== null && cxScanConfig.baseUri !== '') {
+        if (cxScanConfig.baseUri) {
             this.baseUri = cxScanConfig.baseUri;
         }
 
-        if (cxScanConfig.tenant !== null && cxScanConfig.tenant !== '') {
+        if (cxScanConfig.tenant) {
             this.tenant = cxScanConfig.tenant;
         }
     }
 
     initializeCommands(formatRequired: boolean): string[] {
         let list: string[] = [];
-        if (this.clientId !== null && this.clientId.length > 1) {
+        if (this.clientId) {
             list.push("--client-id");
             list.push(this.clientId);
         }
-        if (this.clientSecret !== null && this.clientSecret.length > 1) {
+        if (this.clientSecret) {
             list.push("--client-secret");
             list.push(this.clientSecret);
         }
-        if (this.apiKey !== null && this.apiKey.length > 1) {
+        if (this.apiKey) {
             list.push("--apikey");
             list.push(this.apiKey);
         }
-        if (this.baseUri !== null && this.baseUri.length > 1) {
+        if (this.baseUri) {
             list.push("--base-uri");
             list.push(this.baseUri);
         }
-        if (this.tenant !== null && this.tenant.length > 1) {
+        if (this.tenant) {
             list.push("--tenant");
             list.push(this.tenant);
         }
@@ -141,13 +141,13 @@ export class CxAuth {
         this.commands = this.initializeCommands(false);
         this.commands.push("result");
         this.commands.push("list");
-        if (scanId !== null && scanId !== "") {
+        if (scanId) {
             this.commands.push("--scan-id")
             this.commands.push(scanId)
         } else {
             console.log("Scan Id not provided")
         }
-        if (formatType !== null && formatType != '') {
+        if (formatType) {
             this.commands.push("--format")
             this.commands.push(formatType)
         }
@@ -159,17 +159,17 @@ export class CxAuth {
         this.commands = this.initializeCommands(false);
         this.commands.push("result");
         this.commands.push("summary");
-        if (scanId !== null && scanId !== "") {
+        if (scanId) {
             this.commands.push("--scan-id")
             this.commands.push(scanId)
         } else {
             console.log("Scan Id not provided")
         }
-        if (formatType !== null && formatType != '') {
+        if (formatType) {
             this.commands.push("--format")
             this.commands.push(formatType)
         }
-        if (target !== null && target != '') {
+        if (target) {
             this.commands.push("--target")
             this.commands.push(target)
         }
@@ -181,7 +181,7 @@ export class CxAuth {
         this.commands = this.initializeCommands(false);
         this.commands.push("result");
         this.commands.push(resultParam);
-        if (targetPath !== null && targetPath !== "") {
+        if (targetPath) {
             this.commands.push("--target");
             this.commands.push(targetPath);
         }
