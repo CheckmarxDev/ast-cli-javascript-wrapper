@@ -5,7 +5,7 @@ name: Integration Tests
 
 on:
   push:
-    branches: [ master ]
+    branches: [ add-tenant ]
   pull_request:
     branches: [ master ]
 

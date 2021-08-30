@@ -16,6 +16,7 @@ export class CxAuth {
     apiKey: string = "";
     commands: string[] = [];
     pathToExecutable: string;
+    tenant: string;
 
     constructor(cxScanConfig: CxScanConfig) {
         let path = require("path");
@@ -48,6 +49,10 @@ export class CxAuth {
         if (cxScanConfig.baseUri !== null && cxScanConfig.baseUri !== '') {
             this.baseUri = cxScanConfig.baseUri;
         }
+
+        if (cxScanConfig.tenant !== null && cxScanConfig.tenant !== '') {
+            this.tenant = cxScanConfig.tenant;
+        }
     }
 
     initializeCommands(formatRequired: boolean): string[] {
@@ -67,6 +72,10 @@ export class CxAuth {
         if (this.baseUri !== null && this.baseUri.length > 1) {
             list.push("--base-uri");
             list.push(this.baseUri);
+        }
+        if (this.tenant !== null && this.tenant.length > 1) {
+            list.push("--tenant");
+            list.push(this.tenant);
         }
         if (formatRequired) {
             list.push("--format");
