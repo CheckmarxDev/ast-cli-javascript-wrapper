@@ -4,4 +4,5 @@ export class CxScanConfig {
     clientId: string = " ";
     clientSecret: string = " ";
     apiKey: string = " ";
+    tenant:string =" ";
 }
