@@ -1,10 +1,10 @@
 import {CxScanConfig} from "./CxScanConfig";
 import {CxParamType} from "./CxParamType";
 import {ExecutionService} from "./ExecutionService";
-import {spawn} from "child_process";
-import {CxResultType} from "./CxResultType";
 import {CxCommandOutput} from "./CxCommandOutput";
 import * as fs from "fs"
+import * as os from "os";
+import * as path from "path";
 
 
 type ParamTypeMap = Map<CxParamType, string>;
@@ -137,73 +137,51 @@ export class CxAuth {
         return await exec.executeCommands(this.pathToExecutable, this.commands);
     }
 
-    async getResultsList(scanId: string, formatType: string) {
-        this.commands = this.initializeCommands(false);
-        this.commands.push("result");
-        this.commands.push("list");
-        if (scanId) {
-            this.commands.push("--scan-id")
-            this.commands.push(scanId)
-        } else {
-            console.log("Scan Id not provided")
-        }
-        if (formatType) {
-            this.commands.push("--format")
-            this.commands.push(formatType)
-        }
-        let exec = new ExecutionService();
-        return await exec.executeResultsCommands(this.pathToExecutable, this.commands)
+    async getResultsList(scanId: string) {
+        return this.executeResultsCommands(scanId, "json", ".json");
     }
 
-    async getResultsSummary(scanId: string, formatType: string, target: string) {
-        this.commands = this.initializeCommands(false);
-        this.commands.push("result");
-        this.commands.push("summary");
-        if (scanId) {
-            this.commands.push("--scan-id")
-            this.commands.push(scanId)
-        } else {
-            console.log("Scan Id not provided")
-        }
-        if (formatType) {
-            this.commands.push("--format")
-            this.commands.push(formatType)
-        }
-        if (target) {
-            this.commands.push("--target")
-            this.commands.push(target)
-        }
-        let exec = new ExecutionService();
-        return await exec.executeResultsCommands(this.pathToExecutable, this.commands)
+    async getResultsSummary(scanId: string): Promise<string> {
+        return this.executeResultsCommands(scanId, "summaryHTML", ".html");
     }
 
-    async getResults(scanId: string, targetPath: string, resultParam: CxResultType) {
-        this.commands = this.initializeCommands(false);
-        this.commands.push("result");
-        this.commands.push(resultParam);
-        if (targetPath) {
-            this.commands.push("--target");
-            this.commands.push(targetPath);
+    async getResults(scanId: string, resultType:string, outputFileName: string, outputFilePath: string) {
+        this.commands = this.createResultCommand(scanId, resultType, outputFileName, outputFilePath)
+
+        const exec = new ExecutionService();
+        return await exec.executeCommands(this.pathToExecutable, this.commands);
+    }
+
+    async executeResultsCommands(scanId: string, resultType: string, fileExtension: string): Promise<string> {
+        const fileName = new Date().getTime().toString();
+        this.commands = this.createResultCommand(scanId, resultType, fileName, os.tmpdir())
+
+        const exec = new ExecutionService();
+        await exec.executeResultsCommands(this.pathToExecutable, this.commands)
+
+        const filePath = path.join(os.tmpdir(), fileName + fileExtension)
+
+        return fs.readFileSync(filePath,'utf8');
+    }
+
+    createResultCommand(scanId: string, reportFormat: string, outputFileName: string, outputPath: string): string[] {
+        const resultCommands = this.initializeCommands(false);
+        resultCommands.push("result");
+        resultCommands.push("--scan-id");
+        resultCommands.push(scanId);
+        resultCommands.push("--report-format");
+        resultCommands.push(reportFormat);
+
+        if (outputFileName) {
+            resultCommands.push("--output-name")
+            resultCommands.push(outputFileName)
         }
-        const cp = spawn(this.pathToExecutable, this.commands);
-        cp.stdout.on('data', (data: any) => {
-            console.log(`stdout: ${data}`);
-            const fs = require('fs');
-            fs.readFile((targetPath) ? targetPath : "./simple-results.json", 'utf-8', (err: any, data: any) => {
-                if (err) {
-                    throw err;
-                }
-                const val = JSON.stringify(JSON.parse(data), null, 2);
-                fs.writeFile((targetPath) ? targetPath : "./simple-results.json", val, (err: any) => {
-                    if (err) {
-                        throw err;
-                    }
-                    console.log("Data has been written to file successfully.");
-                });
+        if (outputPath) {
+            resultCommands.push("--output-path")
+            resultCommands.push(outputPath)
+        }
 
-            });
-
-        });
+        return resultCommands;
     }
 }
 
