@@ -24,7 +24,7 @@ const auth = new CxAuth(cxScanConfig);
 describe("ScanCreate cases",() => {
     it('ScanCreate Successful case wait mode', async () => {
         const data = await auth.scanCreate(params);
-        const cxCommandOutput: CxCommandOutput =JSON.parse(JSON.stringify(data))
+        const cxCommandOutput: CxCommandOutput = JSON.parse(JSON.stringify(data))
         const ScanObject = cxCommandOutput.scanObjectList.pop()
         const scanShowObject = await auth.scanShow(ScanObject.ID);
         console.log(" Json object from successful wait mode case: " + JSON.stringify(scanShowObject))
@@ -35,7 +35,7 @@ describe("ScanCreate cases",() => {
         params.set(CxParamType.BRANCH, "master");
         //params.set(CxParamType.PROJECT_NAME, "ASTJavascriptWrapperTest");
         const data = await auth.scanCreate(params);
-        const cxCommandOutput: CxCommandOutput =JSON.parse(JSON.stringify(data))
+        const cxCommandOutput: CxCommandOutput = JSON.parse(JSON.stringify(data))
         const ScanObject = cxCommandOutput.scanObjectList.pop()
         const scanShowObject = await auth.scanShow(ScanObject.ID);
         console.log(" Json object from successful wait mode case with branch: " +JSON.stringify(scanShowObject))
@@ -46,7 +46,7 @@ describe("ScanCreate cases",() => {
     it('ScanCreate Failure case', async () => {
         params.set(CxParamType.SAST_PRESET_NAME, "Checkmarx Default Fake");
         const data = await auth.scanCreate(params);
-        const cxCommandOutput: CxCommandOutput =JSON.parse(JSON.stringify(data))
+        const cxCommandOutput: CxCommandOutput = JSON.parse(JSON.stringify(data))
         const ScanObject = cxCommandOutput.scanObjectList.pop()
         const scanShowObject = await auth.scanShow(ScanObject.ID);
         console.log(" Json object from failure case: " + JSON.stringify(scanShowObject))
@@ -58,7 +58,7 @@ describe("ScanCreate cases",() => {
         params.set(CxParamType.SAST_PRESET_NAME, "Checkmarx Default");
         params.set(CxParamType.ADDITIONAL_PARAMETERS, "--nowait");
         const data = await auth.scanCreate(params);
-        const cxCommandOutput: CxCommandOutput =JSON.parse(JSON.stringify(data))     
+        const cxCommandOutput: CxCommandOutput = JSON.parse(JSON.stringify(data))
         const ScanObject = cxCommandOutput.scanObjectList.pop()
         const scanShowObject = await auth.scanShow(ScanObject.ID);
         console.log(" Json object from successful no wait mode case: " + JSON.stringify(scanShowObject))
@@ -70,7 +70,7 @@ describe("ScanCreate cases",() => {
 describe("ScanList cases",() => {
     it('ScanList Successful case', async () => {
         const data = await auth.scanList();
-        const cxCommandOutput: CxCommandOutput =JSON.parse(JSON.stringify(data))
+        const cxCommandOutput: CxCommandOutput = JSON.parse(JSON.stringify(data))
         expect(cxCommandOutput.scanObjectList.length).toBeGreaterThan(0);
     });
 });
@@ -78,7 +78,7 @@ describe("ScanList cases",() => {
 describe("ProjectList cases",() => {
     it('ProjectList Successful case', async () => {
         const data = await auth.projectList();
-        const cxCommandOutput: CxCommandOutput =JSON.parse(JSON.stringify(data))
+        const cxCommandOutput: CxCommandOutput = JSON.parse(JSON.stringify(data))
         expect(cxCommandOutput.scanObjectList.length).toBeGreaterThan(0);
     });
 });
@@ -86,27 +86,28 @@ describe("ProjectList cases",() => {
 describe("Results cases",() => {
     it('Result Test Successful case', async () => {
         const data = await auth.scanList();
-        const cxCommandOutput: CxCommandOutput =JSON.parse(JSON.stringify(data))
+        const cxCommandOutput: CxCommandOutput = JSON.parse(JSON.stringify(data))
         let sampleId  = cxCommandOutput.scanObjectList.pop().ID;
-        const written = await auth.getResults(sampleId,"test.json",null)
+        const written = await auth.getResults(sampleId,"json","jsonList", ".")
         console.log(written)
-        expect(cxCommandOutput.scanObjectList.length).toBeGreaterThan(0);
+        const file = await fileExists("./jsonList.json");
+        expect(file).toBe(true);
     });
 
     it('Result List Successful case', async () => {
         const data = await auth.scanList();
-        const cxCommandOutput: CxCommandOutput =JSON.parse(JSON.stringify(data))
+        const cxCommandOutput: CxCommandOutput = JSON.parse(JSON.stringify(data))
         let sampleId  = cxCommandOutput.scanObjectList.pop().ID;
-        const written = await auth.getResultsList(sampleId,"json")
+        const written = await auth.getResultsList(sampleId)
         console.log(written)
         expect(written.length).toBeGreaterThan(0);
     });
 
     it('Result summary html file generation successful case', async () => {
         const data = await auth.scanList();
-        const cxCommandOutput: CxCommandOutput =JSON.parse(JSON.stringify(data))
+        const cxCommandOutput: CxCommandOutput = JSON.parse(JSON.stringify(data))
         let sampleId  = cxCommandOutput.scanObjectList.pop().ID;
-        const written = await auth.getResultsSummary(sampleId,"html","./test.html")
+        const written = await auth.getResults(sampleId,"summaryHTML","test", ".")
         console.log(written)
         const file = await fileExists("./test.html");
         expect(file).toBe(true);
@@ -114,9 +115,9 @@ describe("Results cases",() => {
 
     it('Result summary html string successful case', async () => {
         const data = await auth.scanList();
-        const cxCommandOutput: CxCommandOutput =JSON.parse(JSON.stringify(data))
+        const cxCommandOutput: CxCommandOutput = JSON.parse(JSON.stringify(data))
         let sampleId  = cxCommandOutput.scanObjectList.pop().ID;
-        const written = await auth.getResultsSummary(sampleId,"html",null)
+        const written = await auth.getResultsSummary(sampleId)
         console.log(written)
         expect(written.length).toBeGreaterThan(0);
     });
