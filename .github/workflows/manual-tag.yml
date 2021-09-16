@@ -22,4 +22,4 @@ jobs:
       - name: Update version
         run: |
           npm version ${{ env.RELEASE_VERSION }}
-          git push origin ${{ env.RELEASE_VERSION }}
+          git push && git push --tags
