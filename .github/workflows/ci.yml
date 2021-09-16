@@ -34,7 +34,7 @@ jobs:
         with:
           project_name: ast-cli-javascript-wrapper
           branch: master
-          base_uri: ${{ secrets.BASEURI }}
+          base_uri: ${{ secrets.BASE_URI }}
           cx_tenant: ${{ secrets.TENANT }}
           cx_client_id: ${{ secrets.CLIENT_ID }}
           cx_client_secret: ${{ secrets.CLIENT_SECRET }}
