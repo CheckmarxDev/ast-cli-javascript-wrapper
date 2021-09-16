@@ -20,9 +20,6 @@ jobs:
           echo ${{ github.event.inputs.tag }}
           echo "NEXT_VERSION=${{ github.event.inputs.tag }}" >> $GITHUB_ENV
       - name: Update version
-        run: npm version ${{ env.RELEASE_VERSION }}
-      - name: Update version
-        uses: reedyuk/npm-version@1.1.1
-        with:
-         version: ${{ env.RELEASE_VERSION }}
-         git-tag-version: 'true'
+        run: |
+          npm version ${{ env.RELEASE_VERSION }}
+          git push origin ${{ env.RELEASE_VERSION }}
