@@ -17,8 +17,6 @@ jobs:
           node-version: 12
           registry-url: https://npm.pkg.github.com/
       - run: npm ci
-      - name: Update version
-        run: npm version ${{ env.RELEASE_VERSION }}
       - name: npm build
         run: npm run build
       - name: Set up NPM authentication
