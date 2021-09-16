@@ -17,9 +17,8 @@ describe("ScanCreate cases",() => {
     it('ScanCreate Successful case wait mode', async () => {
         const params = new Map();
         params.set(CxParamType.PROJECT_NAME, "ast-cli-javascript-integration-success");
-        params.set(CxParamType.S, "./src/tests");
+        params.set(CxParamType.S, "./src");
         params.set(CxParamType.FILTER, "*.ts,!**/node_modules/**/*");
-        params.set(CxParamType.ADDITIONAL_PARAMETERS, "--scan-types sast");
 
         const auth = new CxAuth(cxScanConfig);
         const data = await auth.scanCreate(params);
@@ -33,9 +32,8 @@ describe("ScanCreate cases",() => {
     it('ScanCreate Successful case with Branch', async () => {
         const params = new Map();
         params.set(CxParamType.PROJECT_NAME, "ast-cli-javascript-integration-success-branch");
-        params.set(CxParamType.S, "./src/tests");
+        params.set(CxParamType.S, "./src");
         params.set(CxParamType.FILTER, "*.ts,!**/node_modules/**/*");
-        params.set(CxParamType.ADDITIONAL_PARAMETERS, "--scan-types sast");
         params.set(CxParamType.BRANCH, "master");
         const auth = new CxAuth(cxScanConfig);
 
@@ -51,9 +49,8 @@ describe("ScanCreate cases",() => {
     it('ScanCreate Failure case', async () => {
         const params = new Map();
         params.set(CxParamType.PROJECT_NAME, "ast-cli-javascript-integration-failure");
-        params.set(CxParamType.S, "./src/tests");
+        params.set(CxParamType.S, "./src");
         params.set(CxParamType.SAST_PRESET_NAME, "Checkmarx Default Fake");
-        params.set(CxParamType.BRANCH, "master");
         const auth = new CxAuth(cxScanConfig);
 
         const data = await auth.scanCreate(params);
@@ -67,7 +64,7 @@ describe("ScanCreate cases",() => {
     it('ScanCreate Successful case no wait mode', async () => {
         const params = new Map();
         params.set(CxParamType.PROJECT_NAME, "ast-cli-javascript-integration-nowait");
-        params.set(CxParamType.S, "./src/tests");
+        params.set(CxParamType.S, "./src");
         params.set(CxParamType.SAST_PRESET_NAME, "Checkmarx Default Fake");
         params.set(CxParamType.ADDITIONAL_PARAMETERS, "--nowait");
         const auth = new CxAuth(cxScanConfig);
