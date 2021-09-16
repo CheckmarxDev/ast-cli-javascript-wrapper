@@ -33,7 +33,6 @@ describe("ScanCreate cases",() => {
 
     it('ScanCreate Successful case with Branch', async () => {
         params.set(CxParamType.BRANCH, "master");
-        //params.set(CxParamType.PROJECT_NAME, "ASTJavascriptWrapperTest");
         const data = await auth.scanCreate(params);
         const cxCommandOutput: CxCommandOutput = JSON.parse(JSON.stringify(data))
         const ScanObject = cxCommandOutput.scanObjectList.pop()
