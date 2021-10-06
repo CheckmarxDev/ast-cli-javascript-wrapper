@@ -25,8 +25,6 @@
   </ol>
 </details>
 
-
-
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
@@ -40,29 +38,47 @@ It contains technology neutral repository interfaces as well as a metadata model
 
 Add the following dependency:
 
-        
-            "dependencies": {
-                "@checkmarxdev/ast-cli-javascript-wrapper": "{version}"
-            }
-        
-
-
+```     
+"dependencies": {
+    "@checkmarxdev/ast-cli-javascript-wrapper": "{version}"
+}
+```
 
 ### Prerequisites
 
 To be able to build the code you should have:
 * Node
- ```
-  You can download and install Node using this link: https://nodejs.org/en/download/
-```
 
 
 ### Setting Up
 
-
 In your terminal, run:
 ```
 - npm install
+```
+
+To run integrations tests, you need to set up environment variables:
+
+- In Linux systems run in terminal:
+```
+export CX_CLIENT_ID="{value}"
+export CX_CLIENT_SECRET="{value}"
+export CX_APIKEY="{value}"
+export CX_BASE_URI="{value}"
+export CX_BASE_AUTH_URI="{value}"
+export CX_TENANT="{value}"
+export PATH_TO_EXECUTABLE="{value}"
+```
+
+- In Windows systems run in powershell:
+```
+setx CX_CLIENT_ID {value}
+setx CX_CLIENT_SECRET {value}
+setx CX_APIKEY {value}
+setx CX_BASE_URI {value}
+setx CX_BASE_AUTH_URI {value}
+setx CX_TENANT {value}
+setx PATH_TO_EXECUTABLE {value}
 ```
 
 <!-- CONTACT -->
