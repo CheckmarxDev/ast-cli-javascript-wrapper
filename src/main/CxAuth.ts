@@ -170,7 +170,7 @@ export class CxAuth {
             commands.push("--output-path")
             commands.push(outputPath)
         }
-        commands.push(...this.initializeCommands(true));
+        commands.push(...this.initializeCommands(false));
 
         return commands;
     }
