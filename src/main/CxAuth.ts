@@ -111,6 +111,14 @@ export class CxAuth {
         return await exec.executeCommands(this.pathToExecutable, this.commands);
     }
 
+    async authValidate(): Promise<CxCommandOutput> {
+        this.commands = this.initializeCommands(false);
+        this.commands.push("auth");
+        this.commands.push("validate");
+        let exec = new ExecutionService();
+        return await exec.executeCommands(this.pathToExecutable, this.commands);
+    }
+
     async scanShow(id: string): Promise<CxCommandOutput> {
         this.commands = this.initializeCommands(true);
         this.commands.push("scan");

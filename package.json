@@ -1,6 +1,6 @@
 {
   "name": "@CheckmarxDev/ast-cli-javascript-wrapper",
-  "version": "0.0.29",
+  "version": "0.0.32",
   "description": "AST CLI Javascript wrapper",
   "main": "dist/CxAuth.js",
   "typings": "dist/CxAuth.d.ts",
@@ -16,7 +16,8 @@
   "dependencies": {
     "typescript-logging": "^1.0.0",
     "log4js": "6.3.0",
-    "tslog": "3.2.0"
+    "tslog": "3.2.0",
+    "@checkmarxdev/ast-cli-javascript-wrapper": "0.0.29"
   },
   "scripts": {
     "build": "tsc",
