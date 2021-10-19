@@ -14,7 +14,6 @@ export class CxAuth {
     clientId: string = "";
     clientSecret: string = "";
     apiKey: string = "";
-    commands: string[] = [];
     pathToExecutable: string;
     tenant: string;
 
@@ -56,7 +55,7 @@ export class CxAuth {
     }
 
     initializeCommands(formatRequired: boolean): string[] {
-        let list: string[] = [];
+        const list: string[] = [];
         if (this.clientId) {
             list.push("--client-id");
             list.push(this.clientId);
@@ -80,35 +79,33 @@ export class CxAuth {
         if (formatRequired) {
             list.push("--format");
             list.push("json");
-            list.push("-v");
         }
         return list;
     }
 
     async scanCreate(params: ParamTypeMap): Promise<CxCommandOutput> {
-        this.commands = this.initializeCommands(true);
-        this.commands.push("scan");
-        this.commands.push("create");
+        const commands: string[] = ["scan", "create"];
+        commands.push(...this.initializeCommands(true));
         params.forEach((value: string, key: CxParamType) => {
             if (key !== CxParamType.ADDITIONAL_PARAMETERS && key.length !== 1 && value) {
-                this.commands.push("--" + key.toString().replace(/_/g, "-").toLowerCase());
-                this.commands.push(value);
+                commands.push("--" + key.toString().replace(/_/g, "-").toLowerCase());
+                commands.push(value);
             } else if (key.length === 1 && value) {
-                this.commands.push("-" + key.toString().replace(/_/g, "-").toLowerCase());
-                this.commands.push(value);
+                commands.push("-" + key.toString().replace(/_/g, "-").toLowerCase());
+                commands.push(value);
             } else if (key === CxParamType.ADDITIONAL_PARAMETERS) {
                 let paramList = value.match(/(?:[^\s"]+|"[^"]*")+/g);
                 console.log("Additional parameters refined: " + paramList)
                 if (paramList) {
                     paramList.forEach((element) => {
-                        this.commands.push(element);
+                        commands.push(element);
                     });
                 }
             }
         });
 
-        let exec = new ExecutionService();
-        return await exec.executeCommands(this.pathToExecutable, this.commands);
+        const exec = new ExecutionService();
+        return await exec.executeCommands(this.pathToExecutable, commands);
     }
 
     async authValidate(): Promise<CxCommandOutput> {
@@ -120,29 +117,27 @@ export class CxAuth {
     }
 
     async scanShow(id: string): Promise<CxCommandOutput> {
-        this.commands = this.initializeCommands(true);
-        this.commands.push("scan");
-        this.commands.push("show");
-        this.commands.push("--scan-id");
-        this.commands.push(id);
-        let exec = new ExecutionService();
-        return await exec.executeCommands(this.pathToExecutable, this.commands);
+        const commands: string[] = ["scan", "show", "--scan-id", id];
+        commands.push(...this.initializeCommands(true));
+
+        const exec = new ExecutionService();
+        return await exec.executeCommands(this.pathToExecutable, commands);
     }
 
     async scanList(): Promise<CxCommandOutput> {
-        this.commands = this.initializeCommands(true);
-        this.commands.push("scan");
-        this.commands.push("list");
-        let exec = new ExecutionService();
-        return await exec.executeCommands(this.pathToExecutable, this.commands);
+        const commands: string[] = ["scan", "list"];
+        commands.push(...this.initializeCommands(true));
+
+        const exec = new ExecutionService();
+        return await exec.executeCommands(this.pathToExecutable, commands);
     }
 
     async projectList(): Promise<CxCommandOutput> {
-        this.commands = this.initializeCommands(true);
-        this.commands.push("project");
-        this.commands.push("list");
-        let exec = new ExecutionService();
-        return await exec.executeCommands(this.pathToExecutable, this.commands);
+        const commands: string[] = ["project", "list"];
+        commands.push(...this.initializeCommands(true));
+
+        const exec = new ExecutionService();
+        return await exec.executeCommands(this.pathToExecutable, commands);
     }
 
     async getResultsList(scanId: string) {
@@ -154,18 +149,18 @@ export class CxAuth {
     }
 
     async getResults(scanId: string, resultType:string, outputFileName: string, outputFilePath: string) {
-        this.commands = this.createResultCommand(scanId, resultType, outputFileName, outputFilePath)
+        const commands = this.createResultCommand(scanId, resultType, outputFileName, outputFilePath)
 
         const exec = new ExecutionService();
-        return await exec.executeCommands(this.pathToExecutable, this.commands);
+        return await exec.executeCommands(this.pathToExecutable, commands);
     }
 
     async executeResultsCommands(scanId: string, resultType: string, fileExtension: string): Promise<string> {
         const fileName = new Date().getTime().toString();
-        this.commands = this.createResultCommand(scanId, resultType, fileName, os.tmpdir())
+        const commands = this.createResultCommand(scanId, resultType, fileName, os.tmpdir())
 
         const exec = new ExecutionService();
-        await exec.executeResultsCommands(this.pathToExecutable, this.commands)
+        await exec.executeResultsCommands(this.pathToExecutable, commands)
 
         const filePath = path.join(os.tmpdir(), fileName + fileExtension)
 
@@ -173,23 +168,19 @@ export class CxAuth {
     }
 
     createResultCommand(scanId: string, reportFormat: string, outputFileName: string, outputPath: string): string[] {
-        const resultCommands = this.initializeCommands(false);
-        resultCommands.push("result");
-        resultCommands.push("--scan-id");
-        resultCommands.push(scanId);
-        resultCommands.push("--report-format");
-        resultCommands.push(reportFormat);
+        const commands: string[] = ["result", "--scan-id", scanId, "--report-format", reportFormat];
 
         if (outputFileName) {
-            resultCommands.push("--output-name")
-            resultCommands.push(outputFileName)
+            commands.push("--output-name")
+            commands.push(outputFileName)
         }
         if (outputPath) {
-            resultCommands.push("--output-path")
-            resultCommands.push(outputPath)
+            commands.push("--output-path")
+            commands.push(outputPath)
         }
+        commands.push(...this.initializeCommands(false));
 
-        return resultCommands;
+        return commands;
     }
 }
 
