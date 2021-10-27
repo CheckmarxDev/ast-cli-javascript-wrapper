@@ -108,6 +108,13 @@ export class CxAuth {
         return await exec.executeCommands(this.pathToExecutable, commands);
     }
 
+    async authValidate(): Promise<CxCommandOutput> {
+        const commands: string[] = ["auth", "validate"];
+        commands.push(...this.initializeCommands(false));
+        let exec = new ExecutionService();
+        return await exec.executeCommands(this.pathToExecutable, commands);
+    }
+
     async scanShow(id: string): Promise<CxCommandOutput> {
         const commands: string[] = ["scan", "show", "--scan-id", id];
         commands.push(...this.initializeCommands(true));
@@ -175,5 +182,3 @@ export class CxAuth {
         return commands;
     }
 }
-
-
