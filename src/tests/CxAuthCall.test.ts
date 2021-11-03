@@ -18,6 +18,7 @@ describe("ScanCreate cases",() => {
         const params = new Map();
         params.set(CxParamType.PROJECT_NAME, "ast-cli-javascript-integration-success");
         params.set(CxParamType.S, "./src");
+        params.set(CxParamType.BRANCH, "main");
         params.set(CxParamType.FILTER, "*.ts,!**/node_modules/**/*");
 
         const auth = new CxAuth(cxScanConfig);
@@ -50,6 +51,7 @@ describe("ScanCreate cases",() => {
         const params = new Map();
         params.set(CxParamType.PROJECT_NAME, "ast-cli-javascript-integration-failure");
         params.set(CxParamType.S, "./src");
+        params.set(CxParamType.BRANCH, "main");
         params.set(CxParamType.SAST_PRESET_NAME, "Checkmarx Default Fake");
         const auth = new CxAuth(cxScanConfig);
 
@@ -63,10 +65,11 @@ describe("ScanCreate cases",() => {
 
     it('ScanCreate Successful case no wait mode', async () => {
         const params = new Map();
-        params.set(CxParamType.PROJECT_NAME, "ast-cli-javascript-integration-nowait");
+        params.set(CxParamType.PROJECT_NAME, "ast-cli-javascript-integration-async");
         params.set(CxParamType.S, "./src");
+        params.set(CxParamType.BRANCH, "main");
         params.set(CxParamType.SAST_PRESET_NAME, "Checkmarx Default Fake");
-        params.set(CxParamType.ADDITIONAL_PARAMETERS, "--nowait");
+        params.set(CxParamType.ADDITIONAL_PARAMETERS, "--async");
         const auth = new CxAuth(cxScanConfig);
 
         const data = await auth.scanCreate(params);
