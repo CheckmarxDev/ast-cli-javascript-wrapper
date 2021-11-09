@@ -10,6 +10,7 @@ describe("ScanCreate cases",() => {
         params.set(CxParamType.PROJECT_NAME, "ast-cli-javascript-integration-success");
         params.set(CxParamType.S, "./src");
         params.set(CxParamType.FILTER, "*.ts,!**/node_modules/**/*");
+        params.set(CxParamType.BRANCH, "master");
 
         const auth = new CxWrapper(cxScanConfig);
         const data = await auth.scanCreate(params);
@@ -26,6 +27,7 @@ describe("ScanCreate cases",() => {
         params.set(CxParamType.S, "./src");
         params.set(CxParamType.FILTER, "*.ts,!**/node_modules/**/*");
         params.set(CxParamType.BRANCH, "master");
+
         const auth = new CxWrapper(cxScanConfig);
 
         const data = await auth.scanCreate(params);
@@ -42,6 +44,8 @@ describe("ScanCreate cases",() => {
         params.set(CxParamType.PROJECT_NAME, "ast-cli-javascript-integration-failure");
         params.set(CxParamType.S, "./src");
         params.set(CxParamType.SAST_PRESET_NAME, "Checkmarx Default Fake");
+        params.set(CxParamType.BRANCH, "master");
+
         const auth = new CxWrapper(cxScanConfig);
 
         const data = await auth.scanCreate(params);
@@ -58,6 +62,8 @@ describe("ScanCreate cases",() => {
         params.set(CxParamType.S, "./src");
         params.set(CxParamType.SAST_PRESET_NAME, "Checkmarx Default Fake");
         params.set(CxParamType.ADDITIONAL_PARAMETERS, "--nowait");
+        params.set(CxParamType.BRANCH, "master");
+
         const auth = new CxWrapper(cxScanConfig);
 
         const data = await auth.scanCreate(params);
