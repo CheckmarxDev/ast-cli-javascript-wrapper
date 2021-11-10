@@ -8,7 +8,7 @@ describe("ProjectList cases",() => {
 
     it('ProjectList Successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);
-        const data = await auth.projectList();
+        const data = await auth.projectList("");
         const cxCommandOutput: CxCommandOutput = data;
         expect(cxCommandOutput.payload.length).toBeGreaterThan(0);
     });
