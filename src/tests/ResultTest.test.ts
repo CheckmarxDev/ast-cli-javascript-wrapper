@@ -8,7 +8,7 @@ describe("Results cases",() => {
     let cxScanConfig = new BaseTest();
     it('Result Test Successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);
-        const data = await auth.scanList();
+        const data = await auth.scanList("");
         const cxCommandOutput: CxCommandOutput = data
         let sampleId  = cxCommandOutput.payload.pop().ID;
         await auth.getResults(sampleId,"json","jsonList", ".")
@@ -18,7 +18,7 @@ describe("Results cases",() => {
 
     it('Result List Successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);
-        const data = await auth.scanList();
+        const data = await auth.scanList("");
         const cxCommandOutput: CxCommandOutput = data
         let sampleId  = cxCommandOutput.payload.pop().ID;
         const written = await auth.getResultsList(sampleId)
@@ -27,7 +27,7 @@ describe("Results cases",() => {
 
     it('Result summary html file generation successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);
-        const data = await auth.scanList();
+        const data = await auth.scanList("");
         const cxCommandOutput: CxCommandOutput = data
         let sampleId  = cxCommandOutput.payload.pop().ID;
         await auth.getResults(sampleId,"summaryHTML","test", ".")
@@ -37,7 +37,7 @@ describe("Results cases",() => {
 
     it('Result summary html string successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);
-        const data = await auth.scanList();
+        const data = await auth.scanList("");
         const cxCommandOutput: CxCommandOutput = data
         let sampleId  = cxCommandOutput.payload.pop().ID;
         const written = await auth.getResultsSummary(sampleId)

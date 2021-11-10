@@ -126,16 +126,18 @@ export class CxWrapper {
         return await exec.executeCommands(this.pathToExecutable, commands, CxConstants.SCAN_TYPE);
     }
 
-    async scanList(): Promise<CxCommandOutput> {
-        const commands: string[] = [CxConstants.CMD_SCAN, CxConstants.SUB_CMD_LIST];
+    async scanList(filters:string): Promise<CxCommandOutput> {
+        const validated_filters = this.filterArguments(filters);
+        const commands: string[] = [CxConstants.CMD_SCAN, "list"].concat(validated_filters);
         commands.push(...this.initializeCommands(true));
 
         const exec = new ExecutionService();
         return await exec.executeCommands(this.pathToExecutable, commands, CxConstants.SCAN_TYPE);
     }
 
-    async projectList(): Promise<CxCommandOutput> {
-        const commands: string[] = [CxConstants.CMD_PROJECT, CxConstants.SUB_CMD_LIST];
+    async projectList(filters:string): Promise<CxCommandOutput> {
+        const validated_filters = this.filterArguments(filters);
+        const commands: string[] = [CxConstants.CMD_PROJECT, "list"].concat(validated_filters);
         commands.push(...this.initializeCommands(true));
 
         const exec = new ExecutionService();
@@ -144,7 +146,7 @@ export class CxWrapper {
 
     async projectBranches(projectId: string, filters: string): Promise<CxCommandOutput> {
         // Verify and add possible branch filter by name
-        const validated_filters = this.filterArguments(filters)
+        const validated_filters = this.filterArguments(CxConstants.BRANCH_NAME + filters)
         const commands: string[] = [CxConstants.CMD_PROJECT , CxConstants.SUB_CMD_BRANCHES, CxConstants.PROJECT_ID, projectId].concat(validated_filters);
         commands.push(...this.initializeCommands(false));
 
@@ -207,7 +209,7 @@ export class CxWrapper {
         let r = [];
         if(filters.length>0){
             r.push(CxConstants.FILTER);
-            r.push(CxConstants.BRANCH_NAME + filters);
+            r.push(filters);
         }
         return r;
     }

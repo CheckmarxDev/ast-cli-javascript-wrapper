@@ -76,7 +76,7 @@ describe("ScanCreate cases",() => {
 
     it('ScanList Successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);
-        const data = await auth.scanList();
+        const data = await auth.scanList("");
         const cxCommandOutput: CxCommandOutput = data;
         expect(cxCommandOutput.payload.length).toBeGreaterThan(0);
     });
