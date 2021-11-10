@@ -22,7 +22,7 @@ describe("Results cases",() => {
         const cxCommandOutput: CxCommandOutput = data
         let sampleId  = cxCommandOutput.payload.pop().ID;
         const written = await auth.getResultsList(sampleId)
-        expect(written.payload.length).toBeGreaterThan(0);
+        expect(written.status).toEqual("");
     });
 
     it('Result summary html file generation successful case', async () => {
