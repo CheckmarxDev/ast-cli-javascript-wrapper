@@ -18,6 +18,7 @@ describe("ProjectList cases",() => {
         params.set(CxParamType.PROJECT_NAME, "ast-cli-javascript-integration-success");
         params.set(CxParamType.S, "./src");
         params.set(CxParamType.FILTER, "*.ts,!**/node_modules/**/*");
+        params.set(CxParamType.BRANCH, "master");
 
         const auth = new CxWrapper(cxScanConfig);
         const data = await auth.scanCreate(params);
@@ -33,6 +34,7 @@ describe("ProjectList cases",() => {
         params.set(CxParamType.PROJECT_NAME, "ast-cli-javascript-integration-success");
         params.set(CxParamType.S, "./src");
         params.set(CxParamType.FILTER, "*.ts,!**/node_modules/**/*");
+        params.set(CxParamType.BRANCH, "master");
 
         const auth = new CxWrapper(cxScanConfig);
         const data = await auth.scanCreate(params);

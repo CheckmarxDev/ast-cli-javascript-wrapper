@@ -15,8 +15,8 @@ describe("Authentication validation",() => {
     it('Result authentication failed case', async () => {
         let cxScanConfig_fail = new CxScanConfig();
         cxScanConfig_fail.baseUri = process.env["CX_BASE_URI"];
-        cxScanConfig_fail.clientId = process.env["CX_CLIENT_ID"];
-        cxScanConfig_fail.clientSecret = process.env["CX_CLIENT_SECRET"];
+        cxScanConfig_fail.clientId = "";
+        cxScanConfig_fail.clientSecret = "";
         cxScanConfig_fail.tenant = process.env["CX_TENANT"];
         cxScanConfig_fail.apiKey = "";
 

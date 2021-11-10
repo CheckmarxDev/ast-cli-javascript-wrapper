@@ -61,7 +61,7 @@ describe("ScanCreate cases",() => {
         params.set(CxParamType.PROJECT_NAME, "ast-cli-javascript-integration-nowait");
         params.set(CxParamType.S, "./src");
         params.set(CxParamType.SAST_PRESET_NAME, "Checkmarx Default Fake");
-        params.set(CxParamType.ADDITIONAL_PARAMETERS, "--nowait");
+        params.set(CxParamType.ADDITIONAL_PARAMETERS, "--async");
         params.set(CxParamType.BRANCH, "master");
 
         const auth = new CxWrapper(cxScanConfig);
