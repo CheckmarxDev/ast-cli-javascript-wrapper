@@ -14,13 +14,13 @@ describe("Authentication validation",() => {
     });
     it('Result authentication failed case', async () => {
         let cxScanConfig_fail = new CxScanConfig();
-        cxScanConfig_fail.baseUri = process.env["CX_BASE_URI"];
-        cxScanConfig_fail.clientId = "";
-        cxScanConfig_fail.clientSecret = "";
+        cxScanConfig_fail.baseUri = "error";
+        cxScanConfig_fail.clientId = "error";
+        cxScanConfig_fail.clientSecret = "error";
         cxScanConfig_fail.tenant = process.env["CX_TENANT"];
-        cxScanConfig_fail.apiKey = "";
+        cxScanConfig_fail.apiKey = "error";
 
-        const auth = new CxWrapper(cxScanConfig);
+        const auth = new CxWrapper(cxScanConfig_fail);
         const data = await auth.authValidate();
         const cxCommandOutput: CxCommandOutput = data;
         expect(cxCommandOutput.exitCode).toBe(1);
