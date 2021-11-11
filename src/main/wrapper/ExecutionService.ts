@@ -33,6 +33,7 @@ export class ExecutionService {
         return new Promise(function (resolve, reject) {
             let stderr = '';
             let cxCommandOutput = new CxCommandOutput();
+            let output_string ="";
             commands = transformation(commands);
             const cp = spawn(pathToExecutable, commands);
             cp.stderr.on('data', function (chunk: string) {
@@ -48,50 +49,53 @@ export class ExecutionService {
                 });
             cp.stdout.on('data', (data: any) => {
                 if (data) {
-                    logger.info(`${data.toString().trim()}`);
-                    if (isJsonString(data.toString())) {
-                        let resultObject = JSON.parse(data.toString().split('\n')[0]);
-                        // Some cli outputs have array format, must be checked
-                        if (resultObject instanceof Array) {
-                            // Check if there is a specific type for the output and make conversions
-                            switch(output){
-                                case 'CxScan':
-                                    let r = resultObject.map((member)=>{return Object.assign( new CxScan(),member);}) ;
-                                    cxCommandOutput.payload = r;
-                                    break;
-                                case 'CxProject':
-                                    r = resultObject.map((member)=>{return Object.assign( new CxProject(),member);}) ;
-                                    cxCommandOutput.payload = r;
-                                    break;
-                                default:
-                                    logger.info(JSON.stringify(resultObject));
-                                    cxCommandOutput.payload = resultObject;
-                            }
-                        } else {
-                            let resultArray: any [] = [];
-                            // Check if there is a specific type for the output and make conversions
-                            switch(output){
-                                case 'CxScan':
-                                    let r = Object.assign( new CxScan(),resultObject);
-                                    resultArray.push(r);
-                                    cxCommandOutput.payload = resultArray;
-                                    break;
-                                case 'CxProject':
-                                    r = Object.assign( new CxProject(),resultObject);
-                                    resultArray.push(r);
-                                    cxCommandOutput.payload = resultArray;
-                                    break;
-                                default:
-                                    resultArray.push(resultObject);
-                                    cxCommandOutput.payload = resultArray;
-                            }
+                    output_string+=data;
+                }
+            });
+            cp.stdout.on('close', (data: any) => {
+                console.log("fim",output_string);
+                logger.info(`${output_string.toString().trim()}`);
+                if (isJsonString(output_string.toString())) {
+                    let resultObject = JSON.parse(output_string.toString().split('\n')[0]);
+                    // Some cli outputs have array format, must be checked
+                    if (resultObject instanceof Array) {
+                        // Check if there is a specific type for the output and make conversions
+                        switch(output){
+                            case 'CxScan':
+                                let r = resultObject.map((member)=>{return Object.assign( new CxScan(),member);}) ;
+                                cxCommandOutput.payload = r;
+                                break;
+                            case 'CxProject':
+                                r = resultObject.map((member)=>{return Object.assign( new CxProject(),member);}) ;
+                                cxCommandOutput.payload = r;
+                                break;
+                            default:
+                                logger.info(JSON.stringify(resultObject));
+                                cxCommandOutput.payload = resultObject;
+                        }
+                    } else {
+                        let resultArray: any [] = [];
+                        // Check if there is a specific type for the output and make conversions
+                        switch(output){
+                            case 'CxScan':
+                                let r = Object.assign( new CxScan(),resultObject);
+                                resultArray.push(r);
+                                cxCommandOutput.payload = resultArray;
+                                break;
+                            case 'CxProject':
+                                r = Object.assign( new CxProject(),resultObject);
+                                resultArray.push(r);
+                                cxCommandOutput.payload = resultArray;
+                                break;
+                            default:
+                                resultArray.push(resultObject);
+                                cxCommandOutput.payload = resultArray;
                         }
                     }
                 }
             });
         });
     }
-
     executeResultsCommands(pathToExecutable: string, commands: string[]): Promise<CxCommandOutput> {
         return new Promise(function (resolve, reject) {
             let stderr = '';
