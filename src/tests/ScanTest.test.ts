@@ -8,6 +8,7 @@ describe("ScanCreate cases",() => {
     const cxScanConfig = new BaseTest();
 
     it('ScanCreate Successful case with Branch', async () => {
+        params = new Map();
         params.set(CxParamType.PROJECT_NAME, "ast-cli-javascript-integration-success-branch");
         params.set(CxParamType.S, "./src");
         params.set(CxParamType.FILTER, "*.ts,!**/node_modules/**/*");
