@@ -5,9 +5,8 @@ import {BaseTest} from "./BaseTest";
 
 describe("ScanCreate cases",() => {
     let cxScanConfig = new BaseTest();
-
+    const params = new Map();
     it('ScanCreate Successful case wait mode', async () => {
-        const params = new Map();
         params.set(CxParamType.PROJECT_NAME, "ast-cli-javascript-integration-success");
         params.set(CxParamType.S, "./src");
         params.set(CxParamType.FILTER, "*.ts,!**/node_modules/**/*");
@@ -21,7 +20,6 @@ describe("ScanCreate cases",() => {
     })
 
     it('ScanCreate Failure case', async () => {
-        const params = new Map();
         params.set(CxParamType.PROJECT_NAME, "ast-cli-javascript-integration-failure");
         params.set(CxParamType.S, "./src");
         params.set(CxParamType.SAST_PRESET_NAME, "Checkmarx Default Fake");
@@ -41,7 +39,6 @@ describe("ScanCreate cases",() => {
     });
 
     it('ScanCreate Successful case with Branch', async () => {
-        const params = new Map();
         params.set(CxParamType.PROJECT_NAME, "ast-cli-javascript-integration-success-branch");
         params.set(CxParamType.S, "./src");
         params.set(CxParamType.FILTER, "*.ts,!**/node_modules/**/*");
@@ -56,7 +53,6 @@ describe("ScanCreate cases",() => {
     })
 
     it('ScanCreate Successful case no wait mode', async () => {
-        const params = new Map();
         params.set(CxParamType.PROJECT_NAME, "ast-cli-javascript-integration-nowait");
         params.set(CxParamType.S, "./src");
         params.set(CxParamType.SAST_PRESET_NAME, "Checkmarx Default Fake");
@@ -66,7 +62,7 @@ describe("ScanCreate cases",() => {
         const cxCommandOutput: CxCommandOutput = await auth.scanCreate(params);
         const scanObject = cxCommandOutput.payload.pop();
         const scanShowObject = await auth.scanShow(scanObject.ID);
-        console.log(" Json object from successful no wait mode case: " + JSON.stringify(scanShowObject))
-        expect(scanShowObject.payload.pop().Status).toEqual("Running")
+        console.log(" Json object from successful no wait mode case: " + JSON.stringify(scanShowObject));
+        expect(scanShowObject.payload.pop().Status).toEqual("Running");
     })
 });
