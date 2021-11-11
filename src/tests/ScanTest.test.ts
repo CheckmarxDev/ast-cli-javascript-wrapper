@@ -6,18 +6,6 @@ import {BaseTest} from "./BaseTest";
 describe("ScanCreate cases",() => {
     let params = new Map();
     const cxScanConfig = new BaseTest();
-    it('ScanCreate Successful case wait mode', async () => {
-        params.set(CxParamType.PROJECT_NAME, "ast-cli-javascript-integration-success");
-        params.set(CxParamType.S, "./src");
-        params.set(CxParamType.FILTER, "*.ts,!**/node_modules/**/*");
-        params.set(CxParamType.BRANCH, "master");
-        const auth = new CxWrapper(cxScanConfig);
-        const cxCommandOutput: CxCommandOutput = await auth.scanCreate(params);
-        const scanObject = cxCommandOutput.payload.pop();
-        const scanShowObject = await auth.scanShow(scanObject.ID);
-        console.log(" Json object from successful wait mode case: " + JSON.stringify(scanShowObject));
-        expect(scanShowObject.payload.pop().Status).toEqual("Completed");
-    })
 
     it('ScanCreate Successful case with Branch', async () => {
         params.set(CxParamType.PROJECT_NAME, "ast-cli-javascript-integration-success-branch");
@@ -58,6 +46,19 @@ describe("ScanCreate cases",() => {
         const scanShowObject = await auth.scanShow(scanObject.ID);
         console.log(" Json object from successful no wait mode case: " + JSON.stringify(scanShowObject))
         expect(scanShowObject.payload.pop().Status).toEqual("Running")
+    })
+
+    it('ScanCreate Successful case wait mode', async () => {
+        params.set(CxParamType.PROJECT_NAME, "ast-cli-javascript-integration-success");
+        params.set(CxParamType.S, "./src");
+        params.set(CxParamType.FILTER, "*.ts,!**/node_modules/**/*");
+        params.set(CxParamType.BRANCH, "master");
+        const auth = new CxWrapper(cxScanConfig);
+        const cxCommandOutput: CxCommandOutput = await auth.scanCreate(params);
+        const scanObject = cxCommandOutput.payload.pop();
+        const scanShowObject = await auth.scanShow(scanObject.ID);
+        console.log(" Json object from successful wait mode case: " + JSON.stringify(scanShowObject));
+        expect(scanShowObject.payload.pop().Status).toEqual("Completed");
     })
 
     it('ScanList Successful case', async () => {
