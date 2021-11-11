@@ -12,7 +12,8 @@ describe("ScanCreate cases",() => {
         params.set(CxParamType.FILTER, "*.ts,!**/node_modules/**/*");
         params.set(CxParamType.BRANCH, "master");
         const auth = new CxWrapper(cxScanConfig);
-        const cxCommandOutput: CxCommandOutput = await auth.scanCreate(params);
+        const data = await auth.scanCreate(params);
+        const cxCommandOutput: CxCommandOutput = data;
         const scanObject = cxCommandOutput.payload.pop();
         const scanShowObject = await auth.scanShow(scanObject.ID);
         console.log(" Json object from successful wait mode case: " + JSON.stringify(scanShowObject));
