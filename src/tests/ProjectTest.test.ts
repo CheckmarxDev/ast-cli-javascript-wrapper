@@ -5,7 +5,6 @@ import {CxParamType} from "../main/wrapper/CxParamType";
 
 describe("ProjectList cases",() => {
     const cxScanConfig = new BaseTest();
-    const params = new Map();
     it('ProjectList Successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);
         const data = await auth.projectList("");
@@ -14,6 +13,7 @@ describe("ProjectList cases",() => {
     });
 
     it('ProjectShow Successful case',async () =>{
+        const params = new Map();
         params.set(CxParamType.PROJECT_NAME, "ast-cli-javascript-integration-success");
         params.set(CxParamType.S, "./src");
         params.set(CxParamType.FILTER, "*.ts,!**/node_modules/**/*");
@@ -28,6 +28,7 @@ describe("ProjectList cases",() => {
     });
 
     it('ProjectBranches Successful case',async () =>{
+        const params = new Map();
         params.set(CxParamType.PROJECT_NAME, "ast-cli-javascript-integration-success");
         params.set(CxParamType.S, "./src");
         params.set(CxParamType.FILTER, "*.ts,!**/node_modules/**/*");
