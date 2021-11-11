@@ -4,7 +4,7 @@ import {BaseTest} from "./BaseTest";
 import * as fs from "fs";
 
 describe("Results cases",() => {
-    const cxScanConfig = new BaseTest();
+    let cxScanConfig = new BaseTest();
     it('Result Test Successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput  = await auth.scanList("");
