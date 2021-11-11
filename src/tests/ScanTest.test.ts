@@ -7,7 +7,8 @@ describe("ScanCreate cases",() => {
     let cxScanConfig = new BaseTest();
     it('ScanList Successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);
-        const cxCommandOutput: CxCommandOutput = await auth.scanList("");
+        let cxCommandOutput: CxCommandOutput = await auth.scanList("");
+        cxCommandOutput = await auth.scanList("");
         expect(cxCommandOutput.payload.length).toBeGreaterThan(0);
     });
     it('ScanCreate Successful case wait mode', async () => {
