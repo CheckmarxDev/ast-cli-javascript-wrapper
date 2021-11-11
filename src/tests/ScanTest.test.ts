@@ -7,10 +7,11 @@ describe("ScanCreate cases",() => {
     let cxScanConfig = new BaseTest();
     it('ScanList Successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);
-        let cxCommandOutput: CxCommandOutput = await auth.scanList("");
-        cxCommandOutput = await auth.scanList("");
-        expect(cxCommandOutput.payload.length).toBeGreaterThan(0);
+        auth.scanList("").then((res)=>{
+            expect(res.payload.length).toBeGreaterThan(0);
+        });
     });
+
     it('ScanCreate Successful case wait mode', async () => {
         const params = new Map();
         params.set(CxParamType.PROJECT_NAME, "ast-cli-javascript-integration-success");
@@ -18,8 +19,7 @@ describe("ScanCreate cases",() => {
         params.set(CxParamType.FILTER, "*.ts,!**/node_modules/**/*");
         params.set(CxParamType.BRANCH, "master");
         const auth = new CxWrapper(cxScanConfig);
-        const data = await auth.scanCreate(params);
-        const cxCommandOutput: CxCommandOutput = data;
+        const cxCommandOutput: CxCommandOutput = await auth.scanCreate(params);
         const scanObject = cxCommandOutput.payload.pop();
         const scanShowObject = await auth.scanShow(scanObject.ID);
         console.log(" Json object from successful wait mode case: " + JSON.stringify(scanShowObject));
