@@ -4,11 +4,8 @@ import {CxConstants} from "./CxConstants";
 import {ExecutionService} from "./ExecutionService";
 import {CxCommandOutput} from "./CxCommandOutput";
 import { logger } from "./loggerConfig";
-
 import * as fs from "fs"
 import * as os from "os";
-
-
 
 type ParamTypeMap = Map<CxParamType, string>;
 
@@ -32,7 +29,6 @@ export class CxWrapper {
             logger.info("Did not receive ClientId/Secret or ApiKey from cli arguments");
         }
         let executablePath: string;
-
         if (cxScanConfig.pathToExecutable) {
             this.pathToExecutable = cxScanConfig.pathToExecutable;
         } else if (process.platform === 'win32') {
@@ -47,11 +43,9 @@ export class CxWrapper {
             this.pathToExecutable = executablePath;
             fs.chmodSync(this.pathToExecutable, 0o777);
         }
-
         if (cxScanConfig.baseUri) {
             this.baseUri = cxScanConfig.baseUri;
         }
-
         if (cxScanConfig.tenant) {
             this.tenant = cxScanConfig.tenant;
         }
@@ -106,7 +100,6 @@ export class CxWrapper {
                 }
             }
         });
-
         const exec = new ExecutionService();
         return await exec.executeCommands(this.pathToExecutable, commands, CxConstants.SCAN_TYPE);
     }
@@ -121,7 +114,6 @@ export class CxWrapper {
     async scanShow(id: string): Promise<CxCommandOutput> {
         const commands: string[] = [CxConstants.CMD_SCAN, CxConstants.SUB_CMD_SHOW, CxConstants.SCAN_ID, id];
         commands.push(...this.initializeCommands(true));
-
         const exec = new ExecutionService();
         return await exec.executeCommands(this.pathToExecutable, commands, CxConstants.SCAN_TYPE);
     }
@@ -130,7 +122,6 @@ export class CxWrapper {
         const validated_filters = this.filterArguments(filters);
         const commands: string[] = [CxConstants.CMD_SCAN, "list"].concat(validated_filters);
         commands.push(...this.initializeCommands(true));
-
         const exec = new ExecutionService();
         return await exec.executeCommands(this.pathToExecutable, commands, CxConstants.SCAN_TYPE);
     }
@@ -139,7 +130,6 @@ export class CxWrapper {
         const validated_filters = this.filterArguments(filters);
         const commands: string[] = [CxConstants.CMD_PROJECT, "list"].concat(validated_filters);
         commands.push(...this.initializeCommands(true));
-
         const exec = new ExecutionService();
         return await exec.executeCommands(this.pathToExecutable, commands, CxConstants.PROJECT_TYPE);
     }
@@ -149,7 +139,6 @@ export class CxWrapper {
         const validated_filters = this.filterArguments(CxConstants.BRANCH_NAME + filters)
         const commands: string[] = [CxConstants.CMD_PROJECT , CxConstants.SUB_CMD_BRANCHES, CxConstants.PROJECT_ID, projectId].concat(validated_filters);
         commands.push(...this.initializeCommands(false));
-
         const exec = new ExecutionService();
         return await exec.executeCommands(this.pathToExecutable, commands, CxConstants.PROJECT_TYPE);
     }
@@ -157,7 +146,6 @@ export class CxWrapper {
     async projectShow(projectId: string): Promise<CxCommandOutput> {
         const commands: string[] = [CxConstants.CMD_PROJECT, CxConstants.SUB_CMD_SHOW, CxConstants.PROJECT_ID,projectId];
         commands.push(...this.initializeCommands(true));
-
         const exec = new ExecutionService();
         return await exec.executeCommands(this.pathToExecutable, commands, CxConstants.PROJECT_TYPE);
     }
@@ -184,14 +172,12 @@ export class CxWrapper {
 
     async getResults(scanId: string, resultType:string, outputFileName: string, outputFilePath: string) {
         const commands = this.createResultCommand(scanId, resultType, outputFileName, outputFilePath)
-
         const exec = new ExecutionService();
         return await exec.executeCommands(this.pathToExecutable, commands);
     }
 
     createResultCommand(scanId: string, reportFormat: string, outputFileName: string, outputPath: string): string[] {
         const commands: string[] = [CxConstants.CMD_RESULT, CxConstants.SCAN_ID, scanId,CxConstants.REPORT_FORMAT , reportFormat];
-
         if (outputFileName) {
             commands.push(CxConstants.OUTPUT_NAME);
             commands.push(outputFileName);
@@ -201,7 +187,6 @@ export class CxWrapper {
             commands.push(outputPath);
         }
         commands.push(...this.initializeCommands(false));
-
         return commands;
     }
 
