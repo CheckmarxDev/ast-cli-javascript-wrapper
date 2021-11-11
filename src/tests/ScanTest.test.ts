@@ -4,10 +4,7 @@ import {CxParamType} from "../main/wrapper/CxParamType";
 import {BaseTest} from "./BaseTest";
 
 describe("ScanCreate cases",() => {
-    const cxScanConfig = new BaseTest();
-
-    it('ScanList Successful case', async () => {
-    });
+    let cxScanConfig = new BaseTest();
 
     it('ScanList Successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);
@@ -16,7 +13,7 @@ describe("ScanCreate cases",() => {
     });
 
     it('ScanCreate Successful case wait mode', async () => {
-        let params = new Map();
+        const params = new Map();
         params.set(CxParamType.PROJECT_NAME, "ast-cli-javascript-integration-success");
         params.set(CxParamType.S, "./src");
         params.set(CxParamType.FILTER, "*.ts,!**/node_modules/**/*");
@@ -30,7 +27,7 @@ describe("ScanCreate cases",() => {
     })
 
     it('ScanCreate Successful case with Branch', async () => {
-        let params = new Map();
+        const params = new Map();
         params.set(CxParamType.PROJECT_NAME, "ast-cli-javascript-integration-success-branch");
         params.set(CxParamType.S, "./src");
         params.set(CxParamType.FILTER, "*.ts,!**/node_modules/**/*");
@@ -45,7 +42,7 @@ describe("ScanCreate cases",() => {
     })
 
     it('ScanCreate Failure case', async () => {
-        let params = new Map();
+        const params = new Map();
         params.set(CxParamType.PROJECT_NAME, "ast-cli-javascript-integration-failure");
         params.set(CxParamType.S, "./src");
         params.set(CxParamType.SAST_PRESET_NAME, "Checkmarx Default Fake");
@@ -59,7 +56,7 @@ describe("ScanCreate cases",() => {
     })
 
     it('ScanCreate Successful case no wait mode', async () => {
-        let params = new Map();
+        const params = new Map();
         params.set(CxParamType.PROJECT_NAME, "ast-cli-javascript-integration-nowait");
         params.set(CxParamType.S, "./src");
         params.set(CxParamType.SAST_PRESET_NAME, "Checkmarx Default Fake");
