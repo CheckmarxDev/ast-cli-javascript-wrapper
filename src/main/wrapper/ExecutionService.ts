@@ -53,8 +53,8 @@ export class ExecutionService {
                 }
             });
             cp.stdout.on('close', (data: any) => {
-                console.log("fim",output_string);
                 logger.info(`${output_string.toString().trim()}`);
+                // Check if the json is valid
                 if (isJsonString(output_string.toString())) {
                     let resultObject = JSON.parse(output_string.toString().split('\n')[0]);
                     // Some cli outputs have array format, must be checked
@@ -96,6 +96,7 @@ export class ExecutionService {
             });
         });
     }
+
     executeResultsCommands(pathToExecutable: string, commands: string[]): Promise<CxCommandOutput> {
         return new Promise(function (resolve, reject) {
             let stderr = '';
@@ -120,7 +121,6 @@ export class ExecutionService {
     }
 
     async executeResultsCommandsFile(scanId: string, resultType: string, fileExtension: string,commands: string[], pathToExecutable: string,fileName:string): Promise<CxCommandOutput> {
-
         const filePath = path.join(os.tmpdir(), fileName + fileExtension)
         let read = fs.readFileSync(filePath,'utf8');
         let cxCommandOutput = new CxCommandOutput();
@@ -136,7 +136,7 @@ export class ExecutionService {
                 cxCommandOutput.status = "Error in the json file."
             }
         }
-        // in case of html output
+        // In case of html output
         else{
             let html_arrray:any = []
             html_arrray.push(read)
