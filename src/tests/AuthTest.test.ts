@@ -1,6 +1,6 @@
 import {CxWrapper} from '../main/wrapper/CxWrapper';
 import {CxCommandOutput} from "../main/wrapper/CxCommandOutput";
-import {CxScanConfig} from "../main/scan/CxScanConfig";
+import {CxConfig} from "../main/wrapper/CxConfig";
 import {BaseTest} from "./BaseTest";
 
 describe("Authentication validation",() => {
@@ -12,7 +12,7 @@ describe("Authentication validation",() => {
     });
 
     it('Result authentication failed case', async () => {
-        const cxScanConfig_fail = new CxScanConfig();
+        const cxScanConfig_fail = new CxConfig();
         cxScanConfig_fail.baseUri = "error";
         cxScanConfig_fail.clientId = "error";
         cxScanConfig_fail.clientSecret = "error";
