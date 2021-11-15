@@ -6,10 +6,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Copy executable
-        run: cp ./src/main/resources/cx-linux /tmp/
-      - name: Permissions to executable
-        run: sudo chmod 777 /tmp/cx-linux
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
         with:
@@ -22,7 +18,6 @@ jobs:
           CX_CLIENT_SECRET: ${{ secrets.CLIENT_SECRET}}
           CX_BASE_URI: ${{ secrets.BASE_URI }}
           CX_TENANT: ${{ secrets.TENANT }}
-          PATH_TO_EXECUTABLE: /tmp/cx-linux
         run: npm test
   cx-scan:
     runs-on: ubuntu-latest

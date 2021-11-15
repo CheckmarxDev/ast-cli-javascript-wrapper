@@ -14,5 +14,7 @@
         "noUnusedLocals": true,
         "pretty": true
     },
-    "include": ["./src/**/*","./src/main/resources/**/*"]
+    "include": ["./src/**/*",
+      "./src/main/wrapper/resources/**/*"
+    ]
 }
