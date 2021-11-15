@@ -1,6 +1,6 @@
 import { configure, getLogger } from 'log4js';
 
-// appenders
+// Appenders
 configure({
   appenders: {
     console: { type: 'stdout', layout: { type: "messagePassThrough" } },
@@ -10,5 +10,5 @@ categories: {
   }
 });
 
-// fetch logger and export
+// Fetch logger and export
 export const logger = getLogger();

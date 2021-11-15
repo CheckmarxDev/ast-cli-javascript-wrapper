@@ -12,7 +12,7 @@
   <summary>Table of Contents</summary>
   <ol>
     <li>
-      <a href="#about-the-project">About The Project</a>
+      <a href="#about-the-project">About The CxProject</a>
     </li>
     <li>
       <a href="#getting-started">Getting Started</a>
@@ -26,7 +26,7 @@
 </details>
 
 <!-- ABOUT THE PROJECT -->
-## About The Project
+## About The CxProject
 
 The Javascript-Wrapper is part of the AST-CLI project that provides a shared infrastructure across the AST projects.
 It contains technology neutral repository interfaces as well as a metadata model for persisting Javascript classes.
@@ -86,7 +86,7 @@ setx PATH_TO_EXECUTABLE {value}
 
 Checkmarx - AST Integrations Team
 
-Project Link: [https://github.com/CheckmarxDev/ast-cli-javascript-wrapper](https://github.com/CheckmarxDev/ast-cli-javascript-wrapper)
+CxProject Link: [https://github.com/CheckmarxDev/ast-cli-javascript-wrapper](https://github.com/CheckmarxDev/ast-cli-javascript-wrapper)
 
 
 © 2021 Checkmarx Ltd. All Rights Reserved.
