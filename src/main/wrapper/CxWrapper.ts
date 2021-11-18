@@ -135,7 +135,7 @@ export class CxWrapper {
         const commands: string[] = [CxConstants.CMD_PROJECT , CxConstants.SUB_CMD_BRANCHES, CxConstants.PROJECT_ID, projectId].concat(validated_filters);
         commands.push(...this.initializeCommands(false));
         const exec = new ExecutionService();
-        return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.PROJECT_TYPE);
+        return await exec.executeCommands(this.config.pathToExecutable, commands);
     }
 
     async projectShow(projectId: string): Promise<CxCommandOutput> {
