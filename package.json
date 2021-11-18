@@ -1,16 +1,11 @@
 {
   "name": "@CheckmarxDev/ast-cli-javascript-wrapper",
-  "version": "0.0.35",
+  "version": "0.0.37",
   "description": "AST CLI Javascript wrapper",
-  "main": "dist/CxAuth.js",
-  "typings": "dist/CxAuth.d.ts",
+  "main": "dist/main/wrapper/CxWrapper.js",
+  "typings": "dist/main/wrapper/CxWrapper.d.ts",
   "files": [
-    "dist/main/resources/cx*",
-    "dist/main/*.ts",
-    "dist/main/*.js",
-    "dist/main/*.map",
-    "jest.config.js",
-    "jest.setup.js",
+    "dist/main/**/*",
     "README.md"
   ],
   "dependencies": {
