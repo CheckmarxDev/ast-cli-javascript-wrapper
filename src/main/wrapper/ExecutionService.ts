@@ -1,11 +1,11 @@
 import {CxCommandOutput} from "./CxCommandOutput";
 import CxScan from "../scan/CxScan";
-import CxProject from "../project/CxProject";
 import { logger } from "./loggerConfig";
 import * as fs from "fs"
 import * as os from "os";
 import * as path from "path";
 import CxResult from "../results/CxResult";
+import CxProject from "../project/CxProject";
 
 const spawn = require('child_process').spawn;
 
@@ -25,7 +25,9 @@ function transformation(commands: string[]):string[] {
 }
 
 function transform(n:string) {
-    return n.replace(/["']/g, "").replace("/[, ]/g",",")
+    let r = "";
+    if(n) r = n.replace(/["']/g, "").replace("/[, ]/g",",");
+    return r;
 }
 
 export class ExecutionService {
@@ -57,41 +59,18 @@ export class ExecutionService {
                 // Check if the json is valid
                 if (isJsonString(output_string.toString())) {
                     let resultObject = JSON.parse(output_string.toString().split('\n')[0]);
-                    // Some cli outputs have array format, must be checked
-                    if (resultObject instanceof Array) {
-                        // Check if there is a specific type for the output and make conversions
                         switch(output){
                             case 'CxScan':
-                                let r = resultObject.map((member)=>{return Object.assign( new CxScan(),member);}) ;
-                                cxCommandOutput.payload = r;
+                                let scans = CxScan.parseProject(resultObject)
+                                cxCommandOutput.payload = scans;
                                 break;
                             case 'CxProject':
-                                r = resultObject.map((member)=>{return Object.assign( new CxProject(),member);}) ;
-                                cxCommandOutput.payload = r;
+                                let projects = CxProject.parseProject(resultObject)
+                                cxCommandOutput.payload = projects;
                                 break;
                             default:
-                                logger.info(JSON.stringify(resultObject));
                                 cxCommandOutput.payload = resultObject;
                         }
-                    } else {
-                        let resultArray: any [] = [];
-                        // Check if there is a specific type for the output and make conversions
-                        switch(output){
-                            case 'CxScan':
-                                let r = Object.assign( new CxScan(),resultObject);
-                                resultArray.push(r);
-                                cxCommandOutput.payload = resultArray;
-                                break;
-                            case 'CxProject':
-                                r = Object.assign( new CxProject(),resultObject);
-                                resultArray.push(r);
-                                cxCommandOutput.payload = resultArray;
-                                break;
-                            default:
-                                resultArray.push(resultObject);
-                                cxCommandOutput.payload = resultArray;
-                        }
-                    }
                 }
             });
         });

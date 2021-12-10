@@ -21,9 +21,9 @@ describe("ScanCreate cases",() => {
         const auth = new CxWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput = await auth.scanCreate(params);
         const scanObject = cxCommandOutput.payload.pop();
-        const scanShowObject = await auth.scanShow(scanObject.ID);
+        const scanShowObject = await auth.scanShow(scanObject.id);
         console.log(" Json object from successful wait mode case: " + JSON.stringify(scanShowObject));
-        expect(scanShowObject.payload.pop().Status).toEqual("Completed");
+        expect(scanShowObject.payload.pop().status).toEqual("Completed");
     })
 
     it('ScanCreate Failure case', async () => {
@@ -35,9 +35,9 @@ describe("ScanCreate cases",() => {
         const auth = new CxWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput = await auth.scanCreate(params);
         const scanObject = cxCommandOutput.payload.pop();
-        const scanShowObject = await auth.scanShow(scanObject.ID);
+        const scanShowObject = await auth.scanShow(scanObject.id);
         console.log(" Json object from failure case: " + JSON.stringify(scanShowObject));
-        expect(scanShowObject.payload.pop().Status).toEqual("Failed");
+        expect(scanShowObject.payload.pop().status).toEqual("Failed");
     })
 
     it('ScanCreate Successful case with Branch', async () => {
@@ -49,9 +49,9 @@ describe("ScanCreate cases",() => {
         const auth = new CxWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput = await auth.scanCreate(params);
         const scanObject = cxCommandOutput.payload.pop();
-        const scanShowObject = await auth.scanShow(scanObject.ID);
+        const scanShowObject = await auth.scanShow(scanObject.id);
         console.log(" Json object from successful wait mode case with branch: " +JSON.stringify(scanShowObject));
-        expect(scanShowObject.payload.pop().Status).toEqual("Completed");
+        expect(scanShowObject.payload.pop().status).toEqual("Completed");
 
     })
 
@@ -65,8 +65,8 @@ describe("ScanCreate cases",() => {
         const auth = new CxWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput = await auth.scanCreate(params);
         const scanObject = cxCommandOutput.payload.pop();
-        const scanShowObject = await auth.scanShow(scanObject.ID);
+        const scanShowObject = await auth.scanShow(scanObject.id);
         console.log(" Json object from successful no wait mode case: " + JSON.stringify(scanShowObject));
-        expect(scanShowObject.payload.pop().Status).toEqual("Running");
+        expect(scanShowObject.payload.pop().status).toEqual("Running");
     })
 });
