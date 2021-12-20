@@ -8,7 +8,7 @@ describe("Results cases",() => {
     it('Result Test Successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput  = await auth.scanList("");
-        let sampleId  = cxCommandOutput.payload.pop().ID;
+        let sampleId  = cxCommandOutput.payload.pop().id;
         await auth.getResults(sampleId,"json","jsonList", ".");
         const file = await fileExists("./jsonList.json");
         expect(file).toBe(true);
@@ -17,7 +17,8 @@ describe("Results cases",() => {
     it('Result List Successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput = await auth.scanList("");
-        let sampleId  = cxCommandOutput.payload.pop().ID;
+        console.log(JSON.stringify(cxCommandOutput));
+        let sampleId  = cxCommandOutput.payload.pop().id;
         const written = await auth.getResultsList(sampleId);
         expect(written.status).toEqual("");
     });
@@ -25,7 +26,7 @@ describe("Results cases",() => {
     it('Result summary html file generation successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput = await auth.scanList("");
-        let sampleId  = cxCommandOutput.payload.pop().ID;
+        let sampleId  = cxCommandOutput.payload.pop().id;
         await auth.getResults(sampleId,"summaryHTML","test", ".");
         const file = await fileExists("./test.html");
         expect(file).toBe(true);
@@ -34,7 +35,7 @@ describe("Results cases",() => {
     it('Result summary html string successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput = await auth.scanList("");
-        let sampleId  = cxCommandOutput.payload.pop().ID;
+        let sampleId  = cxCommandOutput.payload.pop().id;
         const written = await auth.getResultsSummary(sampleId);
         expect(written.payload.length).toBeGreaterThan(0);
     });
