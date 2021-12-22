@@ -33,11 +33,10 @@ function transform(n:string) {
 export class ExecutionService {
     executeCommands(pathToExecutable: string, commands: string[], output? : string ): Promise<CxCommandOutput> {
         return new Promise(function (resolve, reject) {
-
             let stderr = "";
             let stdout ="";
-            commands = transformation(commands);
-            const cp = spawn(pathToExecutable, commands);
+
+            const cp = spawn(pathToExecutable, transformation(commands));
             cp.on('error', reject);
             cp.on('close', function (code: number) {
               logger.info("Exit code received from AST-CLI: " + code);
@@ -48,12 +47,15 @@ export class ExecutionService {
             });
             cp.stdout.on('data', (data: any) => {
                 if (data) {
-                  logger.info(data);
-                  stdout += data;
+                  logger.info(data.toString());
+                  stdout += data.toString();
                 }
             });
-            cp.stderr.on('data', function (chunk: string) {
-                stderr += chunk;
+            cp.stderr.on('data', function (data: any) {
+              if (data) {
+                logger.error(data.toString());
+                stderr += data.toString();
+              }
             });
         });
     }
