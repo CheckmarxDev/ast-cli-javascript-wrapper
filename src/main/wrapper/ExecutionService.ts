@@ -39,7 +39,6 @@ export class ExecutionService {
             let cp = spawn(pathToExecutable, transformation(commands));
             cp.on('error', reject);
             cp.on('exit',(code: number, signal: any) => {
-                logger.info(" " + Date.now().toLocaleString());
                 logger.info("Exit code received from AST-CLI: " + code);
                 logger.info(stdout);
                 logger.info(stderr);
@@ -67,22 +66,24 @@ export class ExecutionService {
         cxCommandOutput.status = stderr;
       }
       if (stdout) {
-        // Check if the json is valid
-        if (isJsonString(stdout)) {
-          let resultObject = JSON.parse(stdout.split('\n')[0]);
-          switch(output){
-            case 'CxScan':
-              let scans = CxScan.parseProject(resultObject)
-              cxCommandOutput.payload = scans;
-              break;
-            case 'CxProject':
-              let projects = CxProject.parseProject(resultObject)
-              cxCommandOutput.payload = projects;
-              break;
-            default:
-              cxCommandOutput.payload = resultObject;
-          }
-        }
+            const stdoutSplit = stdout.split('\n');
+            const data = stdoutSplit.find(isJsonString);
+
+            if (data) {
+              let resultObject = JSON.parse(data);
+              switch(output){
+                case 'CxScan':
+                  let scans = CxScan.parseProject(resultObject)
+                  cxCommandOutput.payload = scans;
+                  break;
+                case 'CxProject':
+                  let projects = CxProject.parseProject(resultObject)
+                  cxCommandOutput.payload = projects;
+                  break;
+                default:
+                  cxCommandOutput.payload = resultObject;
+              }
+            }
       }
 
       return cxCommandOutput;
