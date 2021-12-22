@@ -46,7 +46,7 @@ export class ExecutionService {
             });
             cp.stdout.on('data', (data: { toString: () => string; }) => {
                 if (data) {
-                  logger.info(data.toString());
+                  logger.info(data.toString().replace('\n', ''));
                   stdout += data.toString();
                 }
             });
