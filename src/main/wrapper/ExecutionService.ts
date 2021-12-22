@@ -38,20 +38,20 @@ export class ExecutionService {
 
             let cp = spawn(pathToExecutable, transformation(commands));
             cp.on('error', reject);
-            cp.on('exit',(code: number) => {
-                console.log(" " + Date.now().toLocaleString())
+            cp.on('exit',(code: number, signal: any) => {
+                logger.info(" " + Date.now().toLocaleString());
                 logger.info("Exit code received from AST-CLI: " + code);
                 logger.info(stdout);
                 logger.info(stderr);
                 resolve(ExecutionService.onCloseCommand(code, stderr, stdout, output ));
             });
-            cp.stdout.on('data', (data: any) => {
+            cp.stdout.on('data', (data: { toString: () => string; }) => {
                 if (data) {
                   logger.info(data.toString());
                   stdout += data.toString();
                 }
             });
-            cp.stderr.on('data', function (data: any) {
+            cp.stderr.on('data', (data: { toString: () => string; }) => {
               if (data) {
                 logger.error(data.toString());
                 stderr += data.toString();
