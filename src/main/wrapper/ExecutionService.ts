@@ -33,47 +33,57 @@ function transform(n:string) {
 export class ExecutionService {
     executeCommands(pathToExecutable: string, commands: string[], output? : string ): Promise<CxCommandOutput> {
         return new Promise(function (resolve, reject) {
-            let stderr = '';
-            let cxCommandOutput = new CxCommandOutput();
-            let output_string ="";
+
+            let stderr = "";
+            let stdout ="";
             commands = transformation(commands);
             const cp = spawn(pathToExecutable, commands);
+            cp.on('error', reject);
+            cp.on('close', function (code: number) {
+              logger.info("Exit code received from AST-CLI: " + code);
+              logger.info(stdout);
+              logger.info(stderr);
+
+              resolve(ExecutionService.onCloseCommand(code, stderr, stdout, output ));
+            });
+            cp.stdout.on('data', (data: any) => {
+                if (data) {
+                  logger.info(data);
+                  stdout += data;
+                }
+            });
             cp.stderr.on('data', function (chunk: string) {
                 stderr += chunk;
             });
-            cp.on('error', reject)
-                .on('close', function (code: number) {
-                    cxCommandOutput.exitCode = code;
-                    cxCommandOutput.status =  stderr;
-                    logger.info("Exit code received from AST-CLI: " + code);
-                    logger.info(stderr);
-                    resolve(cxCommandOutput);
-                });
-            cp.stdout.on('data', (data: any) => {
-                if (data) {
-                    output_string+=data;
-                }
-            });
-            cp.stdout.on('close', (data: any) => {
-                logger.info(`${output_string.toString().trim()}`);
-                // Check if the json is valid
-                if (isJsonString(output_string.toString())) {
-                    let resultObject = JSON.parse(output_string.toString().split('\n')[0]);
-                        switch(output){
-                            case 'CxScan':
-                                let scans = CxScan.parseProject(resultObject)
-                                cxCommandOutput.payload = scans;
-                                break;
-                            case 'CxProject':
-                                let projects = CxProject.parseProject(resultObject)
-                                cxCommandOutput.payload = projects;
-                                break;
-                            default:
-                                cxCommandOutput.payload = resultObject;
-                        }
-                }
-            });
         });
+    }
+
+    private static onCloseCommand(code: number, stderr: string, stdout: string, output: string) : CxCommandOutput {
+      const cxCommandOutput = new CxCommandOutput();
+      cxCommandOutput.exitCode = code;
+      if (stderr) {
+        cxCommandOutput.status = stderr;
+      }
+      if (stdout) {
+        // Check if the json is valid
+        if (isJsonString(stdout)) {
+          let resultObject = JSON.parse(stdout.split('\n')[0]);
+          switch(output){
+            case 'CxScan':
+              let scans = CxScan.parseProject(resultObject)
+              cxCommandOutput.payload = scans;
+              break;
+            case 'CxProject':
+              let projects = CxProject.parseProject(resultObject)
+              cxCommandOutput.payload = projects;
+              break;
+            default:
+              cxCommandOutput.payload = resultObject;
+          }
+        }
+      }
+
+      return cxCommandOutput;
     }
 
     executeResultsCommands(pathToExecutable: string, commands: string[]): Promise<CxCommandOutput> {
