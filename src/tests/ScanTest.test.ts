@@ -1,6 +1,5 @@
 import {CxWrapper} from '../main/wrapper/CxWrapper';
 import {CxCommandOutput} from "../main/wrapper/CxCommandOutput";
-import {CxParamType} from "../main/wrapper/CxParamType";
 import {BaseTest} from "./BaseTest";
 
 describe("ScanCreate cases",() => {
