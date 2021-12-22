@@ -40,8 +40,6 @@ export class ExecutionService {
             cp.on('error', reject);
             cp.on('exit',(code: number, signal: any) => {
                 logger.info("Exit code received from AST-CLI: " + code);
-                logger.info(stdout);
-                logger.info(stderr);
                 resolve(ExecutionService.onCloseCommand(code, stderr, stdout, output ));
             });
             cp.stdout.on('data', (data: { toString: () => string; }) => {
