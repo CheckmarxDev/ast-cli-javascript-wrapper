@@ -50,7 +50,7 @@ export class ExecutionService {
             });
             cp.stderr.on('data', (data: { toString: () => string; }) => {
               if (data) {
-                logger.error(data.toString());
+                logger.error(data.toString().replace('\n', ''));
                 stderr += data.toString();
               }
             });
