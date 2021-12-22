@@ -47,6 +47,7 @@ describe("ScanCreate cases",() => {
         params.set(CxParamType.S, "./src");
         params.set(CxParamType.FILTER, "*.ts,!**/node_modules/**/*");
         params.set(CxParamType.BRANCH, "master");
+        params.set(CxParamType.ADDITIONAL_PARAMETERS, "--scan-types sast");
         const auth = new CxWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput = await auth.scanCreate(params);
         const scanObject = cxCommandOutput.payload.pop();
