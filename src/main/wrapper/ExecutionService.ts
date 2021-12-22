@@ -36,9 +36,10 @@ export class ExecutionService {
             let stderr = "";
             let stdout ="";
 
-            const cp = spawn(pathToExecutable, transformation(commands));
+            let cp = spawn(pathToExecutable, transformation(commands));
             cp.on('error', reject);
             cp.on('close', function (code: number) {
+                console.log(" " + Date.now().toLocaleString())
               logger.info("Exit code received from AST-CLI: " + code);
               logger.info(stdout);
               logger.info(stderr);
