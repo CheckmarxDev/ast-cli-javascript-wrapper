@@ -33,47 +33,58 @@ function transform(n:string) {
 export class ExecutionService {
     executeCommands(pathToExecutable: string, commands: string[], output? : string ): Promise<CxCommandOutput> {
         return new Promise(function (resolve, reject) {
-            let stderr = '';
-            let cxCommandOutput = new CxCommandOutput();
-            let output_string ="";
-            commands = transformation(commands);
-            const cp = spawn(pathToExecutable, commands);
-            cp.stderr.on('data', function (chunk: string) {
-                stderr += chunk;
+            let stderr = "";
+            let stdout ="";
+
+            let cp = spawn(pathToExecutable, transformation(commands));
+            cp.on('error', reject);
+            cp.on('exit',(code: number, signal: any) => {
+                logger.info("Exit code received from AST-CLI: " + code);
+                resolve(ExecutionService.onCloseCommand(code, stderr, stdout, output ));
             });
-            cp.on('error', reject)
-                .on('close', function (code: number) {
-                    cxCommandOutput.exitCode = code;
-                    cxCommandOutput.status =  stderr;
-                    logger.info("Exit code received from AST-CLI: " + code);
-                    logger.info(stderr);
-                    resolve(cxCommandOutput);
-                });
-            cp.stdout.on('data', (data: any) => {
+            cp.stdout.on('data', (data: { toString: () => string; }) => {
                 if (data) {
-                    output_string+=data;
+                  logger.info(data.toString().replace('\n', ''));
+                  stdout += data.toString();
                 }
             });
-            cp.stdout.on('close', (data: any) => {
-                logger.info(`${output_string.toString().trim()}`);
-                // Check if the json is valid
-                if (isJsonString(output_string.toString())) {
-                    let resultObject = JSON.parse(output_string.toString().split('\n')[0]);
-                        switch(output){
-                            case 'CxScan':
-                                let scans = CxScan.parseProject(resultObject)
-                                cxCommandOutput.payload = scans;
-                                break;
-                            case 'CxProject':
-                                let projects = CxProject.parseProject(resultObject)
-                                cxCommandOutput.payload = projects;
-                                break;
-                            default:
-                                cxCommandOutput.payload = resultObject;
-                        }
-                }
+            cp.stderr.on('data', (data: { toString: () => string; }) => {
+              if (data) {
+                logger.error(data.toString().replace('\n', ''));
+                stderr += data.toString();
+              }
             });
         });
+    }
+
+    private static onCloseCommand(code: number, stderr: string, stdout: string, output: string) : CxCommandOutput {
+      const cxCommandOutput = new CxCommandOutput();
+      cxCommandOutput.exitCode = code;
+      if (stderr) {
+        cxCommandOutput.status = stderr;
+      }
+      if (stdout) {
+            const stdoutSplit = stdout.split('\n');
+            const data = stdoutSplit.find(isJsonString);
+
+            if (data) {
+              let resultObject = JSON.parse(data);
+              switch(output){
+                case 'CxScan':
+                  let scans = CxScan.parseProject(resultObject)
+                  cxCommandOutput.payload = scans;
+                  break;
+                case 'CxProject':
+                  let projects = CxProject.parseProject(resultObject)
+                  cxCommandOutput.payload = projects;
+                  break;
+                default:
+                  cxCommandOutput.payload = resultObject;
+              }
+            }
+      }
+
+      return cxCommandOutput;
     }
 
     executeResultsCommands(pathToExecutable: string, commands: string[]): Promise<CxCommandOutput> {
