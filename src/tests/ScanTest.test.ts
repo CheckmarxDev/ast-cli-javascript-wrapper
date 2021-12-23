@@ -9,6 +9,7 @@ describe("ScanCreate cases",() => {
         const auth = new CxWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput = await auth.scanList("");
         console.log(" Json object from scanList successful case: " + JSON.stringify(cxCommandOutput));
+        expect(cxCommandOutput.payload.length).toBeGreaterThan(1);
         expect(cxCommandOutput.exitCode).toBe(0);
     });
 
@@ -46,6 +47,7 @@ describe("ScanCreate cases",() => {
         params.set(CxParamType.S, "./src");
         params.set(CxParamType.FILTER, "*.ts,!**/node_modules/**/*");
         params.set(CxParamType.BRANCH, "master");
+        params.set(CxParamType.ADDITIONAL_PARAMETERS, "--scan-types sast");
         const auth = new CxWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput = await auth.scanCreate(params);
         const scanObject = cxCommandOutput.payload.pop();
