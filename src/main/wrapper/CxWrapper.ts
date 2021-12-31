@@ -75,6 +75,13 @@ export class CxWrapper {
         return list;
     }
 
+    async authValidate(): Promise<CxCommandOutput> {
+        const commands: string[] = [CxConstants.CMD_AUTH, CxConstants.SUB_CMD_VALIDATE];
+        commands.push(...this.initializeCommands(false));
+        let exec = new ExecutionService();
+        return await exec.executeCommands(this.config.pathToExecutable, commands);
+    }
+
     async scanCreate(params: ParamTypeMap): Promise<CxCommandOutput> {
         const commands: string[] = [CxConstants.CMD_SCAN, CxConstants.SUB_CMD_CREATE];
         commands.push(...this.initializeCommands(true));
@@ -97,13 +104,6 @@ export class CxWrapper {
         });
         const exec = new ExecutionService();
         return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.SCAN_TYPE);
-    }
-
-    async authValidate(): Promise<CxCommandOutput> {
-        const commands: string[] = [CxConstants.CMD_AUTH, CxConstants.SUB_CMD_VALIDATE];
-        commands.push(...this.initializeCommands(false));
-        let exec = new ExecutionService();
-        return await exec.executeCommands(this.config.pathToExecutable, commands);
     }
 
     async scanShow(id: string): Promise<CxCommandOutput> {
@@ -144,6 +144,21 @@ export class CxWrapper {
         const exec = new ExecutionService();
         return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.PROJECT_TYPE);
     }
+
+    async triageShow(projectId: string, similarityId: string, scanType: string ): Promise<CxCommandOutput> {
+        const commands: string[] = [CxConstants.CMD_TRIAGE, CxConstants.SUB_CMD_SHOW, CxConstants.PROJECT_ID, projectId, CxConstants.SIMILARITY_ID, similarityId, CxConstants.SCAN_TYPES_SUB_CMD, scanType];
+        console.log("COMANDO " + commands)
+        commands.push(...this.initializeCommands(true));
+        const exec = new ExecutionService();
+        return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.PREDICATE_TYPE);
+    }  
+    
+    async triageUpdate(projectId: string, similarityId: string, scanType: string, state: string, comment: string, severity: string): Promise<CxCommandOutput> {
+        const commands: string[] = [CxConstants.CMD_TRIAGE, CxConstants.SUB_CMD_UPDATE, CxConstants.PROJECT_ID, projectId, CxConstants.SIMILARITY_ID, similarityId, CxConstants.SCAN_TYPE, scanType, CxConstants.STATE, state, CxConstants.COMMENT, comment, CxConstants.SEVERITY, severity];
+        commands.push(...this.initializeCommands(false));
+        const exec = new ExecutionService();
+        return await exec.executeCommands(this.config.pathToExecutable, commands);
+    }  
 
     async getResultsList(scanId: string) {
         const exec = new ExecutionService();
