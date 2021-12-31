@@ -147,7 +147,6 @@ export class CxWrapper {
 
     async triageShow(projectId: string, similarityId: string, scanType: string ): Promise<CxCommandOutput> {
         const commands: string[] = [CxConstants.CMD_TRIAGE, CxConstants.SUB_CMD_SHOW, CxConstants.PROJECT_ID, projectId, CxConstants.SIMILARITY_ID, similarityId, CxConstants.SCAN_TYPES_SUB_CMD, scanType];
-        console.log("COMANDO " + commands)
         commands.push(...this.initializeCommands(true));
         const exec = new ExecutionService();
         return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.PREDICATE_TYPE);
