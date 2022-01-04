@@ -27,7 +27,7 @@ describe("Triage cases",() => {
         const result: CxResult = results.payload.find(res => res.type == "sast")
 
         const cxCommandOutput: CxCommandOutput = await auth.triageUpdate(scan.projectID, result.similarityId, "sast", "confirmed", "Edited via JavascriptWrapper", "high");
-        
+
         expect(cxCommandOutput.exitCode).toEqual(0);
     })
 });
