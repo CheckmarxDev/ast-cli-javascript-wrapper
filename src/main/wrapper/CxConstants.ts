@@ -3,6 +3,7 @@ export enum CxConstants {
   VERBOSE = "-v",
   PROJECT_NAME = "--project-name",
   SCAN_TYPES_SUB_CMD = "--scan-type",
+  SCAN_TYPES = "--scan-types",
   SAST_PRESET_NAME = "--sast-preset-name",
   FILE_FILTER = "--file-filter",
   AGENT = "--agent",
