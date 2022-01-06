@@ -26,8 +26,10 @@ describe("Triage cases",() => {
         const results = await auth.getResultsList(scan.id)
         const result: CxResult = results.payload.find(res => res.type == "sast")
 
-        const cxCommandOutput: CxCommandOutput = await auth.triageUpdate(scan.projectID, result.similarityId, "sast", "confirmed", "Edited via JavascriptWrapper", "high");
-
+        const cxCommandOutput: CxCommandOutput = await auth.triageUpdate(scan.projectID, result.similarityId, "sast", "to_verify", "Edited via JavascriptWrapper", "high");
+        const http_code = cxCommandOutput.status
+        console.log("Aqui")
+        console.log(http_code)
         expect(cxCommandOutput.exitCode).toEqual(0);
     })
 });
