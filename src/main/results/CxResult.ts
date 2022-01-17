@@ -9,6 +9,7 @@ export default class CxResult {
     firstFoundAt: string = "";
     foundAt: string = "";
     firstScanId: string = "";
+    description: string = "";
     data: any = {};
     comments: any = {};
     vulnerabilityDetails:any = {};
