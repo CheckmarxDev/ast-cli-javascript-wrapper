@@ -41,6 +41,9 @@ export class CxWrapper {
         if (cxScanConfig.baseUri) {
             this.config.baseUri = cxScanConfig.baseUri;
         }
+        if (cxScanConfig.baseAuthUri) {
+            this.config.baseAuthUri = cxScanConfig.baseAuthUri;
+        }
         if (cxScanConfig.tenant) {
             this.config.tenant = cxScanConfig.tenant;
         }
@@ -63,6 +66,10 @@ export class CxWrapper {
         if (this.config.baseUri) {
             list.push(CxConstants.BASE_URI);
             list.push(this.config.baseUri);
+        }
+        if (this.config.baseAuthUri) {
+            list.push(CxConstants.BASE_AUTH_URI);
+            list.push(this.config.baseAuthUri);
         }
         if (this.config.tenant) {
             list.push(CxConstants.TENANT);
