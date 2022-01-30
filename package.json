@@ -11,7 +11,7 @@
   "dependencies": {
     "typescript-logging": "^1.0.0",
     "log4js": "6.4.0",
-    "tslog": "3.2.0"
+    "tslog": "3.3.1"
   },
   "scripts": {
     "build": "tsc",
