@@ -26,6 +26,7 @@ export enum CxConstants {
     CMD_TRIAGE = "triage",
     SUB_CMD_UPDATE = "update",
     CMD_RESULT = "result",
+    SCAN_INFO_FORMAT = "--scan-info-format",
     FORMAT = "--format",
     FORMAT_JSON = "json",
     FORMAT_HTML = "html",
