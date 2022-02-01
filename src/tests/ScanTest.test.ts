@@ -33,6 +33,7 @@ describe("ScanCreate cases",() => {
         params.set(CxParamType.S, "./src");
         params.set(CxParamType.SAST_PRESET_NAME, "Checkmarx Default Fake");
         params.set(CxParamType.BRANCH, "master");
+        params.set(CxParamType.SCAN_TYPES, "sast");
         const auth = new CxWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput = await auth.scanCreate(params);
         const scanObject = cxCommandOutput.payload.pop();
