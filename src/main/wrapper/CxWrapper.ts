@@ -91,7 +91,10 @@ export class CxWrapper {
 
     async scanCreate(params: ParamTypeMap): Promise<CxCommandOutput> {
         const commands: string[] = [CxConstants.CMD_SCAN, CxConstants.SUB_CMD_CREATE];
-        commands.push(...this.initializeCommands(true));
+        commands.push(...this.initializeCommands(false));
+        commands.push(CxConstants.SCAN_INFO_FORMAT);
+        commands.push(CxConstants.FORMAT_JSON);
+
         params.forEach((value: string, key: CxParamType) => {
             if (key !== CxParamType.ADDITIONAL_PARAMETERS && key.length !== 1 && value) {
                 commands.push("--" + key.toString().replace(/_/g, "-").toLowerCase());
