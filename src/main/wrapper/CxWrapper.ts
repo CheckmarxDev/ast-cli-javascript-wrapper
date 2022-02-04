@@ -172,7 +172,7 @@ export class CxWrapper {
     async getResultsList(scanId: string) {
         const exec = new ExecutionService();
         const fileName = new Date().getTime().toString();
-        const commands = this.createResultCommand(scanId, CxConstants.FORMAT_JSON, fileName, os.tmpdir())
+        const commands = this.resultsShow(scanId, CxConstants.FORMAT_JSON, fileName, os.tmpdir())
         // Executes the command and creates a result file
         await exec.executeResultsCommands(this.config.pathToExecutable, commands)
         // Reads the result file and retrieves the results
@@ -182,7 +182,7 @@ export class CxWrapper {
     async getResultsSummary(scanId: string): Promise<CxCommandOutput> {
         const exec = new ExecutionService();
         const fileName = new Date().getTime().toString();
-        const commands = this.createResultCommand(scanId, CxConstants.FORMAT_HTML_CLI, fileName, os.tmpdir());
+        const commands = this.resultsShow(scanId, CxConstants.FORMAT_HTML_CLI, fileName, os.tmpdir());
         // Executes the command and creates a result file
         await exec.executeResultsCommands(this.config.pathToExecutable, commands);
         // Reads the result file and retrieves the results
@@ -190,13 +190,13 @@ export class CxWrapper {
     }
 
     async getResults(scanId: string, resultType:string, outputFileName: string, outputFilePath: string) {
-        const commands = this.createResultCommand(scanId, resultType, outputFileName, outputFilePath)
+        const commands = this.resultsShow(scanId, resultType, outputFileName, outputFilePath)
         const exec = new ExecutionService();
         return await exec.executeCommands(this.config.pathToExecutable, commands);
     }
 
-    createResultCommand(scanId: string, reportFormat: string, outputFileName: string, outputPath: string): string[] {
-        const commands: string[] = [CxConstants.CMD_RESULT, CxConstants.SCAN_ID, scanId,CxConstants.REPORT_FORMAT , reportFormat];
+    resultsShow(scanId: string, reportFormat: string, outputFileName: string, outputPath: string): string[] {
+        const commands: string[] = [CxConstants.CMD_RESULT,CxConstants.SUB_CMD_SHOW, CxConstants.SCAN_ID, scanId,CxConstants.REPORT_FORMAT , reportFormat];
         if (outputFileName) {
             commands.push(CxConstants.OUTPUT_NAME);
             commands.push(outputFileName);
