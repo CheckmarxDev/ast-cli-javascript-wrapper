@@ -4,6 +4,7 @@ export class BaseTest {
     clientId: string = "";
     clientSecret: string = "";
     apiKey: string = "";
+    scanId: string = "";
     pathToExecutable: string;
     tenant: string;
 
@@ -14,6 +15,7 @@ export class BaseTest {
         this.clientSecret = process.env["CX_CLIENT_SECRET"];
         this.tenant = process.env["CX_TENANT"];
         this.apiKey = process.env["CX_APIKEY"];
+        this.scanId = process.env["CX_SCANID"];
         if (process.env["PATH_TO_EXECUTABLE"] !== null && process.env["PATH_TO_EXECUTABLE"] !== undefined) {
             this.pathToExecutable = process.env["PATH_TO_EXECUTABLE"];
         }
