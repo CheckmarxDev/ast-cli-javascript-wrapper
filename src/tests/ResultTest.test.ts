@@ -40,6 +40,12 @@ describe("Results cases",() => {
         expect(written.payload.length).toBeGreaterThan(0);
     });
 
+    it('Result codebashing successful case', async () => {
+        const auth = new CxWrapper(cxScanConfig);
+        const cxCommandOutput: CxCommandOutput = await auth.codeBashingList("79","PHP","Reflected XSS All Clients");
+        expect(cxCommandOutput.payload.length).toBeGreaterThan(0);
+    });
+
 });
 
 const fileExists = (file:any) => {
