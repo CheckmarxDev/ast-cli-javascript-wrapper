@@ -6,6 +6,7 @@ import * as os from "os";
 import * as path from "path";
 import CxResult from "../results/CxResult";
 import CxProject from "../project/CxProject";
+import CxCodeBashing from "../codebashing/CxCodeBashing";
 
 const spawn = require('child_process').spawn;
 
@@ -69,14 +70,18 @@ export class ExecutionService {
 
             if (data) {
               let resultObject = JSON.parse(data);
-              switch(output){
-                case 'CxScan':
-                  let scans = CxScan.parseProject(resultObject)
+              switch (output) {
+                case "CxScan":
+                  let scans = CxScan.parseProject(resultObject);
                   cxCommandOutput.payload = scans;
                   break;
-                case 'CxProject':
-                  let projects = CxProject.parseProject(resultObject)
+                case "CxProject":
+                  let projects = CxProject.parseProject(resultObject);
                   cxCommandOutput.payload = projects;
+                  break;
+                case "CxCodeBashing":
+                  let codeBashing = CxCodeBashing.parseCodeBashing(resultObject);
+                  cxCommandOutput.payload = codeBashing;
                   break;
                 default:
                   cxCommandOutput.payload = resultObject;
