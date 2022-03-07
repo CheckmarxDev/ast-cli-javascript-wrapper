@@ -195,8 +195,15 @@ export class CxWrapper {
         return await exec.executeCommands(this.config.pathToExecutable, commands);
     }
 
+    async codeBashingList(cweId:string,language:string,queryName:string): Promise<CxCommandOutput> {
+        const commands: string[] = [CxConstants.CMD_RESULT, CxConstants.CMD_CODE_BASHING, CxConstants.LANGUAGE, language, CxConstants.VULNERABILITY_TYPE , queryName, CxConstants.CWE_ID , cweId];
+        commands.push(...this.initializeCommands(true));
+        const exec = new ExecutionService();
+        return await exec.executeCommands(this.config.pathToExecutable, commands,CxConstants.CODE_BASHING_TYPE);
+    }
+
     resultsShow(scanId: string, reportFormat: string, outputFileName: string, outputPath: string): string[] {
-        const commands: string[] = [CxConstants.CMD_RESULT,CxConstants.SUB_CMD_SHOW, CxConstants.SCAN_ID, scanId,CxConstants.REPORT_FORMAT , reportFormat];
+        const commands: string[] = [CxConstants.CMD_RESULT, CxConstants.SUB_CMD_SHOW, CxConstants.SCAN_ID, scanId,CxConstants.REPORT_FORMAT , reportFormat];
         if (outputFileName) {
             commands.push(CxConstants.OUTPUT_NAME);
             commands.push(outputFileName);
