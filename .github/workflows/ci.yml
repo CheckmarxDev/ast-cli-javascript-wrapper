@@ -20,6 +20,7 @@ jobs:
           CX_BASE_URI: ${{ secrets.BASE_URI }}
           CX_TENANT: ${{ secrets.TENANT }}
           CX_SCANID: ${{ secrets.SCANID }}
+          CX_APIKEY: ${{ secrets.CX_APIKEY }}
         run: npm test
   cx-scan:
     runs-on: ubuntu-latest
