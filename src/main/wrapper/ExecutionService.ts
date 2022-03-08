@@ -7,6 +7,7 @@ import * as path from "path";
 import CxResult from "../results/CxResult";
 import CxProject from "../project/CxProject";
 import CxCodeBashing from "../codebashing/CxCodeBashing";
+import CxBFL from "../bfl/CxBFL";
 
 const spawn = require('child_process').spawn;
 
@@ -83,6 +84,10 @@ export class ExecutionService {
                   let codeBashing = CxCodeBashing.parseCodeBashing(resultObject);
                   cxCommandOutput.payload = codeBashing;
                   break;
+                case "CxBFL":
+                    let bflNode = CxBFL.parseBFLResponse(resultObject);
+                    cxCommandOutput.payload = bflNode;
+                    break;
                 default:
                   cxCommandOutput.payload = resultObject;
               }
@@ -121,7 +126,7 @@ export class ExecutionService {
         let cxCommandOutput = new CxCommandOutput();
         // Need to check if file output is json or html
         if(fileExtension.includes("json")){
-            let read_json = JSON.parse(read);
+            let read_json = JSON.parse(read.replace(/:([0-9]{15,}),/g, ':"$1",'));
             if (read_json.results){
                 let r : CxResult[] = read_json.results.map((member:any)=>{return Object.assign( new CxResult(),member);});
                 cxCommandOutput.payload = r;

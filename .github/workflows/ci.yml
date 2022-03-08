@@ -30,10 +30,9 @@ jobs:
       - name: Checkmarx AST CLI Action
         uses: checkmarxDev/ast-github-action@main
         with:
-          project_name: ast-cli-javascript-wrapper
-          branch: master
+          project_name: ${{ github.repository }}
           base_uri: ${{ secrets.BASE_URI }}
           cx_tenant: ${{ secrets.TENANT }}
           cx_client_id: ${{ secrets.CLIENT_ID }}
           cx_client_secret: ${{ secrets.CLIENT_SECRET }}
-          additional_params: --tags galactica-team
+          additional_params: --tags "Galactica"
