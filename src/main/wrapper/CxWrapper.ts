@@ -6,6 +6,7 @@ import {CxCommandOutput} from "./CxCommandOutput";
 import { logger } from "./loggerConfig";
 import * as fs from "fs"
 import * as os from "os";
+import CxBFL from "../bfl/CxBFL";
 
 type ParamTypeMap = Map<CxParamType, string>;
 
@@ -214,6 +215,46 @@ export class CxWrapper {
         }
         commands.push(...this.initializeCommands(false));
         return commands;
+    }
+
+    async getResultsBfl(scanId: string, queryId: string, resultNodes: any[]) {
+        const commands: string[] = [CxConstants.CMD_RESULT, CxConstants.SUB_CMD_BFL, CxConstants.SCAN_ID, scanId, CxConstants.QUERY_ID, queryId];
+        commands.push(...this.initializeCommands(true));
+        const exec = new ExecutionService();
+        const response = await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.BFL_TYPE);
+        const bflNodeIndex = this.getIndexOfBflNode(response.payload, resultNodes)
+        response.payload[0] = bflNodeIndex;
+        return response;
+    }
+
+    getIndexOfBflNode(bflNodes: CxBFL[], resultNodes: any[]): number {
+
+        let bflNodeNotFound = -1;
+        for (const bflNode of bflNodes) {
+            for (const resultNode of resultNodes) {
+
+                if(this.compareNodes(bflNode,resultNode))
+                {
+                    return resultNodes.indexOf(resultNode);
+                }
+            }
+
+        }
+        return bflNodeNotFound;
+
+    }
+
+    compareNodes(bflNode: CxBFL, resultNode : any): boolean{
+
+        return bflNode.line == resultNode.line &&
+                bflNode.column == resultNode.column &&
+                bflNode.length == resultNode.length &&
+                bflNode.name == resultNode.name &&
+                bflNode.method == resultNode.method &&
+                bflNode.domType == resultNode.domType &&
+                bflNode.fileName == resultNode.fileName &&
+                bflNode.fullName == resultNode.fullName &&
+                bflNode.methodLine == resultNode.methodLine;
     }
 
     filterArguments(filters:string):string[]{
