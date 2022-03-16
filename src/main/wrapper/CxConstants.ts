@@ -21,6 +21,7 @@ export enum CxConstants {
     SUB_CMD_BRANCHES = "branches",
     CMD_SCAN = "scan",
     SUB_CMD_SHOW = "show",
+    SUB_CMD_CANCEL = "cancel",
     SUB_CMD_LIST = "list",
     SUB_CMD_CREATE = "create",
     CMD_TRIAGE = "triage",
