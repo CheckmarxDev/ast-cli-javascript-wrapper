@@ -1,14 +1,28 @@
 import { configure, getLogger } from 'log4js';
 
-// Appenders
-configure({
-  appenders: {
-    console: { type: 'stdout', layout: { type: "messagePassThrough" } },
-},
-categories: {
-    default: { appenders: ['console'], level: "info" }
-  }
-});
+export function getLoggerWithFilePath(logFilePath ?: string) {
 
-// Fetch logger and export
+  if(logFilePath) {
+    configure({
+      appenders: {
+        file: { type: 'fileSync', filename: logFilePath ? logFilePath : "" },
+        console: { type: 'stdout', layout: { type: "messagePassThrough" } },
+    },
+    categories: {
+        default: { appenders: ['console', 'file'], level: "info" }
+      }
+    });
+
+  } else {
+    configure({
+      appenders: {
+        console: { type: 'stdout', layout: { type: "messagePassThrough" } },
+    },
+    categories: {
+        default: { appenders: ['console'], level: "info" }
+      }
+    });
+  }
+} 
+
 export const logger = getLogger();

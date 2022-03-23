@@ -3,7 +3,7 @@ import {CxParamType} from "./CxParamType";
 import {CxConstants} from "./CxConstants";
 import {ExecutionService} from "./ExecutionService";
 import {CxCommandOutput} from "./CxCommandOutput";
-import { logger } from "./loggerConfig";
+import { getLoggerWithFilePath, logger } from "./loggerConfig";
 import * as fs from "fs"
 import * as os from "os";
 import CxBFL from "../bfl/CxBFL";
@@ -13,8 +13,11 @@ type ParamTypeMap = Map<CxParamType, string>;
 export class CxWrapper {
     config: CxConfig = new CxConfig();
 
-    constructor(cxScanConfig: CxConfig) {
+    constructor(cxScanConfig: CxConfig, logFilePath?: string) {
         let path = require("path");
+        
+        getLoggerWithFilePath(logFilePath)
+        
         if (cxScanConfig.clientId  && cxScanConfig.clientSecret) {
             logger.info("Received clientId and clientSecret");
             this.config.clientId = cxScanConfig.clientId;
@@ -119,7 +122,7 @@ export class CxWrapper {
     
     async scanCancel(id: string): Promise<CxCommandOutput> {
         const commands: string[] = [CxConstants.CMD_SCAN, CxConstants.SUB_CMD_CANCEL, CxConstants.SCAN_ID, id];
-        commands.push(...this.initializeCommands(true));
+        commands.push(...this.initializeCommands(false));
         const exec = new ExecutionService();
         return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.SCAN_TYPE);
     }
