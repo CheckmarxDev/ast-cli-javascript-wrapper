@@ -72,4 +72,19 @@ describe("ScanCreate cases",() => {
         console.log(" Json object from successful no wait mode case: " + JSON.stringify(scanShowObject));
         expect(scanShowObject.payload.pop().status).toEqual("Running");
     })
+
+    it('ScanCancel Successful case', async () => {
+        const params = new Map();
+        params.set(CxParamType.PROJECT_NAME, "ast-cli-javascript-integration-cancel");
+        params.set(CxParamType.S, "./src");
+        params.set(CxParamType.BRANCH, "master");
+        params.set(CxParamType.FILTER, "*.ts,!**/node_modules/**/*");
+        params.set(CxParamType.ADDITIONAL_PARAMETERS, "--async");
+        const auth = new CxWrapper(cxScanConfig);
+        const cxCommandOutput: CxCommandOutput = await auth.scanCreate(params);
+        const scanObject = cxCommandOutput.payload.pop();
+        await auth.scanCancel(scanObject.id)
+        const scanShowObject = await auth.scanShow(scanObject.id);
+        expect(scanShowObject.exitCode).toEqual(0);
+    })
 });
