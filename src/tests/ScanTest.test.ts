@@ -1,9 +1,9 @@
-import {CxWrapper} from '../main/wrapper/CxWrapper';
-import {CxCommandOutput} from "../main/wrapper/CxCommandOutput";
-import {CxParamType} from "../main/wrapper/CxParamType";
-import {BaseTest} from "./BaseTest";
+import { CxWrapper } from '../main/wrapper/CxWrapper';
+import { CxCommandOutput } from "../main/wrapper/CxCommandOutput";
+import { CxParamType } from "../main/wrapper/CxParamType";
+import { BaseTest } from "./BaseTest";
 
-describe("ScanCreate cases",() => {
+describe("ScanCreate cases", () => {
     let cxScanConfig = new BaseTest();
     it('ScanList Successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);
@@ -53,7 +53,7 @@ describe("ScanCreate cases",() => {
         const cxCommandOutput: CxCommandOutput = await auth.scanCreate(params);
         const scanObject = cxCommandOutput.payload.pop();
         const scanShowObject = await auth.scanShow(scanObject.id);
-        console.log(" Json object from successful wait mode case with branch: " +JSON.stringify(scanShowObject));
+        console.log(" Json object from successful wait mode case with branch: " + JSON.stringify(scanShowObject));
         expect(scanShowObject.payload.pop().status).toEqual("Completed");
 
     })
