@@ -1,9 +1,9 @@
-import {CxConfig} from "./CxConfig";
-import {CxParamType} from "./CxParamType";
-import {CxConstants} from "./CxConstants";
-import {ExecutionService} from "./ExecutionService";
-import {CxCommandOutput} from "./CxCommandOutput";
-import { logger } from "./loggerConfig";
+import { CxConfig } from "./CxConfig";
+import { CxParamType } from "./CxParamType";
+import { CxConstants } from "./CxConstants";
+import { ExecutionService } from "./ExecutionService";
+import { CxCommandOutput } from "./CxCommandOutput";
+import { getLoggerWithFilePath, logger } from "./loggerConfig";
 import * as fs from "fs"
 import * as os from "os";
 import CxBFL from "../bfl/CxBFL";
@@ -13,9 +13,12 @@ type ParamTypeMap = Map<CxParamType, string>;
 export class CxWrapper {
     config: CxConfig = new CxConfig();
 
-    constructor(cxScanConfig: CxConfig) {
+    constructor(cxScanConfig: CxConfig, logFilePath?: string) {
         let path = require("path");
-        if (cxScanConfig.clientId  && cxScanConfig.clientSecret) {
+
+        getLoggerWithFilePath(logFilePath)
+
+        if (cxScanConfig.clientId && cxScanConfig.clientSecret) {
             logger.info("Received clientId and clientSecret");
             this.config.clientId = cxScanConfig.clientId;
             this.config.clientSecret = cxScanConfig.clientSecret;
@@ -117,6 +120,13 @@ export class CxWrapper {
         return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.SCAN_TYPE);
     }
 
+    async scanCancel(id: string): Promise<CxCommandOutput> {
+        const commands: string[] = [CxConstants.CMD_SCAN, CxConstants.SUB_CMD_CANCEL, CxConstants.SCAN_ID, id];
+        commands.push(...this.initializeCommands(false));
+        const exec = new ExecutionService();
+        return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.SCAN_TYPE);
+    }
+
     async scanShow(id: string): Promise<CxCommandOutput> {
         const commands: string[] = [CxConstants.CMD_SCAN, CxConstants.SUB_CMD_SHOW, CxConstants.SCAN_ID, id];
         commands.push(...this.initializeCommands(true));
@@ -124,7 +134,7 @@ export class CxWrapper {
         return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.SCAN_TYPE);
     }
 
-    async scanList(filters:string): Promise<CxCommandOutput> {
+    async scanList(filters: string): Promise<CxCommandOutput> {
         const validated_filters = this.filterArguments(filters);
         const commands: string[] = [CxConstants.CMD_SCAN, "list"].concat(validated_filters);
         commands.push(...this.initializeCommands(true));
@@ -132,7 +142,7 @@ export class CxWrapper {
         return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.SCAN_TYPE);
     }
 
-    async projectList(filters:string): Promise<CxCommandOutput> {
+    async projectList(filters: string): Promise<CxCommandOutput> {
         const validated_filters = this.filterArguments(filters);
         const commands: string[] = [CxConstants.CMD_PROJECT, "list"].concat(validated_filters);
         commands.push(...this.initializeCommands(true));
@@ -143,32 +153,32 @@ export class CxWrapper {
     async projectBranches(projectId: string, filters: string): Promise<CxCommandOutput> {
         // Verify and add possible branch filter by name
         const validated_filters = this.filterArguments(CxConstants.BRANCH_NAME + filters)
-        const commands: string[] = [CxConstants.CMD_PROJECT , CxConstants.SUB_CMD_BRANCHES, CxConstants.PROJECT_ID, projectId].concat(validated_filters);
+        const commands: string[] = [CxConstants.CMD_PROJECT, CxConstants.SUB_CMD_BRANCHES, CxConstants.PROJECT_ID, projectId].concat(validated_filters);
         commands.push(...this.initializeCommands(false));
         const exec = new ExecutionService();
         return await exec.executeCommands(this.config.pathToExecutable, commands);
     }
 
     async projectShow(projectId: string): Promise<CxCommandOutput> {
-        const commands: string[] = [CxConstants.CMD_PROJECT, CxConstants.SUB_CMD_SHOW, CxConstants.PROJECT_ID,projectId];
+        const commands: string[] = [CxConstants.CMD_PROJECT, CxConstants.SUB_CMD_SHOW, CxConstants.PROJECT_ID, projectId];
         commands.push(...this.initializeCommands(true));
         const exec = new ExecutionService();
         return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.PROJECT_TYPE);
     }
 
-    async triageShow(projectId: string, similarityId: string, scanType: string ): Promise<CxCommandOutput> {
+    async triageShow(projectId: string, similarityId: string, scanType: string): Promise<CxCommandOutput> {
         const commands: string[] = [CxConstants.CMD_TRIAGE, CxConstants.SUB_CMD_SHOW, CxConstants.PROJECT_ID, projectId, CxConstants.SIMILARITY_ID, similarityId, CxConstants.SCAN_TYPES_SUB_CMD, scanType];
         commands.push(...this.initializeCommands(true));
         const exec = new ExecutionService();
         return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.PREDICATE_TYPE);
-    }  
-    
+    }
+
     async triageUpdate(projectId: string, similarityId: string, scanType: string, state: string, comment: string, severity: string): Promise<CxCommandOutput> {
         const commands: string[] = [CxConstants.CMD_TRIAGE, CxConstants.SUB_CMD_UPDATE, CxConstants.PROJECT_ID, projectId, CxConstants.SIMILARITY_ID, similarityId, CxConstants.SCAN_TYPES_SUB_CMD, scanType, CxConstants.STATE, state, CxConstants.COMMENT, comment, CxConstants.SEVERITY, severity];
         commands.push(...this.initializeCommands(false));
         const exec = new ExecutionService();
         return await exec.executeCommands(this.config.pathToExecutable, commands);
-    }  
+    }
 
     async getResultsList(scanId: string) {
         const exec = new ExecutionService();
@@ -177,7 +187,7 @@ export class CxWrapper {
         // Executes the command and creates a result file
         await exec.executeResultsCommands(this.config.pathToExecutable, commands)
         // Reads the result file and retrieves the results
-        return exec.executeResultsCommandsFile(scanId, CxConstants.FORMAT_JSON, CxConstants.FORMAT_JSON_FILE, commands,this.config.pathToExecutable,fileName);
+        return exec.executeResultsCommandsFile(scanId, CxConstants.FORMAT_JSON, CxConstants.FORMAT_JSON_FILE, commands, this.config.pathToExecutable, fileName);
     }
 
     async getResultsSummary(scanId: string): Promise<CxCommandOutput> {
@@ -187,24 +197,24 @@ export class CxWrapper {
         // Executes the command and creates a result file
         await exec.executeResultsCommands(this.config.pathToExecutable, commands);
         // Reads the result file and retrieves the results
-        return exec.executeResultsCommandsFile(scanId, CxConstants.FORMAT_HTML, CxConstants.FORMAT_HTML_FILE, commands,this.config.pathToExecutable,fileName);
+        return exec.executeResultsCommandsFile(scanId, CxConstants.FORMAT_HTML, CxConstants.FORMAT_HTML_FILE, commands, this.config.pathToExecutable, fileName);
     }
 
-    async getResults(scanId: string, resultType:string, outputFileName: string, outputFilePath: string) {
+    async getResults(scanId: string, resultType: string, outputFileName: string, outputFilePath: string) {
         const commands = this.resultsShow(scanId, resultType, outputFileName, outputFilePath)
         const exec = new ExecutionService();
         return await exec.executeCommands(this.config.pathToExecutable, commands);
     }
 
-    async codeBashingList(cweId:string,language:string,queryName:string): Promise<CxCommandOutput> {
-        const commands: string[] = [CxConstants.CMD_RESULT, CxConstants.CMD_CODE_BASHING, CxConstants.LANGUAGE, language, CxConstants.VULNERABILITY_TYPE , queryName, CxConstants.CWE_ID , cweId];
+    async codeBashingList(cweId: string, language: string, queryName: string): Promise<CxCommandOutput> {
+        const commands: string[] = [CxConstants.CMD_RESULT, CxConstants.CMD_CODE_BASHING, CxConstants.LANGUAGE, language, CxConstants.VULNERABILITY_TYPE, queryName, CxConstants.CWE_ID, cweId];
         commands.push(...this.initializeCommands(true));
         const exec = new ExecutionService();
-        return await exec.executeCommands(this.config.pathToExecutable, commands,CxConstants.CODE_BASHING_TYPE);
+        return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.CODE_BASHING_TYPE);
     }
 
     resultsShow(scanId: string, reportFormat: string, outputFileName: string, outputPath: string): string[] {
-        const commands: string[] = [CxConstants.CMD_RESULT, CxConstants.SUB_CMD_SHOW, CxConstants.SCAN_ID, scanId,CxConstants.REPORT_FORMAT , reportFormat];
+        const commands: string[] = [CxConstants.CMD_RESULT, CxConstants.SUB_CMD_SHOW, CxConstants.SCAN_ID, scanId, CxConstants.REPORT_FORMAT, reportFormat];
         if (outputFileName) {
             commands.push(CxConstants.OUTPUT_NAME);
             commands.push(outputFileName);
@@ -233,8 +243,7 @@ export class CxWrapper {
         for (const bflNode of bflNodes) {
             for (const resultNode of resultNodes) {
 
-                if(this.compareNodes(bflNode,resultNode))
-                {
+                if (this.compareNodes(bflNode, resultNode)) {
                     return resultNodes.indexOf(resultNode);
                 }
             }
@@ -244,22 +253,22 @@ export class CxWrapper {
 
     }
 
-    compareNodes(bflNode: CxBFL, resultNode : any): boolean{
+    compareNodes(bflNode: CxBFL, resultNode: any): boolean {
 
         return bflNode.line == resultNode.line &&
-                bflNode.column == resultNode.column &&
-                bflNode.length == resultNode.length &&
-                bflNode.name == resultNode.name &&
-                bflNode.method == resultNode.method &&
-                bflNode.domType == resultNode.domType &&
-                bflNode.fileName == resultNode.fileName &&
-                bflNode.fullName == resultNode.fullName &&
-                bflNode.methodLine == resultNode.methodLine;
+            bflNode.column == resultNode.column &&
+            bflNode.length == resultNode.length &&
+            bflNode.name == resultNode.name &&
+            bflNode.method == resultNode.method &&
+            bflNode.domType == resultNode.domType &&
+            bflNode.fileName == resultNode.fileName &&
+            bflNode.fullName == resultNode.fullName &&
+            bflNode.methodLine == resultNode.methodLine;
     }
 
-    filterArguments(filters:string):string[]{
+    filterArguments(filters: string): string[] {
         let r = [];
-        if(filters.length>0){
+        if (filters.length > 0) {
             r.push(CxConstants.FILTER);
             r.push(filters);
         }
