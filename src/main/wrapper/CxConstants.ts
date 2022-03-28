@@ -54,7 +54,7 @@ export enum CxConstants {
     BFL_TYPE = "CxBFL",
     SAST = "sast",
     LANGUAGE = "--language",
-    VULNERABILITY_TYPE = "--vulnerabity-type",
+    VULNERABILITY_TYPE = "--vulnerability-type",
     CWE_ID = "--cwe-id",
 
     SEVERITY_HIGH = "high",
