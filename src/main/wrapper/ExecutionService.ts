@@ -8,6 +8,7 @@ import CxResult from "../results/CxResult";
 import CxProject from "../project/CxProject";
 import CxCodeBashing from "../codebashing/CxCodeBashing";
 import CxBFL from "../bfl/CxBFL";
+import CxKicsRealTime from "../kicsRealtime/CxKicsRealTime";
 
 const spawn = require('child_process').spawn;
 
@@ -87,6 +88,10 @@ export class ExecutionService {
                 case "CxBFL":
                     let bflNode = CxBFL.parseBFLResponse(resultObject);
                     cxCommandOutput.payload = bflNode;
+                    break;
+                case "CxKicsRealTime":
+                    let kicsResults = CxKicsRealTime.parseKicsRealTimeResponse(resultObject);
+                    cxCommandOutput.payload = [kicsResults];
                     break;
                 default:
                   cxCommandOutput.payload = resultObject;

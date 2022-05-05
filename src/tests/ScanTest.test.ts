@@ -87,4 +87,12 @@ describe("ScanCreate cases", () => {
         const scanShowObject = await auth.scanShow(scanObject.id);
         expect(scanShowObject.exitCode).toEqual(0);
     })
+
+    it('KicsRealtime Successful case ', async () => {
+        const auth = new CxWrapper(cxScanConfig);
+        const cxCommandOutput: CxCommandOutput = await auth.kicsRealtimeScan("dist/tests/data/Dockerfile","-v");
+        const scanObject = cxCommandOutput.payload.pop();
+        expect(scanObject.results.length).toBeGreaterThan(0);
+        expect(scanObject.count).toBeGreaterThan(0);
+    })
 });

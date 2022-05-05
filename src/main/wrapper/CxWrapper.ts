@@ -237,6 +237,13 @@ export class CxWrapper {
         return response;
     }
 
+    async kicsRealtimeScan(fileSources: string, additionalParams: string): Promise<CxCommandOutput> {
+        const commands: string[] = [CxConstants.CMD_SCAN, CxConstants.CMD_KICS_REALTIME, CxConstants.FILE_SOURCES, fileSources, CxConstants.ADDITONAL_PARAMS, additionalParams];
+        commands.push(...this.initializeCommands(false));
+        const exec = new ExecutionService();
+        return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.KICS_REALTIME_TYPE);
+    }
+
     getIndexOfBflNode(bflNodes: CxBFL[], resultNodes: any[]): number {
 
         let bflNodeNotFound = -1;
