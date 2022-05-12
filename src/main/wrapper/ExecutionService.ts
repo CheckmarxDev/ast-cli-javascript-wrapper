@@ -40,9 +40,18 @@ export class ExecutionService {
             let stdout ="";
 
             let cp = spawn(pathToExecutable, transformation(commands));
-            cp.on('error', reject);
+            cp.on('error', (data: { toString: () => string; }) => {
+                if (data) {
+                    logger.error(data.toString().replace('\n', ''));
+                    stderr += data.toString();
+                }
+                reject()
+            });
             cp.on('exit',(code: number, signal: any) => {
                 logger.info("Exit code received from AST-CLI: " + code);
+                if(code==1){
+                    stderr = stdout
+                }
                 resolve(ExecutionService.onCloseCommand(code, stderr, stdout, output ));
             });
             cp.stdout.on('data', (data: { toString: () => string; }) => {
