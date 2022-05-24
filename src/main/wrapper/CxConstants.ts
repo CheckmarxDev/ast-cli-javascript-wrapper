@@ -50,6 +50,7 @@ export enum CxConstants {
     OUTPUT_PATH = "--output-path",
     FILE_SOURCES = "--file-sources",
     ADDITONAL_PARAMS = "--additional-params",
+    ENGINE = "--engine",
     SCAN_TYPE = "CxScan",
     PROJECT_TYPE = "CxProject",
     PREDICATE_TYPE = "CxPredicate",
