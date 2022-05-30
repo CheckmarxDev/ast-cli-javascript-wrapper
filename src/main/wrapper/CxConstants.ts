@@ -48,7 +48,7 @@ export enum CxConstants {
     REPORT_FORMAT = "--report-format",
     OUTPUT_NAME = "--output-name",
     OUTPUT_PATH = "--output-path",
-    FILE_SOURCES = "--file-sources",
+    FILE_SOURCES = "--file",
     ADDITONAL_PARAMS = "--additional-params",
     ENGINE = "--engine",
     SCAN_TYPE = "CxScan",
