@@ -40,8 +40,16 @@ module.exports = {
   // setupFiles: [`${__dirname}/setup/setup.js`],
   // setupFilesAfterEnv: [`${__dirname}/setup/setupAfterEnv.ts`],
   // coverage settings
-  collectCoverage: NO_COVERAGE === false,
-  collectCoverageFrom: NO_COVERAGE ? [] : ['**/*.{ts,tsx}', '!**/*.d.ts', '!**/node_modules/**'],
+  collectCoverage: true,
+  collectCoverageFrom: ['**/*.{ts,tsx}', '!**/*.d.ts', '!**/node_modules/**'],
+  coverageThreshold: {
+    "global": {
+      "branches": 70,
+      "functions": 80,
+      "lines": 80,
+      "statements": 80
+    }
+  },
   coveragePathIgnorePatterns: ['/node_modules/', '\\.json$', '/__tests__/', '/stories/', '/\\.storybook/'],
 
   globals: {
