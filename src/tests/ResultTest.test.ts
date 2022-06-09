@@ -13,8 +13,8 @@ describe("Results cases",() => {
         console.log(JSON.stringify(cxCommandOutput));
         let sampleId  = cxCommandOutput.payload.pop().id;
         console.log("Failed scanId " + sampleId);
-        await auth.getResults(sampleId,"json","jsonList", ".");
-        const file = await fileExists("./jsonList.json");
+        await auth.getResults(sampleId,"json","testjson", ".");
+        const file = await fileExists("./testjson.json");
         expect(file).toBe(true);
     });
 
