@@ -12,6 +12,7 @@ describe("Results cases",() => {
         const cxCommandOutput: CxCommandOutput  = await auth.scanList("");
         console.log(JSON.stringify(cxCommandOutput));
         let sampleId  = cxCommandOutput.payload.pop().id;
+        console.log("Failed scanId " + sampleId);
         await auth.getResults(sampleId,"json","jsonList", ".");
         const file = await fileExists("./jsonList.json");
         expect(file).toBe(true);
