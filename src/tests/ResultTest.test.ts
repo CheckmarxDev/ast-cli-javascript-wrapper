@@ -10,6 +10,7 @@ describe("Results cases",() => {
     it('Result Test Successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput  = await auth.scanList("");
+        console.log(JSON.stringify(cxCommandOutput));
         let sampleId  = cxCommandOutput.payload.pop().id;
         await auth.getResults(sampleId,"json","jsonList", ".");
         const file = await fileExists("./jsonList.json");
