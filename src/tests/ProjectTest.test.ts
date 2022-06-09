@@ -23,8 +23,7 @@ describe("ProjectList cases",() => {
         const cxCommandOutput: CxCommandOutput = await auth.scanCreate(params);
         const scan: CxScan = cxCommandOutput.payload.pop();
 
-        const cxProjectCommandOutput: CxCommandOutput = await auth.projectShow(scan.projectID);
-        console.log(" Json object from ProjectShow Successful case: " + JSON.stringify(cxProjectCommandOutput));
+        const cxProjectCommandOutput: CxCommandOutput = await auth.projectShow(scan.projectID);;
         const size = cxProjectCommandOutput.payload.length;
         expect(size).toBeGreaterThan(0);
     });
@@ -40,7 +39,6 @@ describe("ProjectList cases",() => {
         const scan: CxScan = cxCommandOutput.payload.pop();
 
         const cxBranchCommandOutput: CxCommandOutput = await auth.projectBranches(scan.projectID,"");
-        console.log("Json object from projectBranches Successful case: " + JSON.stringify(cxBranchCommandOutput))
         expect(cxBranchCommandOutput.payload.length).toBeGreaterThan(0);
     });
 });
