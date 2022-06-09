@@ -11,14 +11,15 @@ describe("Results cases",() => {
         const auth = new CxWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput  = await auth.scanList("");
         let sampleId  = cxCommandOutput.payload.pop().id;
-        await auth.getResults(sampleId,"json","testjson", ".");
-        const file = await fileExists("./testjson.json");
+        await auth.getResults(sampleId,"json","jsonList", ".");
+        const file = await fileExists("./jsonList.json");
         expect(file).toBe(true);
     });
 
     it('Result List Successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput = await auth.scanList("");
+        console.log(JSON.stringify(cxCommandOutput));
         let sampleId  = cxCommandOutput.payload.pop().id;
         const written = await auth.getResultsList(sampleId);
         expect(written.status).toEqual("");
@@ -49,10 +50,12 @@ describe("Results cases",() => {
 
     it('Result bfl successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);
+        console.log("ScanID : " + cxScanConfig.scanId)
         const results = await auth.getResultsList(cxScanConfig.scanId)
         const result: CxResult = results.payload.find(res => res.type == CxConstants.SAST)
         const data = result.data
         const queryId = data.queryId
+        console.log("QueryID :" + result.data.queryId)
         const cxCommandOutput: CxCommandOutput = await auth.getResultsBfl(cxScanConfig.scanId, queryId, data.nodes);
         expect(cxCommandOutput.payload.length).toBeGreaterThanOrEqual(-1);
     });

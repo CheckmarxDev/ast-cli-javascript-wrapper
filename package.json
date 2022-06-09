@@ -14,7 +14,7 @@
   "scripts": {
     "build": "tsc",
     "postbuild": "copyfiles -u 1 src/main/wrapper/resources/cx* dist/",
-    "test": "copyfiles -u 1 src/tests/data/* dist/; tsc && jest --coverage --no-cache --ci"
+    "test": "tsc && jest --runInBand --coverage"
   },
   "repository": "https://github.com/CheckmarxDev/ast-cli-javascript-wrapper.git",
   "author": "Jay Nanduri",
@@ -24,16 +24,13 @@
   },
   "homepage": "https://github.com/CheckmarxDev/ast-cli-javascript-wrapper#readme",
   "devDependencies": {
-    "@babel/core": "^7.18.2",
-    "@babel/preset-env": "^7.18.2",
-    "@babel/preset-typescript": "^7.17.12",
-    "@types/jest": "^27.5.0",
     "@types/node": "^17.0.41",
-    "babel-jest": "^28.1.1",
+    "@types/jest": "^27.5.0",
     "copyfiles": "^2.4.1",
     "jest": "^26.6.3",
-    "jest-cli": "28.1.1",
-    "typescript": "^4.7.3"
+    "ts-jest": "^26.0.0",
+    "typescript": "^4.7.3",
+    "jest-cli": "28.1.1"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"

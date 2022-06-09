@@ -36,19 +36,39 @@ module.exports = {
   automock: false,
   unmockedModulePathPatterns: ['/node_modules/'],
   setupFilesAfterEnv: ['./jest.setup.js'],
-
+  // test environment setup
+  // setupFiles: [`${__dirname}/setup/setup.js`],
+  // setupFilesAfterEnv: [`${__dirname}/setup/setupAfterEnv.ts`],
+  // coverage settings
   collectCoverage: true,
   collectCoverageFrom: ['**/*.{ts,tsx}', '!**/*.d.ts', '!**/node_modules/**'],
   coverageThreshold: {
     "global": {
       "branches": 70,
-      "functions": 85,
-      "lines": 85,
-      "statements": 85
+      "functions": 90,
+      "lines": 90,
+      "statements": 90
     }
   },
   coveragePathIgnorePatterns: ['/node_modules/', '\\.json$', '/__tests__/', '/stories/', '/\\.storybook/'],
 
+  globals: {
+    'ts-jest': {
+      tsconfig: `${__dirname}/tsconfig.json`,
+
+      // https://huafu.github.io/ts-jest/user/config/diagnostics
+      diagnostics: false,
+
+      // Makes jest test run much faster, BUT, without type checking.
+      // Type checking in CI is done with `tsc --noEmit` or `yarn typecheck` command.
+      // https://huafu.github.io/ts-jest/user/config/isolatedModules
+      isolatedModules: true,
+    },
+  },
 
   transformIgnorePatterns: ['/node_modules/(?!(lodash-es|antd|[^/]+/es|rc-animate|rc-util)/).*'],
+  transform: {
+    '\\.(ts|tsx)$': 'ts-jest',
+    '/node_modules/((lodash-es|[^/]+/es)|rc-animate|rc-util)/.*': 'ts-jest',
+  },
 };
