@@ -7,15 +7,13 @@ import CxScan from "../main/scan/CxScan";
 describe("ProjectList cases",() => {
     const cxScanConfig = new BaseTest();
     it('ProjectList Successful case', async () => {
-        expect.assertions(1);
         const auth = new CxWrapper(cxScanConfig);
         const data = await auth.projectList("");
         const cxCommandOutput: CxCommandOutput = data;
         expect(cxCommandOutput.payload.length).toBeGreaterThan(0);
     });
 
-    it('ProjectShow Successful case',async () =>{
-        expect.assertions(1);
+    it('ProjectShow Successful case', async () => {
         const params = new Map();
         params.set(CxParamType.PROJECT_NAME, "ast-cli-javascript-integration-success");
         params.set(CxParamType.S, "./src");
@@ -30,8 +28,7 @@ describe("ProjectList cases",() => {
         expect(size).toBeGreaterThan(0);
     });
 
-    it('ProjectBranches Successful case',async () =>{
-        expect.assertions(1);
+    it('ProjectBranches Successful case', async () => {
         const params = new Map();
         params.set(CxParamType.PROJECT_NAME, "ast-cli-javascript-integration-success");
         params.set(CxParamType.S, "./src");
