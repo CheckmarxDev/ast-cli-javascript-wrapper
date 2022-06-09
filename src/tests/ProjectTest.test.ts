@@ -25,6 +25,7 @@ describe("ProjectList cases",() => {
 
         const cxProjectCommandOutput: CxCommandOutput = await auth.projectShow(scan.projectID);
         console.log(" Json object from ProjectShow Successful case: " + JSON.stringify(cxProjectCommandOutput));
+        console.log(" Json object from ProjectShow Successful case: " + cxProjectCommandOutput.payload.length);
         expect(cxProjectCommandOutput.payload.length).toBeGreaterThan(0);
     });
 
@@ -38,8 +39,8 @@ describe("ProjectList cases",() => {
         const cxCommandOutput: CxCommandOutput = await auth.scanCreate(params);
         const scan: CxScan = cxCommandOutput.payload.pop();
 
-        const cxProjectCommandOutput: CxCommandOutput = await auth.projectBranches(scan.projectID,"");
-        console.log("Json object from projectBranches Successful case: " + JSON.stringify(cxProjectCommandOutput))
-        expect(cxProjectCommandOutput.payload.length).toBeGreaterThan(0);
+        const cxBranchCommandOutput: CxCommandOutput = await auth.projectBranches(scan.projectID,"");
+        console.log("Json object from projectBranches Successful case: " + JSON.stringify(cxBranchCommandOutput))
+        expect(cxBranchCommandOutput.payload.length).toBeGreaterThan(0);
     });
 });
