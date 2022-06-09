@@ -8,6 +8,7 @@ import CxResult from "../results/CxResult";
 import CxProject from "../project/CxProject";
 import CxCodeBashing from "../codebashing/CxCodeBashing";
 import CxBFL from "../bfl/CxBFL";
+import CxKicsRealTime from "../kicsRealtime/CxKicsRealTime";
 
 const spawn = require('child_process').spawn;
 
@@ -33,33 +34,79 @@ function transform(n:string) {
 }
 
 export class ExecutionService {
+    private fsObject  : any = undefined
+
     executeCommands(pathToExecutable: string, commands: string[], output? : string ): Promise<CxCommandOutput> {
-        return new Promise(function (resolve, reject) {
+        return (new Promise( (resolve, reject)=> {
             let stderr = "";
             let stdout ="";
 
-            let cp = spawn(pathToExecutable, transformation(commands));
-            cp.on('error', reject);
-            cp.on('exit',(code: number, signal: any) => {
-                logger.info("Exit code received from AST-CLI: " + code);
-                resolve(ExecutionService.onCloseCommand(code, stderr, stdout, output ));
+            this.fsObject = spawn(pathToExecutable, transformation(commands));
+            this.fsObject.on('error', (data: { toString: () => string; }) => {
+                if (data) {
+                    logger.error(data.toString().replace('\n', ''));
+                    stderr += data.toString();
+                }
+                reject()
             });
-            cp.stdout.on('data', (data: { toString: () => string; }) => {
+            this.fsObject.on('exit',(code: number, signal: any) => {
+                logger.info("Exit code received from AST-CLI: " + code);
+                if(code==1){
+                    stderr = stdout
+                }
+                resolve(ExecutionService.onCloseCommand(code, stderr, stdout, output, this.fsObject ));
+            });
+            this.fsObject.stdout.on('data', (data: { toString: () => string; }) => {
                 if (data) {
                   logger.info(data.toString().replace('\n', ''));
                   stdout += data.toString();
                 }
             });
-            cp.stderr.on('data', (data: { toString: () => string; }) => {
+            this.fsObject.stderr.on('data', (data: { toString: () => string; }) => {
               if (data) {
                 logger.error(data.toString().replace('\n', ''));
                 stderr += data.toString();
               }
             });
-        });
+        }));
     }
 
-    private static onCloseCommand(code: number, stderr: string, stdout: string, output: string) : CxCommandOutput {
+    executeKicsCommands(pathToExecutable: string, commands: string[], output? : string ): [Promise<CxCommandOutput>,any] {
+        return [new Promise( (resolve, reject)=> {
+            let stderr = "";
+            let stdout ="";
+
+            this.fsObject = spawn(pathToExecutable, transformation(commands));
+            this.fsObject.on('error', (data: { toString: () => string; }) => {
+                if (data) {
+                    logger.error(data.toString().replace('\n', ''));
+                    stderr += data.toString();
+                }
+                reject()
+            });
+            this.fsObject.on('exit',(code: number, signal: any) => {
+                logger.info("Exit code received from AST-CLI: " + code);
+                if(code==1){
+                    stderr = stdout
+                }
+                resolve(ExecutionService.onCloseCommand(code, stderr, stdout, output, this.fsObject ));
+            });
+            this.fsObject.stdout.on('data', (data: { toString: () => string; }) => {
+                if (data) {
+                    logger.info(data.toString().replace('\n', ''));
+                    stdout += data.toString();
+                }
+            });
+            this.fsObject.stderr.on('data', (data: { toString: () => string; }) => {
+                if (data) {
+                    logger.error(data.toString().replace('\n', ''));
+                    stderr += data.toString();
+                }
+            });
+        }), this.fsObject];
+    }
+
+    private static onCloseCommand(code: number, stderr: string, stdout: string, output: string, fsObject:any) : CxCommandOutput {
       const cxCommandOutput = new CxCommandOutput();
       cxCommandOutput.exitCode = code;
       if (stderr) {
@@ -68,7 +115,6 @@ export class ExecutionService {
       if (stdout) {
             const stdoutSplit = stdout.split('\n');
             const data = stdoutSplit.find(isJsonString);
-
             if (data) {
               let resultObject = JSON.parse(data);
               switch (output) {
@@ -87,6 +133,10 @@ export class ExecutionService {
                 case "CxBFL":
                     let bflNode = CxBFL.parseBFLResponse(resultObject);
                     cxCommandOutput.payload = bflNode;
+                    break;
+                case "CxKicsRealTime":
+                    let kicsResults = CxKicsRealTime.parseKicsRealTimeResponse(resultObject);
+                    cxCommandOutput.payload = [kicsResults];
                     break;
                 default:
                   cxCommandOutput.payload = resultObject;

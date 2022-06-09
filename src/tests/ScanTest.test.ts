@@ -87,4 +87,15 @@ describe("ScanCreate cases", () => {
         const scanShowObject = await auth.scanShow(scanObject.id);
         expect(scanShowObject.exitCode).toEqual(0);
     })
+
+    it('KicsRealtime Successful case ', async () => {
+        const auth = new CxWrapper(cxScanConfig);
+        let [outputProcess,pid] = await auth.kicsRealtimeScan("dist/tests/data/Dockerfile","docker","-v");
+        const cxCommandOutput: CxCommandOutput = await outputProcess;
+        console.log(" Json object from successful no wait mode case: " + JSON.stringify( cxCommandOutput.payload));
+        const scanObject = cxCommandOutput.payload.pop();
+        console.log(" Json object from successful no wait mode case: " + JSON.stringify(scanObject));
+        expect(scanObject.results.length).toBeGreaterThan(0);
+        expect(pid).toBeDefined();
+    })
 });
