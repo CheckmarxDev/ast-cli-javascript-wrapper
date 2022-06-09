@@ -25,8 +25,8 @@ describe("ProjectList cases",() => {
 
         const cxProjectCommandOutput: CxCommandOutput = await auth.projectShow(scan.projectID);
         console.log(" Json object from ProjectShow Successful case: " + JSON.stringify(cxProjectCommandOutput));
-        console.log(" Json object from ProjectShow Successful case: " + cxProjectCommandOutput.payload.length);
-        expect(cxProjectCommandOutput.payload.length).toBeGreaterThan(0);
+        const size = cxProjectCommandOutput.payload.length;
+        expect(size).toBeGreaterThan(0);
     });
 
     it('ProjectBranches Successful case',async () =>{
