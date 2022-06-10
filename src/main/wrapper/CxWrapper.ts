@@ -3,6 +3,7 @@ import { CxParamType } from "./CxParamType";
 import { CxConstants } from "./CxConstants";
 import { ExecutionService } from "./ExecutionService";
 import { CxCommandOutput } from "./CxCommandOutput";
+import path = require('path');
 import { getLoggerWithFilePath, logger } from "./loggerConfig";
 import * as fs from "fs"
 import * as os from "os";
@@ -14,7 +15,6 @@ export class CxWrapper {
     config: CxConfig = new CxConfig();
 
     constructor(cxScanConfig: CxConfig, logFilePath?: string) {
-        let path = require("path");
 
         getLoggerWithFilePath(logFilePath)
 
@@ -89,7 +89,7 @@ export class CxWrapper {
     async authValidate(): Promise<CxCommandOutput> {
         const commands: string[] = [CxConstants.CMD_AUTH, CxConstants.SUB_CMD_VALIDATE];
         commands.push(...this.initializeCommands(false));
-        let exec = new ExecutionService();
+        const exec = new ExecutionService();
         return await exec.executeCommands(this.config.pathToExecutable, commands);
     }
 
@@ -107,7 +107,7 @@ export class CxWrapper {
                 commands.push("-" + key.toString().replace(/_/g, "-").toLowerCase());
                 commands.push(value);
             } else if (key === CxParamType.ADDITIONAL_PARAMETERS) {
-                let paramList = value.match(/(?:[^\s"]+|"[^"]*")+/g);
+                const paramList = value.match(/(?:[^\s"]+|"[^"]*")+/g);
                 logger.info("Additional parameters refined: " + paramList)
                 if (paramList) {
                     paramList.forEach((element) => {
@@ -239,7 +239,7 @@ export class CxWrapper {
 
     getIndexOfBflNode(bflNodes: CxBFL[], resultNodes: any[]): number {
 
-        let bflNodeNotFound = -1;
+        const bflNodeNotFound = -1;
         for (const bflNode of bflNodes) {
             for (const resultNode of resultNodes) {
 
@@ -267,7 +267,7 @@ export class CxWrapper {
     }
 
     filterArguments(filters: string): string[] {
-        let r = [];
+        const r = [];
         if (filters.length > 0) {
             r.push(CxConstants.FILTER);
             r.push(filters);

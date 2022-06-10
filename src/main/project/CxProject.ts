@@ -1,8 +1,8 @@
 export default class CxProject {
-  id: string = " ";
-  name: string = " ";
-  createdAt: string = " ";
-  updatedAt: string = " ";
+  id: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
   tags: object = {};
   groups: any = [];
 
@@ -10,7 +10,7 @@ export default class CxProject {
     let projects: CxProject[] = [];
     if (resultObject instanceof Array) {
       projects = resultObject.map((member: any) => {
-        let project = new CxProject();
+        const project = new CxProject();
         project.id = member.ID;
         project.name = member.Name;
         project.createdAt = member.CreatedAt;
@@ -20,7 +20,7 @@ export default class CxProject {
         return project;
       });
     } else {
-      let project = new CxProject();
+      const project = new CxProject();
       project.id = resultObject.ID;
       project.name = resultObject.Name;
       project.createdAt = resultObject.CreatedAt;

@@ -1,20 +1,20 @@
 export default class CxScan {
-  id: string = "";
-  projectID: string = "";
-  status: string = "";
-  createdAt: string = "";
-  updatedAt: string = "";
+  id: string;
+  projectID: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
   tags: object = {};
   groups: any = [];
-  initiator: string = "";
-  origin: string = "";
-  branch: string = "";
+  initiator: string;
+  origin: string;
+  branch: string;
 
   static parseProject(resultObject: any): CxScan[] {
     let scans: CxScan[] = [];
     if (resultObject instanceof Array) {
       scans = resultObject.map((member: any) => {
-        let scan = new CxScan();
+        const scan = new CxScan();
         scan.id = member.ID;
         scan.projectID = member.ProjectID;
         scan.status = member.Status;
@@ -28,7 +28,7 @@ export default class CxScan {
         return scan;
       });
     } else {
-      let scan = new CxScan();
+      const scan = new CxScan();
       scan.id = resultObject.ID;
       scan.projectID = resultObject.ProjectID;
       scan.status = resultObject.Status;

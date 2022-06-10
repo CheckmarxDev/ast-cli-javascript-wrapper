@@ -1,10 +1,10 @@
 export class BaseTest {
-    baseUri: string = "";
-    baseAuthUri: string = "";
-    clientId: string = "";
-    clientSecret: string = "";
-    apiKey: string = "";
-    scanId: string = "";
+    baseUri: string;
+    baseAuthUri: string;
+    clientId: string;
+    clientSecret: string;
+    apiKey: string;
+    scanId: string;
     pathToExecutable: string;
     tenant: string;
 

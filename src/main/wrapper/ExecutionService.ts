@@ -8,12 +8,12 @@ import CxResult from "../results/CxResult";
 import CxProject from "../project/CxProject";
 import CxCodeBashing from "../codebashing/CxCodeBashing";
 import CxBFL from "../bfl/CxBFL";
+import spawner = require('child_process');
 
-const spawn = require('child_process').spawn;
 
 function isJsonString(s: string) {
     try {
-        let stringObject = s.split('\n')[0];
+        const stringObject = s.split('\n')[0];
         JSON.parse(stringObject);
     } catch (e) {
         return false;
@@ -38,9 +38,9 @@ export class ExecutionService {
             let stderr = "";
             let stdout ="";
 
-            let cp = spawn(pathToExecutable, transformation(commands));
+            const cp = spawner.spawn(pathToExecutable, transformation(commands));
             cp.on('error', reject);
-            cp.on('exit',(code: number, signal: any) => {
+            cp.on('exit',(code: number) => {
                 logger.info("Exit code received from AST-CLI: " + code);
                 resolve(ExecutionService.onCloseCommand(code, stderr, stdout, output ));
             });
@@ -70,22 +70,22 @@ export class ExecutionService {
             const data = stdoutSplit.find(isJsonString);
 
             if (data) {
-              let resultObject = JSON.parse(data);
+              const resultObject = JSON.parse(data);
               switch (output) {
                 case "CxScan":
-                  let scans = CxScan.parseProject(resultObject);
+                  const scans = CxScan.parseProject(resultObject);
                   cxCommandOutput.payload = scans;
                   break;
                 case "CxProject":
-                  let projects = CxProject.parseProject(resultObject);
+                  const projects = CxProject.parseProject(resultObject);
                   cxCommandOutput.payload = projects;
                   break;
                 case "CxCodeBashing":
-                  let codeBashing = CxCodeBashing.parseCodeBashing(resultObject);
+                  const codeBashing = CxCodeBashing.parseCodeBashing(resultObject);
                   cxCommandOutput.payload = codeBashing;
                   break;
                 case "CxBFL":
-                    let bflNode = CxBFL.parseBFLResponse(resultObject);
+                    const bflNode = CxBFL.parseBFLResponse(resultObject);
                     cxCommandOutput.payload = bflNode;
                     break;
                 default:
@@ -100,8 +100,8 @@ export class ExecutionService {
     executeResultsCommands(pathToExecutable: string, commands: string[]): Promise<CxCommandOutput> {
         return new Promise(function (resolve, reject) {
             let stderr = '';
-            let cxCommandOutput = new CxCommandOutput();
-            const cp = spawn(pathToExecutable, commands);
+            const cxCommandOutput = new CxCommandOutput();
+            const cp = spawner.spawn(pathToExecutable, commands);
             cp.stderr.on('data', function (chunk: string) {
                 stderr += chunk;
             });
@@ -122,13 +122,13 @@ export class ExecutionService {
 
     async executeResultsCommandsFile(scanId: string, resultType: string, fileExtension: string,commands: string[], pathToExecutable: string,fileName:string): Promise<CxCommandOutput> {
         const filePath = path.join(os.tmpdir(), fileName + fileExtension)
-        let read = fs.readFileSync(filePath,'utf8');
-        let cxCommandOutput = new CxCommandOutput();
+        const read = fs.readFileSync(filePath,'utf8');
+        const cxCommandOutput = new CxCommandOutput();
         // Need to check if file output is json or html
         if(fileExtension.includes("json")){
-            let read_json = JSON.parse(read.replace(/:([0-9]{15,}),/g, ':"$1",'));
+            const read_json = JSON.parse(read.replace(/:([0-9]{15,}),/g, ':"$1",'));
             if (read_json.results){
-                let r : CxResult[] = read_json.results.map((member:any)=>{return Object.assign( new CxResult(),member);});
+                const r : CxResult[] = read_json.results.map((member:any)=>{return Object.assign( new CxResult(),member);});
                 cxCommandOutput.payload = r;
             }
             else{
@@ -138,7 +138,7 @@ export class ExecutionService {
         }
         // In case of html output
         else{
-            let html_arrray:any = []
+            const html_arrray:string[] = []
             html_arrray.push(read)
             cxCommandOutput.payload = html_arrray;
         }

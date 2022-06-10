@@ -4,7 +4,7 @@ import { CxParamType } from "../main/wrapper/CxParamType";
 import { BaseTest } from "./BaseTest";
 
 describe("ScanCreate cases", () => {
-    let cxScanConfig = new BaseTest();
+    const cxScanConfig = new BaseTest();
     it('ScanList Successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput = await auth.scanList("");

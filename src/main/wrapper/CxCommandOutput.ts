@@ -1,5 +1,5 @@
 export class CxCommandOutput {
-    exitCode: number = 0;
-    payload: any [];
-    status: string = "";
+    exitCode: number;
+    payload: any[];
+    status: string;
 }
