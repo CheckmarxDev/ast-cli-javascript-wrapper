@@ -11,9 +11,12 @@ describe("Results cases",() => {
         const auth = new CxWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput  = await auth.scanList("");
         const sampleId  = cxCommandOutput.payload.pop().id;
-        await auth.getResults(sampleId,"json","jsonList", ".");
-        const file = await fileExists("./jsonList.json");
-        expect(file).toBe(true);
+        
+        auth.getResults(sampleId,"json","jsonList", ".").then(() => {
+           fileExists("./jsonList.json").then(file => expect(file).toBe(true));
+            
+        });
+
     });
 
     it('Result List Successful case', async () => {
