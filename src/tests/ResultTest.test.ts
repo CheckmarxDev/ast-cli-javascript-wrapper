@@ -25,7 +25,8 @@ describe("Results cases",() => {
         console.log(JSON.stringify(cxCommandOutput));
         const sampleId  = cxCommandOutput.payload.pop().id;
         const written = await auth.getResultsList(sampleId);
-        expect(written.status).toEqual("");
+        expect(written.status).toBeUndefined();
+        expect(written.payload.length).toBeGreaterThan(0);
     });
 
     it('Result summary html file generation successful case', async () => {
