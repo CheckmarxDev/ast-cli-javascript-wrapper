@@ -4,7 +4,7 @@ import { CxParamType } from "../main/wrapper/CxParamType";
 import { BaseTest } from "./BaseTest";
 
 describe("ScanCreate cases", () => {
-    let cxScanConfig = new BaseTest();
+    const cxScanConfig = new BaseTest();
     it('ScanList Successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput = await auth.scanList("");
@@ -19,6 +19,7 @@ describe("ScanCreate cases", () => {
         params.set(CxParamType.S, "./src");
         params.set(CxParamType.FILTER, "*.ts,!**/node_modules/**/*");
         params.set(CxParamType.BRANCH, "master");
+        params.set(CxParamType.SCAN_TYPES,"kics");
         const auth = new CxWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput = await auth.scanCreate(params);
         const scanObject = cxCommandOutput.payload.pop();
@@ -90,7 +91,7 @@ describe("ScanCreate cases", () => {
 
     it('KicsRealtime Successful case ', async () => {
         const auth = new CxWrapper(cxScanConfig);
-        let [outputProcess,pid] = await auth.kicsRealtimeScan("dist/tests/data/Dockerfile","docker","-v");
+        const [outputProcess,pid] = await auth.kicsRealtimeScan("dist/tests/data/Dockerfile","docker","-v");
         const cxCommandOutput: CxCommandOutput = await outputProcess;
         console.log(" Json object from successful no wait mode case: " + JSON.stringify( cxCommandOutput.payload));
         const scanObject = cxCommandOutput.payload.pop();

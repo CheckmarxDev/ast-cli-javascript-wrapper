@@ -5,7 +5,7 @@ import CxResult from '../main/results/CxResult';
 import { CxConstants } from '../main/wrapper/CxConstants';
 
 describe("Triage cases",() => {
-    let cxScanConfig = new BaseTest();
+    const cxScanConfig = new BaseTest();
 
     it('TriageShow Successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);

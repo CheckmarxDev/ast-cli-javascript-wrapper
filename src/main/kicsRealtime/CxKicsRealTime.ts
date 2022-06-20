@@ -1,11 +1,11 @@
 export default class CxKicsRealTime {
-    version: string = "";
-    count: string = "";
+    version: string;
+    count: string;
     summary : any = {};
     results: any = [];
 
     static parseKicsRealTimeResponse(resultObject: any): CxKicsRealTime {
-        let kicsRealTime: CxKicsRealTime = new CxKicsRealTime();
+        const kicsRealTime: CxKicsRealTime = new CxKicsRealTime();
         kicsRealTime.version = resultObject.kics_version;
         kicsRealTime.count = resultObject.total_counter;
         kicsRealTime.results = resultObject.queries;

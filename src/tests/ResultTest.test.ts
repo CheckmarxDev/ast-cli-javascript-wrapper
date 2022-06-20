@@ -6,31 +6,33 @@ import { CxConstants } from '../main/wrapper/CxConstants';
 import CxResult from '../main/results/CxResult';
 
 describe("Results cases",() => {
-    let cxScanConfig = new BaseTest();
+    const cxScanConfig = new BaseTest();
     it('Result Test Successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput  = await auth.scanList("");
-        let sampleId  = cxCommandOutput.payload.pop().id;
+        const sampleId  = cxCommandOutput.payload.pop().id;
         
         auth.getResults(sampleId,"json","jsonList", ".").then(() => {
            fileExists("./jsonList.json").then(file => expect(file).toBe(true));
             
         });
+
     });
 
     it('Result List Successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput = await auth.scanList("");
         console.log(JSON.stringify(cxCommandOutput));
-        let sampleId  = cxCommandOutput.payload.pop().id;
+        const sampleId  = cxCommandOutput.payload.pop().id;
         const written = await auth.getResultsList(sampleId);
-        expect(written.status).toEqual("");
+        expect(written.status).toBeUndefined();
+        expect(written.payload.length).toBeGreaterThanOrEqual(0);
     });
 
     it('Result summary html file generation successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput = await auth.scanList("");
-        let sampleId  = cxCommandOutput.payload.pop().id;
+        const sampleId  = cxCommandOutput.payload.pop().id;
         await auth.getResults(sampleId,"summaryHTML","test", ".");
         const file = await fileExists("./test.html");
         expect(file).toBe(true);
@@ -39,7 +41,7 @@ describe("Results cases",() => {
     it('Result summary html string successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput = await auth.scanList("");
-        let sampleId  = cxCommandOutput.payload.pop().id;
+        const sampleId  = cxCommandOutput.payload.pop().id;
         const written = await auth.getResultsSummary(sampleId);
         expect(written.payload.length).toBeGreaterThan(0);
     });
@@ -63,7 +65,7 @@ describe("Results cases",() => {
     });
 });
 
-const fileExists = (file:any) => {
+const fileExists = (file:string) => {
     return new Promise((resolve) => {
         fs.access(file, fs.constants.F_OK, (err) => {
             err ? resolve(false) : resolve(true)
