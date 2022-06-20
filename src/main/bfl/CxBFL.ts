@@ -1,19 +1,19 @@
 export default class CxBFL {
     column: number;
-    fileName: string = "";
-    fullName: string = "";
+    fileName: string;
+    fullName: string;
     length: number;
     line: number;
     methodLine: number;
-    method: string = "";
-    name: string = "";
-    domType: string = "";
+    method: string;
+    name: string;
+    domType: string;
 
 
 static parseBFLResponse(resultObject: any[]): CxBFL[] {
     let bflNode: CxBFL[] = [];
     bflNode = resultObject.map((member: any) => {
-      let bflNode = new CxBFL();
+      const bflNode = new CxBFL();
       bflNode.column = member.column;
       bflNode.fileName = member.fileName;
       bflNode.fullName = member.fullName;
