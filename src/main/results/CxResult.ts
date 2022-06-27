@@ -1,3 +1,6 @@
+import CxData from "./CxData";
+import CxVulnerabilityDetails from "./CxVulnerabilityDetails";
+
 export default class CxResult {
     type: string;
     id: string;
@@ -10,7 +13,7 @@ export default class CxResult {
     foundAt: string;
     firstScanId: string;
     description: string;
-    data: any = {};
+    data: CxData;
     comments: any = {};
-    vulnerabilityDetails:object = {};
+    vulnerabilityDetails:CxVulnerabilityDetails;
 }
