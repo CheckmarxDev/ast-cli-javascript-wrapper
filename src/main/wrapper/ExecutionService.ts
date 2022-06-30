@@ -10,6 +10,8 @@ import CxCodeBashing from "../codebashing/CxCodeBashing";
 import CxBFL from "../bfl/CxBFL";
 import spawner = require('child_process');
 import CxKicsRealTime from "../kicsRealtime/CxKicsRealTime";
+import CxData from "../results/CxData";
+import CxScaPackageData from "../results/CxScaPackageData";
 
 
 
@@ -180,7 +182,11 @@ export class ExecutionService {
         if(fileExtension.includes("json")){
             const read_json = JSON.parse(read.replace(/:([0-9]{15,}),/g, ':"$1",'));
             if (read_json.results){
-                const r : CxResult[] = read_json.results.map((member:any)=>{return Object.assign( new CxResult(),member);});
+                const r : CxResult[] = read_json.results.map((member:any)=>{
+                    const cxScaPackageData = new CxScaPackageData(member.data.scaPackageData?.id,member.data.scaPackageData?.locations,member.data.scaPackageData?.dependencyPaths,member.data.scaPackageData?.outdated)
+                    const data = new CxData(member.data.packageData,member.data.packageIdentifier,cxScaPackageData,member.data.queryId,member.data.queryName,member.data.group,member.data.resultHash,member.data.languageName,member.data.nodes,member.data.recommendedVersion)
+                    return new CxResult(member.type,member.id,member.status,member.similarityId,member.state,member.severity,member.created,member.firstFoundAt,member.foundAt,member.firstScanId,member.description,data,member.comments,member.vulnerabilityDetails)
+                });
                 cxCommandOutput.payload = r;
             }
             else{
