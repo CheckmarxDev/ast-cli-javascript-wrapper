@@ -15,6 +15,7 @@ import CxScaPackageData from "../results/CxScaPackageData";
 import CxVulnerabilityDetails from "../results/CxVulnerabilityDetails";
 import CxCvss from "../results/CxCvss";
 import CxNode from "../results/CxNode";
+import CxPackageData from "../results/CxPackageData";
 
 
 
@@ -192,7 +193,10 @@ export class ExecutionService {
                     const nodes:CxNode[]=member.data.nodes?.map((node:any)=>{
                         return new CxNode(node.id,node.line,node.name,node.column,node.length,node.method,node.nodeID,node.domType,node.fileName,node.fullName,node.typeName,node.methodLine,node.definitions)
                     });
-                    const data = new CxData(member.data.packageData,member.data.packageIdentifier,cxScaPackageData,member.data.queryId,member.data.queryName,member.data.group,member.data.resultHash,member.data.languageName,nodes,member.data.recommendedVersion);
+                    const cxPackageData:CxPackageData[]=member.data.packageData?.map((packages:any)=>{
+                        return new CxPackageData(packages.comment,packages.type,packages.url);
+                    });
+                    const data = new CxData(cxPackageData,member.data.packageIdentifier,cxScaPackageData,member.data.queryId,member.data.queryName,member.data.group,member.data.resultHash,member.data.languageName,nodes,member.data.recommendedVersion);
                     return new CxResult(member.type,member.id,member.status,member.similarityId,member.state,member.severity,member.created,member.firstFoundAt,member.foundAt,member.firstScanId,member.description,data,member.comments,cxVulnerabilityDetails);
                 });
                 cxCommandOutput.payload = r;
