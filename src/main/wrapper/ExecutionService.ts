@@ -14,6 +14,7 @@ import CxData from "../results/CxData";
 import CxScaPackageData from "../results/CxScaPackageData";
 import CxVulnerabilityDetails from "../results/CxVulnerabilityDetails";
 import CxCvss from "../results/CxCvss";
+import CxNode from "../results/CxNode";
 
 
 
@@ -188,7 +189,10 @@ export class ExecutionService {
                     const cxScaPackageData = new CxScaPackageData(member.data.scaPackageData?.id,member.data.scaPackageData?.locations,member.data.scaPackageData?.dependencyPaths,member.data.scaPackageData?.outdated);
                     const cvss = new CxCvss(member.vulnerabilityDetails.cvss.version,member.vulnerabilityDetails.cvss.attackVector,member.vulnerabilityDetails.cvss.availability,member.vulnerabilityDetails.cvss.confidentiality,member.vulnerabilityDetails.cvss.attackComplexity,member.vulnerabilityDetails.cvss.integrityImpact,member.vulnerabilityDetails.cvss.scope,member.vulnerabilityDetails.cvss.privilegesRequired,member.vulnerabilityDetails.cvss.userInteraction);
                     const cxVulnerabilityDetails = new CxVulnerabilityDetails(member.vulnerabilityDetails.cweId,cvss,member.vulnerabilityDetails.compliances,member.vulnerabilityDetails.cvssScore,member.vulnerabilityDetails.cveName);
-                    const data = new CxData(member.data.packageData,member.data.packageIdentifier,cxScaPackageData,member.data.queryId,member.data.queryName,member.data.group,member.data.resultHash,member.data.languageName,member.data.nodes,member.data.recommendedVersion);
+                    const nodes:CxNode[]=member.data.nodes?.map((node:any)=>{
+                        return new CxNode(node.id,node.line,node.name,node.column,node.length,node.method,node.nodeID,node.domType,node.fileName,node.fullName,node.typeName,node.methodLine,node.definitions)
+                    });
+                    const data = new CxData(member.data.packageData,member.data.packageIdentifier,cxScaPackageData,member.data.queryId,member.data.queryName,member.data.group,member.data.resultHash,member.data.languageName,nodes,member.data.recommendedVersion);
                     return new CxResult(member.type,member.id,member.status,member.similarityId,member.state,member.severity,member.created,member.firstFoundAt,member.foundAt,member.firstScanId,member.description,data,member.comments,cxVulnerabilityDetails);
                 });
                 cxCommandOutput.payload = r;
