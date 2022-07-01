@@ -12,6 +12,8 @@ import spawner = require('child_process');
 import CxKicsRealTime from "../kicsRealtime/CxKicsRealTime";
 import CxData from "../results/CxData";
 import CxScaPackageData from "../results/CxScaPackageData";
+import CxVulnerabilityDetails from "../results/CxVulnerabilityDetails";
+import CxCvss from "../results/CxCvss";
 
 
 
@@ -183,9 +185,11 @@ export class ExecutionService {
             const read_json = JSON.parse(read.replace(/:([0-9]{15,}),/g, ':"$1",'));
             if (read_json.results){
                 const r : CxResult[] = read_json.results.map((member:any)=>{
-                    const cxScaPackageData = new CxScaPackageData(member.data.scaPackageData?.id,member.data.scaPackageData?.locations,member.data.scaPackageData?.dependencyPaths,member.data.scaPackageData?.outdated)
-                    const data = new CxData(member.data.packageData,member.data.packageIdentifier,cxScaPackageData,member.data.queryId,member.data.queryName,member.data.group,member.data.resultHash,member.data.languageName,member.data.nodes,member.data.recommendedVersion)
-                    return new CxResult(member.type,member.id,member.status,member.similarityId,member.state,member.severity,member.created,member.firstFoundAt,member.foundAt,member.firstScanId,member.description,data,member.comments,member.vulnerabilityDetails)
+                    const cxScaPackageData = new CxScaPackageData(member.data.scaPackageData?.id,member.data.scaPackageData?.locations,member.data.scaPackageData?.dependencyPaths,member.data.scaPackageData?.outdated);
+                    const cvss = new CxCvss(member.vulnerabilityDetails.cvss.version,member.vulnerabilityDetails.cvss.attackVector,member.vulnerabilityDetails.cvss.availability,member.vulnerabilityDetails.cvss.confidentiality,member.vulnerabilityDetails.cvss.attackComplexity,member.vulnerabilityDetails.cvss.integrityImpact,member.vulnerabilityDetails.cvss.scope,member.vulnerabilityDetails.cvss.privilegesRequired,member.vulnerabilityDetails.cvss.userInteraction);
+                    const cxVulnerabilityDetails = new CxVulnerabilityDetails(member.vulnerabilityDetails.cweId,cvss,member.vulnerabilityDetails.compliances,member.vulnerabilityDetails.cvssScore,member.vulnerabilityDetails.cveName);
+                    const data = new CxData(member.data.packageData,member.data.packageIdentifier,cxScaPackageData,member.data.queryId,member.data.queryName,member.data.group,member.data.resultHash,member.data.languageName,member.data.nodes,member.data.recommendedVersion);
+                    return new CxResult(member.type,member.id,member.status,member.similarityId,member.state,member.severity,member.created,member.firstFoundAt,member.foundAt,member.firstScanId,member.description,data,member.comments,cxVulnerabilityDetails);
                 });
                 cxCommandOutput.payload = r;
             }
