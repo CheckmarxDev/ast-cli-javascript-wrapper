@@ -9,7 +9,7 @@
     "README.md"
   ],
   "dependencies": {
-    "log4js": "^6.5.2"
+    "log4js": "^6.6.0"
   },
   "scripts": {
     "build": "tsc",
