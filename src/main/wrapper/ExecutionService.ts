@@ -10,6 +10,7 @@ import CxCodeBashing from "../codebashing/CxCodeBashing";
 import CxBFL from "../bfl/CxBFL";
 import spawner = require('child_process');
 import CxKicsRealTime from "../kicsRealtime/CxKicsRealTime";
+import CxLearnMoreDescriptions from "../learnmore/CxLearnMoreDescriptions";
 
 
 
@@ -140,6 +141,10 @@ export class ExecutionService {
                     const kicsResults = CxKicsRealTime.parseKicsRealTimeResponse(resultObject);
                     cxCommandOutput.payload = [kicsResults];
                     break;
+              case "cxLearnMoreDescriptions":
+                  const learnMore = CxLearnMoreDescriptions.parseLearnMoreDescriptionsResponse(resultObject);
+                  cxCommandOutput.payload = [learnMore];
+                  break;
                 default:
                   cxCommandOutput.payload = resultObject;
               }
