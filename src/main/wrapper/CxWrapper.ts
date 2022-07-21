@@ -247,6 +247,19 @@ export class CxWrapper {
         return exec.executeKicsCommands(this.config.pathToExecutable, commands, CxConstants.KICS_REALTIME_TYPE);
     }
 
+    async kicsRemediation(resultsFile: string, kicsFile:string, engine:string,similarityIds?: string):Promise<[Promise<CxCommandOutput>,any]>  {
+        const commands: string[] = [CxConstants.CMD_UTILS, CxConstants.CMD_REMEDIATION,CxConstants.SUB_CMD_REMEDIATION_KICS,CxConstants.KICS_REMEDIATION_RESULTS_FILE, resultsFile, CxConstants.KICS_REMEDIATION_KICS_FILE, kicsFile];
+        if(engine.length>0){
+            commands.push(CxConstants.ENGINE,engine)
+        }
+        if(similarityIds){
+            commands.push(CxConstants.KICS_REMEDIATION_SIMILARITY_IDS,similarityIds)
+        }
+        commands.push(...this.initializeCommands(false));
+        const exec = new ExecutionService();
+        return exec.executeKicsCommands(this.config.pathToExecutable, commands, CxConstants.KICS_REMEDIATION_TYPE);
+    }
+
     getIndexOfBflNode(bflNodes: CxBFL[], resultNodes: any[]): number {
 
         const bflNodeNotFound = -1;
