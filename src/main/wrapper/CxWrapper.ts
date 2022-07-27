@@ -1,13 +1,13 @@
-import { CxConfig } from "./CxConfig";
-import { CxParamType } from "./CxParamType";
-import { CxConstants } from "./CxConstants";
-import { ExecutionService } from "./ExecutionService";
-import { CxCommandOutput } from "./CxCommandOutput";
-import path = require('path');
-import { getLoggerWithFilePath, logger } from "./loggerConfig";
+import {CxConfig} from "./CxConfig";
+import {CxParamType} from "./CxParamType";
+import {CxConstants} from "./CxConstants";
+import {ExecutionService} from "./ExecutionService";
+import {CxCommandOutput} from "./CxCommandOutput";
+import {getLoggerWithFilePath, logger} from "./loggerConfig";
 import * as fs from "fs"
 import * as os from "os";
 import CxBFL from "../bfl/CxBFL";
+import path = require('path');
 
 type ParamTypeMap = Map<CxParamType, string>;
 
@@ -247,6 +247,12 @@ export class CxWrapper {
         return exec.executeKicsCommands(this.config.pathToExecutable, commands, CxConstants.KICS_REALTIME_TYPE);
     }
 
+    async learnMore(queryId: string){
+        const commands: string[] = [CxConstants.CMD_UTILS,CxConstants.CMD_LEARN_MORE,CxConstants.QUERY_ID,queryId]
+        commands.push(...this.initializeCommands(true))
+        const exec = new ExecutionService();
+        return exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.LEARN_MORE_DESCRIPTIONS_TYPE);
+    }
     getIndexOfBflNode(bflNodes: CxBFL[], resultNodes: any[]): number {
 
         const bflNodeNotFound = -1;
