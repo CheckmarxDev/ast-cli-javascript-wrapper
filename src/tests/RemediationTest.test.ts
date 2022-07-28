@@ -9,7 +9,9 @@ describe("Kics Remediation cases",() => {
         const auth = new CxWrapper(cxScanConfig);
         auth.kicsRemediation("dist/tests/data/results.json",__dirname+"/dist/tests/data/","",).then((e:[Promise<CxCommandOutput>,any]) => {
             e[0].then((output:CxCommandOutput)=>{
-                expect(output).toBeDefined();
+                const remediation: CxKicsRemediation = output.payload[0]
+                expect(remediation.availableRemediation).toBeDefined();
+                expect(remediation.appliedRemediation).toBeDefined();
             })
         });
     });
