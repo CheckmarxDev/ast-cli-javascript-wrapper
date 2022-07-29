@@ -10,6 +10,7 @@ import CxCodeBashing from "../codebashing/CxCodeBashing";
 import CxBFL from "../bfl/CxBFL";
 import spawner = require('child_process');
 import CxKicsRealTime from "../kicsRealtime/CxKicsRealTime";
+import CxKicsRemediation from "../remediation/CxKicsRemediation";
 
 
 
@@ -139,6 +140,10 @@ export class ExecutionService {
                 case "CxKicsRealTime":
                     const kicsResults = CxKicsRealTime.parseKicsRealTimeResponse(resultObject);
                     cxCommandOutput.payload = [kicsResults];
+                    break;
+                  case "CxKicsRemediation":
+                    const kicsRemediationOutput = CxKicsRemediation.parseKicsRemediation(resultObject)
+                    cxCommandOutput.payload = [kicsRemediationOutput]
                     break;
                 default:
                   cxCommandOutput.payload = resultObject;
