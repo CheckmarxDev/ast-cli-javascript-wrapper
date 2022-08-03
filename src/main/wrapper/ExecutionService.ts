@@ -16,6 +16,7 @@ import CxVulnerabilityDetails from "../results/CxVulnerabilityDetails";
 import CxCvss from "../results/CxCvss";
 import CxNode from "../results/CxNode";
 import CxPackageData from "../results/CxPackageData";
+import CxKicsRemediation from "../remediation/CxKicsRemediation";
 
 
 
@@ -145,6 +146,10 @@ export class ExecutionService {
                 case "CxKicsRealTime":
                     const kicsResults = CxKicsRealTime.parseKicsRealTimeResponse(resultObject);
                     cxCommandOutput.payload = [kicsResults];
+                    break;
+                  case "CxKicsRemediation":
+                    const kicsRemediationOutput = CxKicsRemediation.parseKicsRemediation(resultObject)
+                    cxCommandOutput.payload = [kicsRemediationOutput]
                     break;
                 default:
                   cxCommandOutput.payload = resultObject;
