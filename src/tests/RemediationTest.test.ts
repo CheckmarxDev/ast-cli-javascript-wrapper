@@ -22,4 +22,10 @@ describe("Kics Remediation cases",() => {
         expect(remediation.availableRemediation).toBeDefined();
         expect(remediation.appliedRemediation).toBeDefined();
     });
+
+    it('SCA Remediation Successful case ', async () => {
+        const auth = new CxWrapper(cxScanConfig);
+        const e:CxCommandOutput = await auth.scaRemediation("dist/tests/data/package.json","copyfiles","1.2")
+        expect(e.exitCode).toBe(0);
+    });
 });

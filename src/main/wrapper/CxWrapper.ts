@@ -1,13 +1,13 @@
-import { CxConfig } from "./CxConfig";
-import { CxParamType } from "./CxParamType";
-import { CxConstants } from "./CxConstants";
-import { ExecutionService } from "./ExecutionService";
-import { CxCommandOutput } from "./CxCommandOutput";
-import path = require('path');
-import { getLoggerWithFilePath, logger } from "./loggerConfig";
+import {CxConfig} from "./CxConfig";
+import {CxParamType} from "./CxParamType";
+import {CxConstants} from "./CxConstants";
+import {ExecutionService} from "./ExecutionService";
+import {CxCommandOutput} from "./CxCommandOutput";
+import {getLoggerWithFilePath, logger} from "./loggerConfig";
 import * as fs from "fs"
 import * as os from "os";
 import CxBFL from "../bfl/CxBFL";
+import path = require('path');
 
 type ParamTypeMap = Map<CxParamType, string>;
 
@@ -258,6 +258,13 @@ export class CxWrapper {
         commands.push(...this.initializeCommands(false));
         const exec = new ExecutionService();
         return exec.executeKicsCommands(this.config.pathToExecutable, commands, CxConstants.KICS_REMEDIATION_TYPE);
+    }
+
+    async scaRemediation(packageFile: string, packages:string, packageVersion:string): Promise<CxCommandOutput>  {
+        const commands: string[] = [CxConstants.CMD_UTILS, CxConstants.CMD_REMEDIATION,CxConstants.SUB_CMD_REMEDIATION_SCA,CxConstants.SCA_REMEDIATION_PACKAGE_FILE, packageFile,CxConstants.SCA_REMEDIATION_PACKAGE, packages,CxConstants.SCA_REMEDIATION_PACKAGE_VERSION,packageVersion];
+        commands.push(...this.initializeCommands(false));
+        const exec = new ExecutionService();
+        return exec.executeCommands(this.config.pathToExecutable, commands);
     }
 
     getIndexOfBflNode(bflNodes: CxBFL[], resultNodes: any[]): number {
