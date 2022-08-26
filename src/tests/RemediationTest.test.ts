@@ -3,6 +3,15 @@ import {BaseTest} from "./BaseTest";
 import {CxCommandOutput} from "../main/wrapper/CxCommandOutput";
 import CxKicsRemediation from "../main/remediation/CxKicsRemediation";
 
+describe("SCA Remediation cases",() => {
+    const cxScanConfig = new BaseTest();
+    it('SCA Remediation Successful case ', async () => {
+        const auth = new CxWrapper(cxScanConfig);
+        const e:CxCommandOutput = await auth.scaRemediation("dist/tests/data/package.json","copyfiles","1.2")
+        expect(e.exitCode).toBe(0);
+    });
+});
+
 describe("Kics Remediation cases",() => {
     const cxScanConfig = new BaseTest();
     it('Kics Remediation Successful case', async () => {
@@ -21,11 +30,5 @@ describe("Kics Remediation cases",() => {
         const remediation: CxKicsRemediation = output.payload[0];
         expect(remediation.availableRemediation).toBeDefined();
         expect(remediation.appliedRemediation).toBeDefined();
-    });
-
-    it('SCA Remediation Successful case ', async () => {
-        const auth = new CxWrapper(cxScanConfig);
-        const e:CxCommandOutput = await auth.scaRemediation("dist/tests/data/package.json","copyfiles","1.2")
-        expect(e.exitCode).toBe(0);
     });
 });
