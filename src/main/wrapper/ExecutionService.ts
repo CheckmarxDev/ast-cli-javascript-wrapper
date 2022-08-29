@@ -152,7 +152,7 @@ export class ExecutionService {
                     break;
               case CxConstants.LEARN_MORE_DESCRIPTIONS_TYPE:
                   const learnMore = CxLearnMoreDescriptions.parseLearnMoreDescriptionsResponse(resultObject);
-                  cxCommandOutput.payload = [learnMore];
+                  cxCommandOutput.payload = learnMore;
                   break;
               case CxConstants.KICS_REMEDIATION_TYPE:
                   const kicsRemediationOutput = CxKicsRemediation.parseKicsRemediation(resultObject)

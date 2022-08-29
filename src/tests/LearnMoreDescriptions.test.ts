@@ -7,7 +7,7 @@ describe("LearnMoreDescriptions cases",() => {
     it('LearnMoreDescriptions Successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);
         const queryId = process.env.CX_TEST_QUERY_ID;
-        const data = await auth.learnMore(queryId !== undefined? queryId : "10308959669028119927")
+        const data = await auth.learnMore(queryId !== undefined? queryId : "16772998409937314312")
         const cxCommandOutput: CxCommandOutput = data;
         expect(cxCommandOutput.payload.length).toBeGreaterThan(0);
     })
