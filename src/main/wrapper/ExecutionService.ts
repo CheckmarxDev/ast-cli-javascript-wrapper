@@ -12,6 +12,14 @@ import spawner = require('child_process');
 import CxKicsRealTime from "../kicsRealtime/CxKicsRealTime";
 import CxLearnMoreDescriptions from "../learnmore/CxLearnMoreDescriptions";
 import {CxConstants} from "./CxConstants";
+import CxData from "../results/CxData";
+import CxScaPackageData from "../results/CxScaPackageData";
+import CxVulnerabilityDetails from "../results/CxVulnerabilityDetails";
+import CxCvss from "../results/CxCvss";
+import CxNode from "../results/CxNode";
+import CxPackageData from "../results/CxPackageData";
+import CxKicsRemediation from "../remediation/CxKicsRemediation";
+
 
 
 
@@ -146,7 +154,11 @@ export class ExecutionService {
                   const learnMore = CxLearnMoreDescriptions.parseLearnMoreDescriptionsResponse(resultObject);
                   cxCommandOutput.payload = [learnMore];
                   break;
-                default:
+              case CxConstants.KICS_REMEDIATION_TYPE:
+                  const kicsRemediationOutput = CxKicsRemediation.parseKicsRemediation(resultObject)
+                  cxCommandOutput.payload = [kicsRemediationOutput]
+                  break;
+               default:
                   cxCommandOutput.payload = resultObject;
               }
             }
@@ -186,7 +198,19 @@ export class ExecutionService {
         if(fileExtension.includes("json")){
             const read_json = JSON.parse(read.replace(/:([0-9]{15,}),/g, ':"$1",'));
             if (read_json.results){
-                const r : CxResult[] = read_json.results.map((member:any)=>{return Object.assign( new CxResult(),member);});
+                const r : CxResult[] = read_json.results.map((member:any)=>{
+                    const cxScaPackageData = new CxScaPackageData(member.data.scaPackageData?.id,member.data.scaPackageData?.locations,member.data.scaPackageData?.dependencyPaths,member.data.scaPackageData?.outdated,member.data.scaPackageData?.fixLink);
+                    const cvss = new CxCvss(member.vulnerabilityDetails.cvss.version,member.vulnerabilityDetails.cvss.attackVector,member.vulnerabilityDetails.cvss.availability,member.vulnerabilityDetails.cvss.confidentiality,member.vulnerabilityDetails.cvss.attackComplexity,member.vulnerabilityDetails.cvss.integrityImpact,member.vulnerabilityDetails.cvss.scope,member.vulnerabilityDetails.cvss.privilegesRequired,member.vulnerabilityDetails.cvss.userInteraction);
+                    const cxVulnerabilityDetails = new CxVulnerabilityDetails(member.vulnerabilityDetails.cweId,cvss,member.vulnerabilityDetails.compliances,member.vulnerabilityDetails.cvssScore,member.vulnerabilityDetails.cveName);
+                    const nodes:CxNode[]=member.data.nodes?.map((node:any)=>{
+                        return new CxNode(node.id,node.line,node.name,node.column,node.length,node.method,node.nodeID,node.domType,node.fileName,node.fullName,node.typeName,node.methodLine,node.definitions)
+                    });
+                    const cxPackageData:CxPackageData[]=member.data.packageData?.map((packages:any)=>{
+                        return new CxPackageData(packages.comment,packages.type,packages.url);
+                    });
+                    const data = new CxData(cxPackageData,member.data.packageIdentifier,cxScaPackageData,member.data.queryId,member.data.queryName,member.data.group,member.data.resultHash,member.data.languageName,nodes,member.data.recommendedVersion);
+                    return new CxResult(member.type,member.id,member.status,member.similarityId,member.state,member.severity,member.created,member.firstFoundAt,member.foundAt,member.firstScanId,member.description,data,member.comments,cxVulnerabilityDetails);
+                });
                 cxCommandOutput.payload = r;
             }
             else{
