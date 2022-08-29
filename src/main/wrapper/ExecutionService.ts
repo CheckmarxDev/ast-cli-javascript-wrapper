@@ -122,23 +122,23 @@ export class ExecutionService {
             if (data) {
               const resultObject = JSON.parse(data);
               switch (output) {
-                case "CxScan":
+                case CxConstants.SCAN_TYPE:
                   const scans = CxScan.parseProject(resultObject);
                   cxCommandOutput.payload = scans;
                   break;
-                case "CxProject":
+                case CxConstants.PROJECT_TYPE:
                   const projects = CxProject.parseProject(resultObject);
                   cxCommandOutput.payload = projects;
                   break;
-                case "CxCodeBashing":
+                case CxConstants.CODE_BASHING_TYPE:
                   const codeBashing = CxCodeBashing.parseCodeBashing(resultObject);
                   cxCommandOutput.payload = codeBashing;
                   break;
-                case "CxBFL":
+                case CxConstants.BFL_TYPE:
                     const bflNode = CxBFL.parseBFLResponse(resultObject);
                     cxCommandOutput.payload = bflNode;
                     break;
-                case "CxKicsRealTime":
+                case CxConstants.KICS_REALTIME_TYPE:
                     const kicsResults = CxKicsRealTime.parseKicsRealTimeResponse(resultObject);
                     cxCommandOutput.payload = [kicsResults];
                     break;
