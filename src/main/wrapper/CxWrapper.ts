@@ -247,12 +247,35 @@ export class CxWrapper {
         return exec.executeKicsCommands(this.config.pathToExecutable, commands, CxConstants.KICS_REALTIME_TYPE);
     }
 
+
     async learnMore(queryId: string){
         const commands: string[] = [CxConstants.CMD_UTILS,CxConstants.CMD_LEARN_MORE,CxConstants.QUERY_ID,queryId]
         commands.push(...this.initializeCommands(true))
         const exec = new ExecutionService();
         return exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.LEARN_MORE_DESCRIPTIONS_TYPE);
     }
+
+    async kicsRemediation(resultsFile: string, kicsFile:string, engine:string,similarityIds?: string):Promise<[Promise<CxCommandOutput>,any]>  {
+        const commands: string[] = [CxConstants.CMD_UTILS, CxConstants.CMD_REMEDIATION,CxConstants.SUB_CMD_REMEDIATION_KICS,CxConstants.KICS_REMEDIATION_RESULTS_FILE, resultsFile, CxConstants.KICS_REMEDIATION_KICS_FILE, kicsFile];
+        if(engine.length>0){
+            commands.push(CxConstants.ENGINE,engine)
+        }
+        if(similarityIds){
+            commands.push(CxConstants.KICS_REMEDIATION_SIMILARITY_IDS,similarityIds)
+        }
+        commands.push(...this.initializeCommands(false));
+        const exec = new ExecutionService();
+        return exec.executeKicsCommands(this.config.pathToExecutable, commands, CxConstants.KICS_REMEDIATION_TYPE);
+    }
+
+    async scaRemediation(packageFile: string, packages:string, packageVersion:string): Promise<CxCommandOutput>  {
+        const commands: string[] = [CxConstants.CMD_UTILS, CxConstants.CMD_REMEDIATION,CxConstants.SUB_CMD_REMEDIATION_SCA,CxConstants.SCA_REMEDIATION_PACKAGE_FILE, packageFile,CxConstants.SCA_REMEDIATION_PACKAGE, packages,CxConstants.SCA_REMEDIATION_PACKAGE_VERSION,packageVersion];
+        commands.push(...this.initializeCommands(false));
+        const exec = new ExecutionService();
+        return exec.executeCommands(this.config.pathToExecutable, commands);
+    }
+
+
     getIndexOfBflNode(bflNodes: CxBFL[], resultNodes: any[]): number {
 
         const bflNodeNotFound = -1;
