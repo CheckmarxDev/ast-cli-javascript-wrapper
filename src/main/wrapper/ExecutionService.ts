@@ -10,6 +10,8 @@ import CxCodeBashing from "../codebashing/CxCodeBashing";
 import CxBFL from "../bfl/CxBFL";
 import spawner = require('child_process');
 import CxKicsRealTime from "../kicsRealtime/CxKicsRealTime";
+import CxLearnMoreDescriptions from "../learnmore/CxLearnMoreDescriptions";
+import {CxConstants} from "./CxConstants";
 import CxData from "../results/CxData";
 import CxScaPackageData from "../results/CxScaPackageData";
 import CxVulnerabilityDetails from "../results/CxVulnerabilityDetails";
@@ -17,6 +19,7 @@ import CxCvss from "../results/CxCvss";
 import CxNode from "../results/CxNode";
 import CxPackageData from "../results/CxPackageData";
 import CxKicsRemediation from "../remediation/CxKicsRemediation";
+
 
 
 
@@ -127,31 +130,35 @@ export class ExecutionService {
             if (data) {
               const resultObject = JSON.parse(data);
               switch (output) {
-                case "CxScan":
+                case CxConstants.SCAN_TYPE:
                   const scans = CxScan.parseProject(resultObject);
                   cxCommandOutput.payload = scans;
                   break;
-                case "CxProject":
+                case CxConstants.PROJECT_TYPE:
                   const projects = CxProject.parseProject(resultObject);
                   cxCommandOutput.payload = projects;
                   break;
-                case "CxCodeBashing":
+                case CxConstants.CODE_BASHING_TYPE:
                   const codeBashing = CxCodeBashing.parseCodeBashing(resultObject);
                   cxCommandOutput.payload = codeBashing;
                   break;
-                case "CxBFL":
+                case CxConstants.BFL_TYPE:
                     const bflNode = CxBFL.parseBFLResponse(resultObject);
                     cxCommandOutput.payload = bflNode;
                     break;
-                case "CxKicsRealTime":
+                case CxConstants.KICS_REALTIME_TYPE:
                     const kicsResults = CxKicsRealTime.parseKicsRealTimeResponse(resultObject);
                     cxCommandOutput.payload = [kicsResults];
                     break;
-                  case "CxKicsRemediation":
-                    const kicsRemediationOutput = CxKicsRemediation.parseKicsRemediation(resultObject)
-                    cxCommandOutput.payload = [kicsRemediationOutput]
-                    break;
-                default:
+              case CxConstants.LEARN_MORE_DESCRIPTIONS_TYPE:
+                  const learnMore = CxLearnMoreDescriptions.parseLearnMoreDescriptionsResponse(resultObject);
+                  cxCommandOutput.payload = learnMore;
+                  break;
+              case CxConstants.KICS_REMEDIATION_TYPE:
+                  const kicsRemediationOutput = CxKicsRemediation.parseKicsRemediation(resultObject)
+                  cxCommandOutput.payload = [kicsRemediationOutput]
+                  break;
+               default:
                   cxCommandOutput.payload = resultObject;
               }
             }

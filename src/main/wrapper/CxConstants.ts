@@ -66,14 +66,15 @@ export enum CxConstants {
     PREDICATE_TYPE = "CxPredicate",
     CODE_BASHING_TYPE = "CxCodeBashing",
     KICS_REALTIME_TYPE = "CxKicsRealTime",
+    LEARN_MORE_DESCRIPTIONS_TYPE = "CxLearnMoreDescriptions",
     KICS_REMEDIATION_TYPE = "CxKicsRemediation",
     BFL_TYPE = "CxBFL",
     SAST = "sast",
     LANGUAGE = "--language",
     VULNERABILITY_TYPE = "--vulnerability-type",
     CWE_ID = "--cwe-id",
-
     SEVERITY_HIGH = "high",
     SEVERITY_MEDIUM = "medium",
-    STATE_CONFIRMED = "confirmed"
+    STATE_CONFIRMED = "confirmed",
+    CMD_LEARN_MORE = "learn-more"
 }
