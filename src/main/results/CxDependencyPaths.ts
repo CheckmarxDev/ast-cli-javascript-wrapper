@@ -3,4 +3,5 @@ export default class CxDependencyPaths {
     name: string;
     version: string;
     isDevelopment: boolean;
+    supportsQuickFix:boolean;
 }
