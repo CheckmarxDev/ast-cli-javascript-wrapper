@@ -22,7 +22,7 @@ export enum CxConstants {
     KICS_REMEDIATION_RESULTS_FILE = "--results-file",
     KICS_REMEDIATION_KICS_FILE = "--kics-files",
     KICS_REMEDIATION_SIMILARITY_IDS = "--similarity-ids",
-    SCA_REMEDIATION_PACKAGE_FILE = "--package-file",
+    SCA_REMEDIATION_PACKAGE_FILES = "--package-files",
     SCA_REMEDIATION_PACKAGE = "--package",
     SCA_REMEDIATION_PACKAGE_VERSION = "--package-version",
     CMD_AUTH = "auth",
