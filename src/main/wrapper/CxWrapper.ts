@@ -275,6 +275,14 @@ export class CxWrapper {
         return exec.executeCommands(this.config.pathToExecutable, commands);
     }
 
+    async ideScansEnabled() : Promise<boolean> {
+        const commands: string[] = [CxConstants.CMD_UTILS, CxConstants.SUB_CMD_TENANT];
+        commands.push(...this.initializeCommands(false));
+        const exec = new ExecutionService();
+        const output =  await exec.executeMapTenantOutputCommands(this.config.pathToExecutable, commands);
+        return output.has(CxConstants.IDE_SCANS_KEY) && output.get(CxConstants.IDE_SCANS_KEY).toLowerCase() === "true";
+    }
+
 
     getIndexOfBflNode(bflNodes: CxBFL[], resultNodes: any[]): number {
 

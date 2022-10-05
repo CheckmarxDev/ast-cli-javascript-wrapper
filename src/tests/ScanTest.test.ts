@@ -99,4 +99,10 @@ describe("ScanCreate cases", () => {
         expect(scanObject.results.length).toBeGreaterThan(0);
         expect(pid).toBeDefined();
     })
+
+    it("Should check if scan create is possible", async() => {
+        const auth = new CxWrapper(cxScanConfig);
+        const tenantSettings: boolean = await auth.ideScansEnabled();
+        expect(tenantSettings).toBeDefined();
+    })
 });

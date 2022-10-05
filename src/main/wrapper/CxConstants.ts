@@ -19,6 +19,7 @@ export enum CxConstants {
     CMD_REMEDIATION = "remediation",
     SUB_CMD_REMEDIATION_KICS = "kics",
     SUB_CMD_REMEDIATION_SCA = "sca",
+    SUB_CMD_TENANT = "tenant",
     KICS_REMEDIATION_RESULTS_FILE = "--results-file",
     KICS_REMEDIATION_KICS_FILE = "--kics-files",
     KICS_REMEDIATION_SIMILARITY_IDS = "--similarity-ids",
@@ -76,5 +77,6 @@ export enum CxConstants {
     SEVERITY_HIGH = "high",
     SEVERITY_MEDIUM = "medium",
     STATE_CONFIRMED = "confirmed",
-    CMD_LEARN_MORE = "learn-more"
+    CMD_LEARN_MORE = "learn-more",
+    IDE_SCANS_KEY = "scan.config.plugins.ideScans"
 }
