@@ -17,13 +17,13 @@ export class CxWrapper {
     constructor(cxScanConfig: CxConfig, logFilePath?: string) {
 
         getLoggerWithFilePath(logFilePath)
-
-        if (cxScanConfig.clientId && cxScanConfig.clientSecret) {
+        if (cxScanConfig.apiKey) {
+            this.config.apiKey = cxScanConfig.apiKey;
+        }
+        else if (cxScanConfig.clientId && cxScanConfig.clientSecret) {
             logger.info("Received clientId and clientSecret");
             this.config.clientId = cxScanConfig.clientId;
             this.config.clientSecret = cxScanConfig.clientSecret;
-        } else if (cxScanConfig.apiKey) {
-            this.config.apiKey = cxScanConfig.apiKey;
         } else {
             logger.info("Did not receive ClientId/Secret or ApiKey from cli arguments");
         }

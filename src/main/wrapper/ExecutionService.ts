@@ -116,7 +116,7 @@ export class ExecutionService {
         }), this.fsObject];
     }
 
-    executeMapTenantOutputCommands(pathToExecutable: string, commands: string[]): Promise<Map<String,String>> {
+    executeMapTenantOutputCommands(pathToExecutable: string, commands: string[]): Promise<Map<string,string>> {
         return (new Promise( (resolve, reject)=> {
             let stderr = "";
             let stdout ="";
@@ -151,10 +151,10 @@ export class ExecutionService {
         }));
     }
 
-    private static onCloseMapTenantOutputCommand(code: number, stderr: string, stdout: string): Map<String,String> {
-        let result = new Map<String,String>();
+    private static onCloseMapTenantOutputCommand(code: number, stderr: string, stdout: string): Map<string,string> {
+        const result = new Map<string,string>();
         if (code == 0) {
-            let tenantSettingsList = stdout.split('\n');
+            const tenantSettingsList = stdout.split('\n');
             tenantSettingsList.forEach(tenantSetting => {
                 tenantSetting.includes('Key') ? result.set(tenantSetting.split(':')[1],tenantSettingsList[tenantSettingsList.indexOf(tenantSetting) +1].split(':')[1]) : null;
             });
