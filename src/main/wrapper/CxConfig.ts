@@ -6,4 +6,5 @@ export class CxConfig {
     clientSecret: string;
     apiKey: string;
     tenant: string;
+    additionalParameters:string;
 }

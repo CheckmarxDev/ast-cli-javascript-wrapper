@@ -7,6 +7,7 @@ export class BaseTest {
     scanId: string;
     pathToExecutable: string;
     tenant: string;
+    additionalParameters:string;
 
     constructor() {
         this.baseUri = process.env["CX_BASE_URI"];
@@ -16,6 +17,7 @@ export class BaseTest {
         this.tenant = process.env["CX_TENANT"];
         this.apiKey = process.env["CX_APIKEY"];
         this.scanId = process.env["CX_SCANID"];
+        this.additionalParameters = "--debug"
         if (process.env["PATH_TO_EXECUTABLE"] !== null && process.env["PATH_TO_EXECUTABLE"] !== undefined) {
             this.pathToExecutable = process.env["PATH_TO_EXECUTABLE"];
         }

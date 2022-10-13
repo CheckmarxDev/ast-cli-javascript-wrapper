@@ -51,6 +51,9 @@ export class CxWrapper {
         if (cxScanConfig.tenant) {
             this.config.tenant = cxScanConfig.tenant;
         }
+        if (cxScanConfig.additionalParameters) {
+            this.config.additionalParameters = cxScanConfig.additionalParameters;
+        }
     }
 
     initializeCommands(formatRequired: boolean): string[] {
@@ -78,6 +81,12 @@ export class CxWrapper {
         if (this.config.tenant) {
             list.push(CxConstants.TENANT);
             list.push(this.config.tenant);
+        }
+        if(this.config.additionalParameters){
+            // this.config.additionalParameters.forEach(function (param){
+            //     list.push(param)
+            // })
+            list.push(this.config.additionalParameters)
         }
         if (formatRequired) {
             list.push(CxConstants.FORMAT);
