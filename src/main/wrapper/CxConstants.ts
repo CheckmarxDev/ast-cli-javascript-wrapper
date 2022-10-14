@@ -78,5 +78,5 @@ export enum CxConstants {
     SEVERITY_MEDIUM = "medium",
     STATE_CONFIRMED = "confirmed",
     CMD_LEARN_MORE = "learn-more",
-    IDE_SCANS_KEY = "scan.config.plugins.ideScans"
+    IDE_SCANS_KEY = " scan.config.plugins.ideScans"
 }

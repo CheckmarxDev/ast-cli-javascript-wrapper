@@ -289,7 +289,7 @@ export class CxWrapper {
         commands.push(...this.initializeCommands(false));
         const exec = new ExecutionService();
         const output =  await exec.executeMapTenantOutputCommands(this.config.pathToExecutable, commands);
-        return output.has(CxConstants.IDE_SCANS_KEY) && output.get(CxConstants.IDE_SCANS_KEY).toLowerCase() === "true";
+        return output.has(CxConstants.IDE_SCANS_KEY) && output.get(CxConstants.IDE_SCANS_KEY).toLowerCase() === " true";
     }
 
 
