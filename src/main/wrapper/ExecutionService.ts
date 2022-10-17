@@ -21,8 +21,6 @@ import CxPackageData from "../results/CxPackageData";
 import CxKicsRemediation from "../remediation/CxKicsRemediation";
 
 
-
-
 function isJsonString(s: string) {
     try {
         const stringObject = s.split('\n')[0];
@@ -116,6 +114,54 @@ export class ExecutionService {
                 }
             });
         }), this.fsObject];
+    }
+
+    executeMapTenantOutputCommands(pathToExecutable: string, commands: string[]): Promise<Map<string,string>> {
+        return (new Promise( (resolve, reject)=> {
+            let stderr = "";
+            let stdout ="";
+
+            this.fsObject = spawner.spawn(pathToExecutable, transformation(commands));
+            this.fsObject.on('error', (data: { toString: () => string; }) => {
+                if (data) {
+                    logger.error(data.toString().replace('\n', ''));
+                    stderr += data.toString();
+                }
+                reject()
+            });
+            this.fsObject.on('exit',(code: number) => {
+                logger.info("Exit code received from AST-CLI: " + code);
+                if(code==1){
+                    stderr = stdout
+                }
+                resolve(ExecutionService.onCloseMapTenantOutputCommand(code, stderr, stdout));
+            });
+            this.fsObject.stdout.on('data', (data: { toString: () => string; }) => {
+                if (data) {
+                    logger.info(data.toString().replace('\n', ''));
+                    stdout += data.toString();
+                }
+            });
+            this.fsObject.stderr.on('data', (data: { toString: () => string; }) => {
+                if (data) {
+                    logger.error(data.toString().replace('\n', ''));
+                    stderr += data.toString();
+                }
+            });
+        }));
+    }
+
+    private static onCloseMapTenantOutputCommand(code: number, stderr: string, stdout: string): Map<string,string> {
+        const result = new Map<string,string>();
+        if (code == 0) {
+            const tenantSettingsList = stdout.split('\n');
+            tenantSettingsList.forEach(tenantSetting => {
+                tenantSetting.includes('Key') ? result.set(tenantSetting.split(':')[1],tenantSettingsList[tenantSettingsList.indexOf(tenantSetting) +1].split(':')[1]) : null;
+            });
+        } else {
+            logger.error("Error occurred while executing command: " + stderr);
+        }
+        return result;
     }
 
     private static onCloseCommand(code: number, stderr: string, stdout: string, output: string) : CxCommandOutput {

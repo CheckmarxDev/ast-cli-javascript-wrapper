@@ -17,13 +17,13 @@ export class CxWrapper {
     constructor(cxScanConfig: CxConfig, logFilePath?: string) {
 
         getLoggerWithFilePath(logFilePath)
-
-        if (cxScanConfig.clientId && cxScanConfig.clientSecret) {
+        if (cxScanConfig.apiKey) {
+            this.config.apiKey = cxScanConfig.apiKey;
+        }
+        else if (cxScanConfig.clientId && cxScanConfig.clientSecret) {
             logger.info("Received clientId and clientSecret");
             this.config.clientId = cxScanConfig.clientId;
             this.config.clientSecret = cxScanConfig.clientSecret;
-        } else if (cxScanConfig.apiKey) {
-            this.config.apiKey = cxScanConfig.apiKey;
         } else {
             logger.info("Did not receive ClientId/Secret or ApiKey from cli arguments");
         }
@@ -50,6 +50,9 @@ export class CxWrapper {
         }
         if (cxScanConfig.tenant) {
             this.config.tenant = cxScanConfig.tenant;
+        }
+        if (cxScanConfig.additionalParameters) {
+            this.config.additionalParameters = cxScanConfig.additionalParameters;
         }
     }
 
@@ -78,6 +81,12 @@ export class CxWrapper {
         if (this.config.tenant) {
             list.push(CxConstants.TENANT);
             list.push(this.config.tenant);
+        }
+        if(this.config.additionalParameters){
+            // this.config.additionalParameters.forEach(function (param){
+            //     list.push(param)
+            // })
+            list.push(this.config.additionalParameters)
         }
         if (formatRequired) {
             list.push(CxConstants.FORMAT);
@@ -273,6 +282,14 @@ export class CxWrapper {
         commands.push(...this.initializeCommands(false));
         const exec = new ExecutionService();
         return exec.executeCommands(this.config.pathToExecutable, commands);
+    }
+
+    async ideScansEnabled() : Promise<boolean> {
+        const commands: string[] = [CxConstants.CMD_UTILS, CxConstants.SUB_CMD_TENANT];
+        commands.push(...this.initializeCommands(false));
+        const exec = new ExecutionService();
+        const output =  await exec.executeMapTenantOutputCommands(this.config.pathToExecutable, commands);
+        return output.has(CxConstants.IDE_SCANS_KEY) && output.get(CxConstants.IDE_SCANS_KEY).toLowerCase() === " true";
     }
 
 
