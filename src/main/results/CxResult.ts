@@ -3,6 +3,7 @@ import CxVulnerabilityDetails from "./CxVulnerabilityDetails";
 
 export default class CxResult {
     type: string;
+    label:string;
     id: string;
     status: string;
     similarityId :string;
@@ -17,8 +18,9 @@ export default class CxResult {
     comments: any = {};
     vulnerabilityDetails:CxVulnerabilityDetails;
 
-    constructor(type: string,id: string,status: string,similarityId: string,state: string,severity: string,created: string,firstFoundAt: string,foundAt: string,firstScanId:string,description: string,data: CxData,comments: any,vulnerabilityDetails: CxVulnerabilityDetails) {
+    constructor(type: string,label: string,id: string,status: string,similarityId: string,state: string,severity: string,created: string,firstFoundAt: string,foundAt: string,firstScanId:string,description: string,data: CxData,comments: any,vulnerabilityDetails: CxVulnerabilityDetails) {
         this.type = type;
+        this.label = label;
         this.id = id;
         this.status = status;
         this.similarityId = similarityId;
