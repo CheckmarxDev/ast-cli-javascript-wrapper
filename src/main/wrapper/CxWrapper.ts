@@ -290,7 +290,7 @@ export class CxWrapper {
 
     prepareAdditionalParams(additionalParameters: string) : string[] {
         const paramList = additionalParameters.match(/(?:[^\s"]+|"[^"]*")+/g);
-        let params: string[] = [];
+        const params: string[] = [];
         logger.info("Additional parameters refined: " + paramList)
         if (paramList) {
             paramList.forEach((element) => {
