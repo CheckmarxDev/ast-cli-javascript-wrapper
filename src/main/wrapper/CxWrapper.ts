@@ -83,10 +83,9 @@ export class CxWrapper {
             list.push(this.config.tenant);
         }
         if(this.config.additionalParameters){
-            // this.config.additionalParameters.forEach(function (param){
-            //     list.push(param)
-            // })
-            list.push(this.config.additionalParameters)
+            this.prepareAdditionalParams(this.config.additionalParameters).forEach(function (param){
+                list.push(param)
+            })
         }
         if (formatRequired) {
             list.push(CxConstants.FORMAT);
@@ -116,13 +115,10 @@ export class CxWrapper {
                 commands.push("-" + key.toString().replace(/_/g, "-").toLowerCase());
                 commands.push(value);
             } else if (key === CxParamType.ADDITIONAL_PARAMETERS) {
-                const paramList = value.match(/(?:[^\s"]+|"[^"]*")+/g);
-                logger.info("Additional parameters refined: " + paramList)
-                if (paramList) {
-                    paramList.forEach((element) => {
-                        commands.push(element);
-                    });
-                }
+                this.prepareAdditionalParams(this.config.additionalParameters).forEach((element) => {
+                    logger.info("Additional parameter: " + element)
+                    commands.push(element);
+                });
             }
         });
         const exec = new ExecutionService();
@@ -292,6 +288,17 @@ export class CxWrapper {
         return output.has(CxConstants.IDE_SCANS_KEY) && output.get(CxConstants.IDE_SCANS_KEY).toLowerCase() === " true";
     }
 
+    prepareAdditionalParams(additionalParameters: string) : string[] {
+        const paramList = additionalParameters.match(/(?:[^\s"]+|"[^"]*")+/g);
+        const params: string[] = [];
+        logger.info("Additional parameters refined: " + paramList)
+        if (paramList) {
+            paramList.forEach((element) => {
+                params.push(element);
+            });
+        }
+        return params;
+    }
 
     getIndexOfBflNode(bflNodes: CxBFL[], resultNodes: any[]): number {
 

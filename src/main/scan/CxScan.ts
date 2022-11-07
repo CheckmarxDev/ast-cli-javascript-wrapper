@@ -24,7 +24,7 @@ export default class CxScan {
         scan.groups = member.Groups;
         scan.origin = member.Origin;
         scan.initiator = member.Initiator;
-        scan.branch = member.Initiator;
+        scan.branch = member.Branch;
         return scan;
       });
     } else {
@@ -38,7 +38,7 @@ export default class CxScan {
       scan.groups = resultObject.Groups;
       scan.origin = resultObject.Origin;
       scan.initiator = resultObject.Initiator;
-      scan.branch = resultObject.Initiator;
+      scan.branch = resultObject.Branch;
       scans.push(scan);
     }
     return scans;

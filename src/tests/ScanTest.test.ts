@@ -71,7 +71,7 @@ describe("ScanCreate cases", () => {
         const scanObject = cxCommandOutput.payload.pop();
         const scanShowObject = await auth.scanShow(scanObject.id);
         console.log(" Json object from successful no wait mode case: " + JSON.stringify(scanShowObject));
-        expect(scanShowObject.payload.pop().status).toEqual("Running");
+        expect(scanShowObject.payload.pop().status).toEqual("Partial");
     })
 
     it('ScanCancel Successful case', async () => {
