@@ -115,7 +115,7 @@ export class CxWrapper {
                 commands.push("-" + key.toString().replace(/_/g, "-").toLowerCase());
                 commands.push(value);
             } else if (key === CxParamType.ADDITIONAL_PARAMETERS) {
-                this.prepareAdditionalParams(this.config.additionalParameters).forEach((element) => {
+                this.prepareAdditionalParams(value).forEach((element) => {
                     logger.info("Additional parameter: " + element)
                     commands.push(element);
                 });
