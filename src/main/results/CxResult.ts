@@ -13,11 +13,12 @@ export default class CxResult {
     foundAt: string;
     firstScanId: string;
     description: string;
+    descriptionHTML: string;
     data: CxData;
     comments: any = {};
     vulnerabilityDetails:CxVulnerabilityDetails;
 
-    constructor(type: string,id: string,status: string,similarityId: string,state: string,severity: string,created: string,firstFoundAt: string,foundAt: string,firstScanId:string,description: string,data: CxData,comments: any,vulnerabilityDetails: CxVulnerabilityDetails) {
+    constructor(type: string,id: string,status: string,similarityId: string,state: string,severity: string,created: string,firstFoundAt: string,foundAt: string,firstScanId:string,description: string,data: CxData,comments: any,vulnerabilityDetails: CxVulnerabilityDetails,descriptionHTML: string) {
         this.type = type;
         this.id = id;
         this.status = status;
@@ -32,6 +33,7 @@ export default class CxResult {
         this.data = data;
         this.comments = comments;
         this.vulnerabilityDetails = vulnerabilityDetails;
+        this.descriptionHTML = descriptionHTML;
     }
 }
 

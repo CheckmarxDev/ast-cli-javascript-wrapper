@@ -255,7 +255,7 @@ export class ExecutionService {
                         return new CxPackageData(packages.comment,packages.type,packages.url);
                     });
                     const data = new CxData(cxPackageData,member.data.packageIdentifier,cxScaPackageData,member.data.queryId,member.data.queryName,member.data.group,member.data.resultHash,member.data.languageName,nodes,member.data.recommendedVersion);
-                    return new CxResult(member.type,member.id,member.status,member.similarityId,member.state,member.severity,member.created,member.firstFoundAt,member.foundAt,member.firstScanId,member.description,data,member.comments,cxVulnerabilityDetails);
+                    return new CxResult(member.type,member.id,member.status,member.similarityId,member.state,member.severity,member.created,member.firstFoundAt,member.foundAt,member.firstScanId,member.description,data,member.comments,cxVulnerabilityDetails, member.descriptionHTML);
                 });
                 cxCommandOutput.payload = r;
             }
