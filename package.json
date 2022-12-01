@@ -27,7 +27,7 @@
   "homepage": "https://github.com/CheckmarxDev/ast-cli-javascript-wrapper#readme",
   "devDependencies": {
     "@types/jest": "^27.5.0",
-    "@types/node": "^18.11.9",
+    "@types/node": "^18.11.10",
     "@typescript-eslint/eslint-plugin": "^5.45.0",
     "@typescript-eslint/parser": "^5.45.0",
     "copyfiles": "^2.4.1",
