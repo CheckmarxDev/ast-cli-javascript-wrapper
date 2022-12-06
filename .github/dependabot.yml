@@ -10,7 +10,7 @@ updates:
     schedule:
       interval: "daily"
     reviewers:
-      - "Checkmarx/ast-galactica-team"
+      - "tiagobcx"
   
   - package-ecosystem: "github-actions"
     # Workflow files stored in the
@@ -19,4 +19,4 @@ updates:
     schedule:
       interval: "daily"
     reviewers:
-      - "Checkmarx/ast-galactica-team"
+      - "tiagobcx"
