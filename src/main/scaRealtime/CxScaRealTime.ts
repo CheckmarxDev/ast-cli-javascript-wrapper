@@ -5,7 +5,7 @@ export default class CxScaRealTime {
     static parseScaRealTimeResponse(resultObject: any): CxScaRealTime {
         const scaRealTime: CxScaRealTime = new CxScaRealTime();
         scaRealTime.totalCount = resultObject.totalCount;
-        scaRealTime.results = resultObject.results;
+        scaRealTime.results = resultObject.results || [];
 
         return scaRealTime;
     }
