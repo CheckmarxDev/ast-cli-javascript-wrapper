@@ -19,6 +19,7 @@ import CxCvss from "../results/CxCvss";
 import CxNode from "../results/CxNode";
 import CxPackageData from "../results/CxPackageData";
 import CxKicsRemediation from "../remediation/CxKicsRemediation";
+import CxScaRealTime from "../scaRealtime/CxScaRealTime";
 
 
 function isJsonString(s: string) {
@@ -195,6 +196,10 @@ export class ExecutionService {
                 case CxConstants.KICS_REALTIME_TYPE:
                     const kicsResults = CxKicsRealTime.parseKicsRealTimeResponse(resultObject);
                     cxCommandOutput.payload = [kicsResults];
+                    break;
+                case CxConstants.SCA_REALTIME_TYPE:
+                    const scaRealtimeResponse = CxScaRealTime.parseScaRealTimeResponse(resultObject);
+                    cxCommandOutput.payload = [scaRealtimeResponse];
                     break;
               case CxConstants.LEARN_MORE_DESCRIPTIONS_TYPE:
                   const learnMore = CxLearnMoreDescriptions.parseLearnMoreDescriptionsResponse(resultObject);

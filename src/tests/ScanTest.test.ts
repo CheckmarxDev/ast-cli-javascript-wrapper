@@ -100,6 +100,17 @@ describe("ScanCreate cases", () => {
         expect(pid).toBeDefined();
     })
 
+    it('ScaRealtime Successful case', async () => {
+        const wrapper = new CxWrapper(cxScanConfig);
+        const cxCommandOutput: CxCommandOutput = await wrapper.runScaRealtimeScan(process.cwd());
+        if(cxCommandOutput.exitCode == 1) {
+            expect(cxCommandOutput.payload).toBeUndefined();
+        } else {
+            const scanObject = cxCommandOutput.payload.pop();
+            expect(scanObject.results).toBeDefined();
+        }
+    })
+
     it("Should check if scan create is possible", async() => {
         const auth = new CxWrapper(cxScanConfig);
         const tenantSettings: boolean = await auth.ideScansEnabled();
