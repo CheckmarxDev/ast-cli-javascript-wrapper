@@ -252,6 +252,17 @@ export class CxWrapper {
         return exec.executeKicsCommands(this.config.pathToExecutable, commands, CxConstants.KICS_REALTIME_TYPE);
     }
 
+    /**
+     * Run SCA Realtime for a specific directory
+     *
+     * @param projectDirPath
+     */
+    async runScaRealtimeScan(projectDirPath: string): Promise<CxCommandOutput> {
+        const commands: string[] = [CxConstants.CMD_SCAN, CxConstants.CMD_SCA_REALTIME, CxConstants.CMD_SCA_REALTIME_PROJECT_DIR, projectDirPath];
+        commands.push(...this.initializeCommands(false));
+        return new ExecutionService().executeCommands(this.config.pathToExecutable, commands, CxConstants.SCA_REALTIME_TYPE);
+    }
+
 
     async learnMore(queryId: string){
         const commands: string[] = [CxConstants.CMD_UTILS,CxConstants.CMD_LEARN_MORE,CxConstants.QUERY_ID,queryId]
