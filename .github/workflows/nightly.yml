@@ -3,6 +3,7 @@ name: Nightly Release
 permissions:
   id-token: write
   contents: write
+  packages: write
 
 on:
   push:
