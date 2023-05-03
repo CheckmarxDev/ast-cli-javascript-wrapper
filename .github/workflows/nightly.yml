@@ -1,0 +1,16 @@
+name: Nightly Release
+
+permissions:
+  id-token: write
+  contents: write
+  packages: write
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  nightly:
+    uses: CheckmarxDev/ast-cli-javascript-wrapper/.github/workflows/release.yml@main
+    secrets: inherit
