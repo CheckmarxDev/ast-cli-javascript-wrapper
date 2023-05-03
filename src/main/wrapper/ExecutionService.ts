@@ -21,7 +21,6 @@ import CxPackageData from "../results/CxPackageData";
 import CxKicsRemediation from "../remediation/CxKicsRemediation";
 import CxScaRealTime from "../scaRealtime/CxScaRealTime";
 
-
 function isJsonString(s: string) {
     try {
         const stringObject = s.split('\n')[0];
@@ -82,7 +81,7 @@ export class ExecutionService {
         }));
     }
 
-    executeKicsCommands(pathToExecutable: string, commands: string[], output? : string ): [Promise<CxCommandOutput>,any] {
+    executeKicsCommands(pathToExecutable: string, commands: string[]): [Promise<CxCommandOutput>,any] {
         return [new Promise( (resolve, reject)=> {
             let stderr = "";
             let stdout ="";
@@ -100,7 +99,7 @@ export class ExecutionService {
                 if(code==1){
                     stderr = stdout
                 }
-                resolve(ExecutionService.onCloseCommand(code, stderr, stdout, output));
+                resolve(ExecutionService.onCloseKicsCommand(code, stderr, stdout));
             });
             this.fsObject.stdout.on('data', (data: { toString: () => string; }) => {
                 if (data) {
@@ -167,13 +166,9 @@ export class ExecutionService {
 
     private static onCloseCommand(code: number, stderr: string, stdout: string, output: string) : CxCommandOutput {
       const cxCommandOutput = new CxCommandOutput();
-      cxCommandOutput.exitCode = code;
-      if (stderr) {
-        cxCommandOutput.status = stderr;
-      }
+      cxCommandOutput.buildOutputForProcess(code,stderr);
       if (stdout) {
-            const stdoutSplit = stdout.split('\n');
-            const data = stdoutSplit.find(isJsonString);
+            const data = this.buildDataFromStdOut(stdout);
             if (data) {
               const resultObject = JSON.parse(data);
               switch (output) {
@@ -193,10 +188,6 @@ export class ExecutionService {
                     const bflNode = CxBFL.parseBFLResponse(resultObject);
                     cxCommandOutput.payload = bflNode;
                     break;
-                case CxConstants.KICS_REALTIME_TYPE:
-                    const kicsResults = CxKicsRealTime.parseKicsRealTimeResponse(resultObject);
-                    cxCommandOutput.payload = [kicsResults];
-                    break;
                 case CxConstants.SCA_REALTIME_TYPE:
                     const scaRealtimeResponse = CxScaRealTime.parseScaRealTimeResponse(resultObject);
                     cxCommandOutput.payload = [scaRealtimeResponse];
@@ -214,8 +205,34 @@ export class ExecutionService {
               }
             }
       }
-
       return cxCommandOutput;
+    }
+
+    private static onCloseKicsCommand(code: number, stderr: string, stdout: string) : CxCommandOutput {
+        const cxCommandOutput = new CxCommandOutput();
+        let kicsResults;
+        cxCommandOutput.buildOutputForProcess(code,stderr);
+        if (stdout) {
+            const data = this.buildDataFromStdOut(stdout);
+            if (data) {
+                const resultObject = JSON.parse(data);
+                kicsResults = CxKicsRealTime.parseKicsRealTimeResponse(resultObject);
+            }
+        }
+        // case there are no errors and no payload then we have no results
+        else{
+            if(code==0){
+                kicsResults = new CxKicsRealTime();
+                kicsResults.summary= CxConstants.KICS_EMPTY_RESULTS
+            }
+        }
+        cxCommandOutput.payload = [kicsResults];
+        return cxCommandOutput;
+    }
+
+    private static buildDataFromStdOut(stdout:string){
+        const stdoutSplit = stdout.split('\n');
+        return stdoutSplit.find(isJsonString);
     }
 
     executeResultsCommands(pathToExecutable: string, commands: string[]): Promise<CxCommandOutput> {

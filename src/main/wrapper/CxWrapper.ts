@@ -249,7 +249,7 @@ export class CxWrapper {
         }
         commands.push(...this.initializeCommands(false));
         const exec = new ExecutionService();
-        return exec.executeKicsCommands(this.config.pathToExecutable, commands, CxConstants.KICS_REALTIME_TYPE);
+        return exec.executeKicsCommands(this.config.pathToExecutable, commands);
     }
 
     /**
@@ -281,7 +281,7 @@ export class CxWrapper {
         }
         commands.push(...this.initializeCommands(false));
         const exec = new ExecutionService();
-        return exec.executeKicsCommands(this.config.pathToExecutable, commands, CxConstants.KICS_REMEDIATION_TYPE);
+        return exec.executeKicsCommands(this.config.pathToExecutable, commands);
     }
 
     async scaRemediation(packageFiles: string, packages:string, packageVersion:string): Promise<CxCommandOutput>  {
