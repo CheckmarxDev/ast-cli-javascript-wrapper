@@ -8,7 +8,7 @@ export default class CxScaRealTime {
         const scaRealTime: CxScaRealTime = new CxScaRealTime();
         scaRealTime.totalCount = resultObject.totalCount;
         scaRealTime.results = resultObject.results || [];
-        scaRealTime.errors = resultObject.errors.map((errorObject: any) => CxScaRealTimeErrors.parseScaRealTimeResponseError(errorObject)) || [];
+        scaRealTime.errors = resultObject.errors ? resultObject.errors.map((errorObject: any) => CxScaRealTimeErrors.parseScaRealTimeResponseError(errorObject)) : [];
 
         return scaRealTime;
     }
