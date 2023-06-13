@@ -20,6 +20,7 @@ import CxNode from "../results/CxNode";
 import CxPackageData from "../results/CxPackageData";
 import CxKicsRemediation from "../remediation/CxKicsRemediation";
 import CxScaRealTime from "../scaRealtime/CxScaRealTime";
+import CxChat from "../chat/CxChat";
 
 
 function isJsonString(s: string) {
@@ -209,7 +210,11 @@ export class ExecutionService {
                   const kicsRemediationOutput = CxKicsRemediation.parseKicsRemediation(resultObject)
                   cxCommandOutput.payload = [kicsRemediationOutput]
                   break;
-               default:
+              case CxConstants.CHAT_TYPE:
+                  const chatOutput = CxChat.parseChat(resultObject)
+                  cxCommandOutput.payload = [chatOutput]
+                  break;
+              default:
                   cxCommandOutput.payload = resultObject;
               }
             }

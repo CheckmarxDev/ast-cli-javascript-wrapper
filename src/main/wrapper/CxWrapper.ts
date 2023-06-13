@@ -299,6 +299,26 @@ export class CxWrapper {
         return output.has(CxConstants.IDE_SCANS_KEY) && output.get(CxConstants.IDE_SCANS_KEY).toLowerCase() === " true";
     }
 
+    async chat(apikey: string, file: string, line: number, severity: string, vulnerability: string, input: string, conversationId?: string, model?: string): Promise<CxCommandOutput> {
+        const commands: string[] = [
+            CxConstants.CMD_CHAT,
+            CxConstants.CMD_CHAT_APIKEY, apikey,
+            CxConstants.CMD_CHAT_FILE, file,
+            CxConstants.CMD_CHAT_LINE, line.toString(),
+            CxConstants.CMD_CHAT_SEVERITY, severity,
+            CxConstants.CMD_CHAT_VULNERABILITY, vulnerability,
+            CxConstants.CMD_CHAT_INPUT, input,
+        ];
+        if (!!conversationId) {
+            commands.push(CxConstants.CMD_CHAT_CONVERSATION_ID, conversationId)
+        }
+        if (!!model) {
+            commands.push(CxConstants.CMD_CHAT_MODEL, model)
+        }
+        commands.push(...this.initializeCommands(false));
+        return new ExecutionService().executeCommands(this.config.pathToExecutable, commands, CxConstants.CHAT_TYPE);
+    }
+
     prepareAdditionalParams(additionalParameters: string) : string[] {
         const params: string[] = [];
 
