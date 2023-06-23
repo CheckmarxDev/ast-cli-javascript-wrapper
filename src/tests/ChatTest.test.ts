@@ -1,35 +1,55 @@
 import {CxWrapper} from '../main/wrapper/CxWrapper';
 import {CxCommandOutput} from "../main/wrapper/CxCommandOutput";
-import {BaseTest} from "./BaseTest";
 import CxChat from "../main/chat/CxChat";
+import {anything, instance, mock, when} from 'ts-mockito';
+import {BaseTest} from "./BaseTest";
 
-describe("Chat", () => {
-    it('Try call', async () => {
-        const config = new BaseTest();
-        config.pathToExecutable = "path\\to\\cli\\dev\\build"
-        const wrapper = new CxWrapper(config);
-        let cxCommandOutput: CxCommandOutput = await wrapper.chat(
-            "apikey",
-            "path\\to\\result\\file",
-            3,
-            "MEDIUM",
-            "Security Opt Not Set",
-            "Explain the result",
-            null,
-            "gpt-3.5-turbo"
+function createOutput(exitCode:number,payload:CxChat):CxCommandOutput {
+    const output = new CxCommandOutput();
+    output.exitCode=exitCode;
+    output.status="";
+    output.payload=[payload];
+    return output;
+}
+
+describe("Gpt Chat Cases", () => {
+    // tests preparation
+    const cxScanConfig = new BaseTest();
+    const mockedWrapper: CxWrapper = mock(CxWrapper);
+    const originalWrapper: CxWrapper = new CxWrapper(cxScanConfig);
+    const outputSuccessful = createOutput(0,new CxChat("CONVERSATION",["RESPONSE"] ));
+
+    when(mockedWrapper.chat("APIKEY","FILE",anything(),anything(),anything(),anything(),anything(), anything())).thenResolve(
+        outputSuccessful
+    );
+    const wrapper: CxWrapper = instance(mockedWrapper);
+
+    it('Gpt Chat Successful case', async () => {
+        const cxCommandOutput = await wrapper.chat(
+            "APIKEY",
+            "FILE",
+            0,
+            "SEVERITY",
+            "VULNERABILITY",
+            "INPUT",
+            "CONVERSATION",
+            "MODEL"
         );
         expect(cxCommandOutput.exitCode).toBe(0);
-        const output: CxChat = cxCommandOutput.payload.pop();
-        cxCommandOutput = await wrapper.chat(
-            "apikey",
-            "path\\to\\result\\file",
-            3,
-            "MEDIUM",
-            "Security Opt Not Set",
-            "Can you provide a snippet with the fix?",
-            output.conversationId,
-            "gpt-3.5-turbo"
+    });
+
+    it('Gpt Chat Failed case', async () => {
+        const cxCommandOutput = await originalWrapper.chat(
+            "APIKEY",
+            "",
+            0,
+            "SEVERITY",
+            "VULNERABILITY",
+            "INPUT",
+            "CONVERSATION",
+            "MODEL"
         );
-        expect(cxCommandOutput.exitCode).toBe(0);
+        expect(cxCommandOutput.exitCode).toBe(1);
+        expect(cxCommandOutput.status).toBe("open : no such file or directory\n");
     });
 });

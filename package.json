@@ -9,7 +9,8 @@
     "README.md"
   ],
   "dependencies": {
-    "log4js": "^6.9.1"
+    "log4js": "^6.9.1",
+    "ts-mockito": "^2.6.1"
   },
   "scripts": {
     "build": "tsc",
