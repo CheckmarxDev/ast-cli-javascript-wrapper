@@ -309,10 +309,10 @@ export class CxWrapper {
             CxConstants.CMD_CHAT_VULNERABILITY, vulnerability,
             CxConstants.CMD_CHAT_INPUT, input,
         ];
-        if (!!conversationId) {
+        if (conversationId) {
             commands.push(CxConstants.CMD_CHAT_CONVERSATION_ID, conversationId)
         }
-        if (!!model) {
+        if (model) {
             commands.push(CxConstants.CMD_CHAT_MODEL, model)
         }
         commands.push(...this.initializeCommands(false));
