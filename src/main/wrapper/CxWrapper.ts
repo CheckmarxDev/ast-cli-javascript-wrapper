@@ -319,6 +319,17 @@ export class CxWrapper {
         return new ExecutionService().executeCommands(this.config.pathToExecutable, commands, CxConstants.CHAT_TYPE);
     }
 
+    async maskSecrets( file: string): Promise<CxCommandOutput> {
+        const commands: string[] = [
+            CxConstants.CMD_UTILS,
+            CxConstants.CMD_MASK_SECRETS,
+            CxConstants.CMD_CHAT_FILE, file,
+        ];
+
+        commands.push(...this.initializeCommands(false));
+        return new ExecutionService().executeCommands(this.config.pathToExecutable, commands, CxConstants.MASK_TYPE);
+    }
+
     prepareAdditionalParams(additionalParameters: string) : string[] {
         const params: string[] = [];
 
