@@ -8,7 +8,7 @@ export default class CxKicsRealTime {
         const kicsRealTime: CxKicsRealTime = new CxKicsRealTime();
         kicsRealTime.version = resultObject.kics_version;
         kicsRealTime.count = resultObject.total_counter;
-        kicsRealTime.results = resultObject.queries;
+        kicsRealTime.results = resultObject.queries?resultObject.queries:[];
         kicsRealTime.summary = resultObject.severity_counters;
         return kicsRealTime;
     }
