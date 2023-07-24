@@ -299,6 +299,14 @@ export class CxWrapper {
         return output.has(CxConstants.IDE_SCANS_KEY) && output.get(CxConstants.IDE_SCANS_KEY).toLowerCase() === " true";
     }
 
+    async guidedRemediationEnabled() : Promise<boolean> {
+        const commands: string[] = [CxConstants.CMD_UTILS, CxConstants.SUB_CMD_TENANT];
+        commands.push(...this.initializeCommands(false));
+        const exec = new ExecutionService();
+        const output =  await exec.executeMapTenantOutputCommands(this.config.pathToExecutable, commands);
+        return output.has(CxConstants.AI_GUIDED_REMEDIATION_KEY) && output.get(CxConstants.AI_GUIDED_REMEDIATION_KEY).toLowerCase() === " true";
+    }
+
     async chat(apikey: string, file: string, line: number, severity: string, vulnerability: string, input: string, conversationId?: string, model?: string): Promise<CxCommandOutput> {
         const commands: string[] = [
             CxConstants.CMD_CHAT,
