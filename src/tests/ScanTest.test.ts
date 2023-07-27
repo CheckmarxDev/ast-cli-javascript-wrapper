@@ -112,8 +112,17 @@ describe("ScanCreate cases", () => {
     })
 
     it("Should check if scan create is possible", async() => {
+        const cxScanConfig = new BaseTest();
         const auth = new CxWrapper(cxScanConfig);
         const tenantSettings: boolean = await auth.ideScansEnabled();
         expect(tenantSettings).toBeDefined();
     })
+
+    it("Should check if AI guided remediation is active", async() => {
+        const cxScanConfig = new BaseTest();
+        const auth = new CxWrapper(cxScanConfig);
+        const aiEnabled: boolean = await auth.guidedRemediationEnabled();
+        expect(aiEnabled).toBeDefined();
+    })
+
 });
