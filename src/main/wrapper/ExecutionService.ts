@@ -20,6 +20,8 @@ import CxNode from "../results/CxNode";
 import CxPackageData from "../results/CxPackageData";
 import CxKicsRemediation from "../remediation/CxKicsRemediation";
 import CxScaRealTime from "../scaRealtime/CxScaRealTime";
+import CxChat from "../chat/CxChat";
+import CxMask from "../mask/CxMask";
 
 
 function isJsonString(s: string) {
@@ -206,10 +208,18 @@ export class ExecutionService {
                   cxCommandOutput.payload = learnMore;
                   break;
               case CxConstants.KICS_REMEDIATION_TYPE:
-                  const kicsRemediationOutput = CxKicsRemediation.parseKicsRemediation(resultObject)
-                  cxCommandOutput.payload = [kicsRemediationOutput]
+                  const kicsRemediationOutput = CxKicsRemediation.parseKicsRemediation(resultObject);
+                  cxCommandOutput.payload = [kicsRemediationOutput];
                   break;
-               default:
+              case CxConstants.CHAT_TYPE:
+                  const chatOutput = CxChat.parseChat(resultObject);
+                  cxCommandOutput.payload = [chatOutput];
+                  break;
+              case CxConstants.MASK_TYPE:
+                  const maskOutput = CxMask.parseMask(resultObject);
+                  cxCommandOutput.payload = [maskOutput];
+                  break;
+              default:
                   cxCommandOutput.payload = resultObject;
               }
             }

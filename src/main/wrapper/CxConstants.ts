@@ -43,6 +43,16 @@ export enum CxConstants {
     CMD_KICS_REALTIME = "kics-realtime",
     CMD_SCA_REALTIME = "sca-realtime",
     CMD_SCA_REALTIME_PROJECT_DIR = "--project-dir",
+    CMD_CHAT = "chat",
+    CMD_CHAT_APIKEY = "--chat-apikey",
+    CMD_CHAT_FILE = "--result-file",
+    CMD_CHAT_LINE = "--result-line",
+    CMD_CHAT_SEVERITY = "--result-severity",
+    CMD_CHAT_VULNERABILITY = "--result-vulnerability",
+    CMD_CHAT_INPUT = "--user-input",
+    CMD_CHAT_CONVERSATION_ID = "--conversation-id",
+    CMD_CHAT_MODEL = "--model",
+    CMD_MASK_SECRETS = "mask",
     SCAN_INFO_FORMAT = "--scan-info-format",
     FORMAT = "--format",
     FORMAT_JSON = "json",
@@ -70,6 +80,8 @@ export enum CxConstants {
     CODE_BASHING_TYPE = "CxCodeBashing",
     KICS_REALTIME_TYPE = "CxKicsRealTime",
     SCA_REALTIME_TYPE = "CxScaRealTime",
+    CHAT_TYPE = "CxChat",
+    MASK_TYPE = "CxMask",
     LEARN_MORE_DESCRIPTIONS_TYPE = "CxLearnMoreDescriptions",
     KICS_REMEDIATION_TYPE = "CxKicsRemediation",
     BFL_TYPE = "CxBFL",
@@ -81,5 +93,6 @@ export enum CxConstants {
     SEVERITY_MEDIUM = "medium",
     STATE_CONFIRMED = "confirmed",
     CMD_LEARN_MORE = "learn-more",
-    IDE_SCANS_KEY = " scan.config.plugins.ideScans"
+    IDE_SCANS_KEY = " scan.config.plugins.ideScans",
+    AI_GUIDED_REMEDIATION_KEY = " scan.config.plugins.aiGuidedRemediation"
 }
