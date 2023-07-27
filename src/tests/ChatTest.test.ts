@@ -41,15 +41,15 @@ describe("Gpt Chat Cases", () => {
     it('Gpt Chat Failed case', async () => {
         const cxCommandOutput = await originalWrapper.chat(
             "APIKEY",
-            "",
+            "FILE",
             0,
             "SEVERITY",
             "VULNERABILITY",
             "INPUT",
-            "CONVERSATION",
+            "",
             "MODEL"
         );
-        expect(cxCommandOutput.exitCode).toBe(1);
-        expect(cxCommandOutput.status).toBe("open : no such file or directory\n");
+        expect(cxCommandOutput.exitCode).toBe(0);
+        expect(cxCommandOutput.payload[0].responses[0]).toBe("It seems that FILE is not available for AI Guided Remediation. Please ensure that you have opened the correct workspace or the relevant file.");
     });
 });
