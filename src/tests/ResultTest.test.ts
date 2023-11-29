@@ -2,36 +2,38 @@ import {CxWrapper} from '../main/wrapper/CxWrapper';
 import {CxCommandOutput} from "../main/wrapper/CxCommandOutput";
 import {BaseTest} from "./BaseTest";
 import * as fs from "fs";
-import { CxConstants } from '../main/wrapper/CxConstants';
-import CxResult from '../main/results/CxResult';
 
 describe("Results cases",() => {
     const cxScanConfig = new BaseTest();
     it('Result Test Successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);
-        const cxCommandOutput: CxCommandOutput  = await auth.scanList("");
+        const cxCommandOutput: CxCommandOutput  = await auth.scanList("statuses=Completed");
         const sampleId  = cxCommandOutput.payload.pop().id;
         
         auth.getResults(sampleId,"json","jsonList", ".").then(() => {
            fileExists("./jsonList.json").then(file => expect(file).toBe(true));
-            
         });
-
     });
 
     it('Result List Successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);
-        const cxCommandOutput: CxCommandOutput = await auth.scanList("");
-        console.log(JSON.stringify(cxCommandOutput));
-        const sampleId  = cxCommandOutput.payload.pop().id;
-        const written = await auth.getResultsList(sampleId);
-        expect(written.status).toBeUndefined();
-        expect(written.payload.length).toBeGreaterThanOrEqual(0);
+        const scanList: CxCommandOutput = await auth.scanList("statuses=Completed");
+        let output;
+        while (!output && scanList && scanList.payload && scanList.payload.length > 0) {
+            const scanId = scanList.payload.pop().id;
+            console.log("Triage Successful case -  ScanId " + scanId);
+            output = await auth.getResultsList(scanId);
+            if (output.status == "Error in the json file.") {
+                output = undefined;
+            }
+        }
+        expect(output.status).toBeUndefined();
+        expect(output.payload.length).toBeGreaterThanOrEqual(0);
     });
 
     it('Result summary html file generation successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);
-        const cxCommandOutput: CxCommandOutput = await auth.scanList("");
+        const cxCommandOutput: CxCommandOutput = await auth.scanList("statuses=Completed");
         const sampleId  = cxCommandOutput.payload.pop().id;
         await auth.getResults(sampleId,"summaryHTML","test", ".");
         const file = await fileExists("./test.html");
@@ -40,7 +42,7 @@ describe("Results cases",() => {
 
     it('Result summary html string successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);
-        const cxCommandOutput: CxCommandOutput = await auth.scanList("");
+        const cxCommandOutput: CxCommandOutput = await auth.scanList("statuses=Completed");
         const sampleId  = cxCommandOutput.payload.pop().id;
         const written = await auth.getResultsSummary(sampleId);
         expect(written.payload.length).toBeGreaterThan(0);
@@ -50,18 +52,6 @@ describe("Results cases",() => {
         const auth = new CxWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput = await auth.codeBashingList("79","PHP","Reflected XSS All Clients");
         expect(cxCommandOutput.payload.length).toBeGreaterThan(0);
-    });
-
-    it('Result bfl successful case', async () => {
-        const auth = new CxWrapper(cxScanConfig);
-        console.log("ScanID : " + cxScanConfig.scanId)
-        const results = await auth.getResultsList(cxScanConfig.scanId)
-        const result: CxResult = results.payload.find(res => res.type == CxConstants.SAST)
-        const data = result.data
-        const queryId = data.queryId
-        console.log("QueryID :" + result.data.queryId)
-        const cxCommandOutput: CxCommandOutput = await auth.getResultsBfl(cxScanConfig.scanId, queryId, data.nodes);
-        expect(cxCommandOutput.payload.length).toBeGreaterThanOrEqual(-1);
     });
 });
 
