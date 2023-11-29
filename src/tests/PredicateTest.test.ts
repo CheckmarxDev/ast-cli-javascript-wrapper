@@ -15,7 +15,7 @@ describe("Triage cases", () => {
 
         let output;
         while (!output && scanList && scanList.payload && scanList.payload.length > 0) {
-            let scanId = scanList.payload.pop().id
+            const scanId = scanList.payload.pop().id
             console.log("Triage Successful case -  ScanId " + scanId)
             output = await auth.getResultsList(scanId)
             if (output.status == "Error in the json file.") {
