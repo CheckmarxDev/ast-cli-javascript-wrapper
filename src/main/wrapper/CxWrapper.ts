@@ -356,8 +356,12 @@ export class CxWrapper {
     }
 
     getIndexOfBflNode(bflNodes: CxBFL[], resultNodes: any[]): number {
-
         const bflNodeNotFound = -1;
+
+        if (!bflNodes) {
+            return bflNodeNotFound
+        }
+
         for (const bflNode of bflNodes) {
             for (const resultNode of resultNodes) {
 

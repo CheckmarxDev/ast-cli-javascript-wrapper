@@ -14,9 +14,7 @@ describe("Results cases",() => {
         
         auth.getResults(sampleId,"json","jsonList", ".").then(() => {
            fileExists("./jsonList.json").then(file => expect(file).toBe(true));
-            
         });
-
     });
 
     it('Result List Successful case', async () => {
