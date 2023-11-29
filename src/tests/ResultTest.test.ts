@@ -7,7 +7,7 @@ describe("Results cases",() => {
     const cxScanConfig = new BaseTest();
     it('Result Test Successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);
-        const cxCommandOutput: CxCommandOutput  = await auth.scanList("");
+        const cxCommandOutput: CxCommandOutput  = await auth.scanList("statuses=Completed");
         const sampleId  = cxCommandOutput.payload.pop().id;
         
         auth.getResults(sampleId,"json","jsonList", ".").then(() => {
@@ -17,7 +17,7 @@ describe("Results cases",() => {
 
     it('Result List Successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);
-        const cxCommandOutput: CxCommandOutput = await auth.scanList("");
+        const cxCommandOutput: CxCommandOutput = await auth.scanList("statuses=Completed");
         console.log(JSON.stringify(cxCommandOutput));
         const sampleId  = cxCommandOutput.payload.pop().id;
         const written = await auth.getResultsList(sampleId);
@@ -27,7 +27,7 @@ describe("Results cases",() => {
 
     it('Result summary html file generation successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);
-        const cxCommandOutput: CxCommandOutput = await auth.scanList("");
+        const cxCommandOutput: CxCommandOutput = await auth.scanList("statuses=Completed");
         const sampleId  = cxCommandOutput.payload.pop().id;
         await auth.getResults(sampleId,"summaryHTML","test", ".");
         const file = await fileExists("./test.html");
@@ -36,7 +36,7 @@ describe("Results cases",() => {
 
     it('Result summary html string successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);
-        const cxCommandOutput: CxCommandOutput = await auth.scanList("");
+        const cxCommandOutput: CxCommandOutput = await auth.scanList("statuses=Completed");
         const sampleId  = cxCommandOutput.payload.pop().id;
         const written = await auth.getResultsSummary(sampleId);
         expect(written.payload.length).toBeGreaterThan(0);
