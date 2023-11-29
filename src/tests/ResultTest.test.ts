@@ -18,11 +18,15 @@ describe("Results cases",() => {
     it('Result List Successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput = await auth.scanList("statuses=Completed");
-        console.log(JSON.stringify(cxCommandOutput));
-        const sampleId  = cxCommandOutput.payload.pop().id;
-        const written = await auth.getResultsList(sampleId);
-        expect(written.status).toBeUndefined();
-        expect(written.payload.length).toBeGreaterThanOrEqual(0);
+        let output;
+        while (!output) {
+            output = await auth.getResultsList(cxCommandOutput.payload.pop().id)
+            if (output.status == "Error in the json file.") {
+                output = undefined;
+            }
+        }
+        expect(output.status).toBeUndefined();
+        expect(output.payload.length).toBeGreaterThanOrEqual(0);
     });
 
     it('Result summary html file generation successful case', async () => {

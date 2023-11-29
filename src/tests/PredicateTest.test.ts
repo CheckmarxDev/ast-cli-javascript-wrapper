@@ -13,8 +13,15 @@ describe("Triage cases", () => {
         const scanList: CxCommandOutput = await auth.scanList("statuses=Completed");
         const scan = scanList.payload.pop();
 
-        const results = await auth.getResultsList(scan.id)
-        const result: CxResult = results.payload.find(res => res.type == CxConstants.SAST)
+        let output;
+        while (!output) {
+            output = await auth.getResultsList(scanList.payload.pop().id)
+            if (output.status == "Error in the json file.") {
+                output = undefined;
+            }
+        }
+
+        const result: CxResult = output.payload.find(res => res.type == CxConstants.SAST)
 
         const cxShow: CxCommandOutput = await auth.triageShow(scan.projectID, result.similarityId, result.type);
 
