@@ -17,10 +17,12 @@ describe("Results cases",() => {
 
     it('Result List Successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);
-        const cxCommandOutput: CxCommandOutput = await auth.scanList("statuses=Completed");
+        const scanList: CxCommandOutput = await auth.scanList("statuses=Completed");
         let output;
-        while (!output && cxCommandOutput && cxCommandOutput.payload && cxCommandOutput.payload.length > 0) {
-            output = await auth.getResultsList(cxCommandOutput.payload.pop().id)
+        while (!output && scanList && scanList.payload && scanList.payload.length > 0) {
+            let scanId = scanList.payload.pop().id;
+            console.log("Triage Successful case -  ScanId " + scanId);
+            output = await auth.getResultsList(scanId);
             if (output.status == "Error in the json file.") {
                 output = undefined;
             }

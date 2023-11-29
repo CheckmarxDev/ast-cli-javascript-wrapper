@@ -7,7 +7,7 @@ import {CxConstants} from '../main/wrapper/CxConstants';
 describe("Triage cases", () => {
     const cxScanConfig = new BaseTest();
 
-    it('TriageShow Successful case', async () => {
+    it('Triage Successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);
 
         const scanList: CxCommandOutput = await auth.scanList("statuses=Completed");
@@ -15,7 +15,9 @@ describe("Triage cases", () => {
 
         let output;
         while (!output && scanList && scanList.payload && scanList.payload.length > 0) {
-            output = await auth.getResultsList(scanList.payload.pop().id)
+            let scanId = scanList.payload.pop().id
+            console.log("Triage Successful case -  ScanId " + scanId)
+            output = await auth.getResultsList(scanId)
             if (output.status == "Error in the json file.") {
                 output = undefined;
             }
