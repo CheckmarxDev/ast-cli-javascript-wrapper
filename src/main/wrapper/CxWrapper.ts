@@ -237,8 +237,10 @@ export class CxWrapper {
         commands.push(...this.initializeCommands(true));
         const exec = new ExecutionService();
         const response = await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.BFL_TYPE);
-        const bflNodeIndex = this.getIndexOfBflNode(response.payload, resultNodes)
-        response.payload[0] = bflNodeIndex;
+        if (response) {
+            const bflNodeIndex = this.getIndexOfBflNode(response.payload, resultNodes)
+            response.payload[0] = bflNodeIndex;
+        }
         return response;
     }
 

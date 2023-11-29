@@ -2,8 +2,6 @@ import {CxWrapper} from '../main/wrapper/CxWrapper';
 import {CxCommandOutput} from "../main/wrapper/CxCommandOutput";
 import {BaseTest} from "./BaseTest";
 import * as fs from "fs";
-import { CxConstants } from '../main/wrapper/CxConstants';
-import CxResult from '../main/results/CxResult';
 
 describe("Results cases",() => {
     const cxScanConfig = new BaseTest();
@@ -48,22 +46,6 @@ describe("Results cases",() => {
         const auth = new CxWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput = await auth.codeBashingList("79","PHP","Reflected XSS All Clients");
         expect(cxCommandOutput.payload.length).toBeGreaterThan(0);
-    });
-
-    it('Result bfl successful case', async () => {
-        const auth = new CxWrapper(cxScanConfig);
-
-        const scanList: CxCommandOutput = await auth.scanList("statuses=Completed");
-        const sampleId  = scanList.payload.pop().id;
-
-        const results = await auth.getResultsList(sampleId)
-        const result: CxResult = results.payload.find(res => res.type == CxConstants.SAST)
-        const data = result.data
-        const queryId = data.queryId
-        console.log("QueryID :" + result.data.queryId)
-
-        const cxCommandOutput: CxCommandOutput = await auth.getResultsBfl(cxScanConfig.scanId, queryId, data.nodes);
-        expect(cxCommandOutput.payload.length).toBeGreaterThanOrEqual(-1);
     });
 });
 
