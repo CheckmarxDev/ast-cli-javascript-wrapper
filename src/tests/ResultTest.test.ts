@@ -54,12 +54,16 @@ describe("Results cases",() => {
 
     it('Result bfl successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);
-        console.log("ScanID : " + cxScanConfig.scanId)
-        const results = await auth.getResultsList(cxScanConfig.scanId)
+
+        const scanList: CxCommandOutput = await auth.scanList("statuses=Completed");
+        const sampleId  = scanList.payload.pop().id;
+
+        const results = await auth.getResultsList(sampleId)
         const result: CxResult = results.payload.find(res => res.type == CxConstants.SAST)
         const data = result.data
         const queryId = data.queryId
         console.log("QueryID :" + result.data.queryId)
+
         const cxCommandOutput: CxCommandOutput = await auth.getResultsBfl(cxScanConfig.scanId, queryId, data.nodes);
         expect(cxCommandOutput.payload.length).toBeGreaterThanOrEqual(-1);
     });
