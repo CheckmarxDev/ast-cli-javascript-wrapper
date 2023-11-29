@@ -21,6 +21,5 @@ jobs:
           CX_CLIENT_SECRET: ${{ secrets.CX_CLIENT_SECRET}}
           CX_BASE_URI: ${{ secrets.CX_BASE_URI }}
           CX_TENANT: ${{ secrets.CX_TENANT }}
-          CX_SCANID: ${{ secrets.SCANID }}
           CX_APIKEY: ${{ secrets.CX_APIKEY }}
         run: npm test
