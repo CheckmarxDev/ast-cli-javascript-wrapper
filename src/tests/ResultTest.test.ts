@@ -19,7 +19,7 @@ describe("Results cases",() => {
         const auth = new CxWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput = await auth.scanList("statuses=Completed");
         let output;
-        while (!output) {
+        while (!output && cxCommandOutput && cxCommandOutput.payload && cxCommandOutput.payload.length > 0) {
             output = await auth.getResultsList(cxCommandOutput.payload.pop().id)
             if (output.status == "Error in the json file.") {
                 output = undefined;

@@ -14,7 +14,7 @@ describe("Triage cases", () => {
         const scan = scanList.payload.pop();
 
         let output;
-        while (!output) {
+        while (!output && scanList && scanList.payload && scanList.payload.length > 0) {
             output = await auth.getResultsList(scanList.payload.pop().id)
             if (output.status == "Error in the json file.") {
                 output = undefined;
