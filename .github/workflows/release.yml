@@ -61,7 +61,7 @@ jobs:
           git config user.email github-actions@github.com
 
       # SETUP NODE
-      - uses: actions/setup-node@v4.0.0
+      - uses: actions/setup-node@v4.0.1
         with:
           node-version: 10
           registry-url: https://npm.pkg.github.com/
