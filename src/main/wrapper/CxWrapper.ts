@@ -312,11 +312,32 @@ export class CxWrapper {
     async chat(apikey: string, file: string, line: number, severity: string, vulnerability: string, input: string, conversationId?: string, model?: string): Promise<CxCommandOutput> {
         const commands: string[] = [
             CxConstants.CMD_CHAT,
+            CxConstants.CMD_KICS_CHAT,
             CxConstants.CMD_CHAT_APIKEY, apikey,
             CxConstants.CMD_CHAT_FILE, file,
             CxConstants.CMD_CHAT_LINE, line.toString(),
             CxConstants.CMD_CHAT_SEVERITY, severity,
             CxConstants.CMD_CHAT_VULNERABILITY, vulnerability,
+            CxConstants.CMD_CHAT_INPUT, input,
+        ];
+        if (conversationId) {
+            commands.push(CxConstants.CMD_CHAT_CONVERSATION_ID, conversationId)
+        }
+        if (model) {
+            commands.push(CxConstants.CMD_CHAT_MODEL, model)
+        }
+        commands.push(...this.initializeCommands(false));
+        return new ExecutionService().executeCommands(this.config.pathToExecutable, commands, CxConstants.CHAT_TYPE);
+    }
+
+    async sastChat(apikey: string, sourceFile: string, resultsFile: string, resultID: string, input: string, conversationId?: string, model?: string): Promise<CxCommandOutput> {
+        const commands: string[] = [
+            CxConstants.CMD_CHAT,
+            CxConstants.CMD_SAST_CHAT,
+            CxConstants.CMD_SAST_CHAT_RESULT_ID, resultID,
+            CxConstants.CMD_SAST_CHAT_RESULT_RESULTS_FILE, resultsFile,
+            CxConstants.CMD_SAST_CHAT_RESULT_SOURCE_FILE, sourceFile,
+            CxConstants.CMD_CHAT_APIKEY, apikey,
             CxConstants.CMD_CHAT_INPUT, input,
         ];
         if (conversationId) {
