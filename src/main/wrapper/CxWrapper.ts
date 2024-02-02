@@ -309,7 +309,7 @@ export class CxWrapper {
         return output.has(CxConstants.AI_GUIDED_REMEDIATION_KEY) && output.get(CxConstants.AI_GUIDED_REMEDIATION_KEY).toLowerCase() === " true";
     }
 
-    async chat(apikey: string, file: string, line: number, severity: string, vulnerability: string, input: string, conversationId?: string, model?: string): Promise<CxCommandOutput> {
+    async kicsChat(apikey: string, file: string, line: number, severity: string, vulnerability: string, input: string, conversationId?: string, model?: string): Promise<CxCommandOutput> {
         const commands: string[] = [
             CxConstants.CMD_CHAT,
             CxConstants.CMD_KICS_CHAT,
