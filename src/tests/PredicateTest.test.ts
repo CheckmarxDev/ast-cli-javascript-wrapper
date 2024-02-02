@@ -19,10 +19,11 @@ describe("Triage cases", () => {
             output = await auth.getResultsList(scan.id)
             if (output.status == "Error in the json file.") {
                 output = undefined;
-            }
-            result = output.payload.find(res => res.type == CxConstants.SAST)
-            if (!result || !result.similarityId) {
-                output = undefined;
+            } else {
+                result = output.payload.find(res => res.type == CxConstants.SAST)
+                if (!result || !result.similarityId) {
+                    output = undefined;
+                }
             }
         }
 
