@@ -53,7 +53,7 @@ describe("Gpt Chat Cases", () => {
         expect(cxCommandOutput.payload[0].responses[0]).toBe("It seems that FILE is not available for AI Guided Remediation. Please ensure that you have opened the correct workspace or the relevant file.");
     });
 
-    it('Sast gpt Chat Failed case', async () => {
+    it('Sast Gpt Chat Failed case', async () => {
         const cxCommandOutput = await originalWrapper.sastChat(
             "APIKEY",
             "SOURCE_FILE",
