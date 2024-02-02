@@ -10,7 +10,8 @@ describe("Triage cases", () => {
     it('Triage Successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);
 
-        const scanList: CxCommandOutput = await auth.scanList("statuses=Completed");
+        const scanList: CxCommandOutput = await auth.scanList("statuses=Completed,limit=100");
+        let result: CxResult;
         let scan, output;
         while (!output && scanList && scanList.payload && scanList.payload.length > 0) {
             scan = scanList.payload.pop()
@@ -18,10 +19,13 @@ describe("Triage cases", () => {
             output = await auth.getResultsList(scan.id)
             if (output.status == "Error in the json file.") {
                 output = undefined;
+            } else {
+                result = output.payload.find(res => res.type == CxConstants.SAST)
+                if (!result || !result.similarityId) {
+                    output = undefined;
+                }
             }
         }
-
-        const result: CxResult = output.payload.find(res => res.type == CxConstants.SAST)
 
         const cxShow: CxCommandOutput = await auth.triageShow(scan.projectID, result.similarityId, result.type);
 
