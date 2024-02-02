@@ -10,7 +10,7 @@ describe("Triage cases", () => {
     it('Triage Successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);
 
-        const scanList: CxCommandOutput = await auth.scanList("statuses=Completed,limit=10000");
+        const scanList: CxCommandOutput = await auth.scanList("statuses=Completed,limit=100");
         let result: CxResult;
         let scan, output;
         while (!output && scanList && scanList.payload && scanList.payload.length > 0) {
