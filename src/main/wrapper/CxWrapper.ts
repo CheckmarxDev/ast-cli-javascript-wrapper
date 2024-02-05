@@ -274,7 +274,7 @@ export class CxWrapper {
     }
 
     async kicsRemediation(resultsFile: string, kicsFile:string, engine:string,similarityIds?: string):Promise<[Promise<CxCommandOutput>,any]>  {
-        const commands: string[] = [CxConstants.CMD_UTILS, CxConstants.CMD_REMEDIATION,CxConstants.SUB_CMD_REMEDIATION_KICS,CxConstants.KICS_REMEDIATION_RESULTS_FILE, resultsFile, CxConstants.KICS_REMEDIATION_KICS_FILE, kicsFile];
+        const commands: string[] = [CxConstants.CMD_UTILS, CxConstants.CMD_REMEDIATION,CxConstants.KICS,CxConstants.KICS_REMEDIATION_RESULTS_FILE, resultsFile, CxConstants.KICS_REMEDIATION_KICS_FILE, kicsFile];
         if(engine.length>0){
             commands.push(CxConstants.ENGINE,engine)
         }
@@ -312,7 +312,7 @@ export class CxWrapper {
     async kicsChat(apikey: string, file: string, line: number, severity: string, vulnerability: string, input: string, conversationId?: string, model?: string): Promise<CxCommandOutput> {
         const commands: string[] = [
             CxConstants.CMD_CHAT,
-            CxConstants.CMD_KICS_CHAT,
+            CxConstants.KICS,
             CxConstants.CMD_CHAT_APIKEY, apikey,
             CxConstants.CMD_CHAT_FILE, file,
             CxConstants.CMD_CHAT_LINE, line.toString(),
@@ -333,7 +333,7 @@ export class CxWrapper {
     async sastChat(apikey: string, sourceFile: string, resultsFile: string, resultID: string, input: string, conversationId?: string, model?: string): Promise<CxCommandOutput> {
         const commands: string[] = [
             CxConstants.CMD_CHAT,
-            CxConstants.CMD_SAST_CHAT,
+            CxConstants.SAST,
             CxConstants.CMD_SAST_CHAT_RESULT_ID, resultID,
             CxConstants.CMD_SAST_CHAT_RESULT_RESULTS_FILE, resultsFile,
             CxConstants.CMD_SAST_CHAT_RESULT_SOURCE_FILE, sourceFile,

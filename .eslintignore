@@ -1,5 +1,6 @@
-node_modules
-dist
-tmp
-coverage
-.github
+/**/node_modules/*
+node_modules/
+dist/
+tmp/
+coverage/
+.github/
