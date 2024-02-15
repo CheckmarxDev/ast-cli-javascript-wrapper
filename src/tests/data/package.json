@@ -797,5 +797,8 @@
 				"vscode:prepublish": "npm run compile",
 				"watch": "tsc -w -p ./ \u0026\u0026 npm run copytestproject"
 		},
+		"overrides": {
+			"glob": "10.3.10"
+		},
 		"version": "2.0.4"
 }

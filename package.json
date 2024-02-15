@@ -38,5 +38,8 @@
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
+  },
+  "overrides": {
+    "glob": "10.3.10"
   }
 }
