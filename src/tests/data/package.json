@@ -799,7 +799,7 @@
 		},
 		"overrides": {
 			"glob": "9.3.5",
-			"globby": "12.2.0"
+			"globby": "13.2.2"
 		},
 		"version": "2.0.4"
 }
