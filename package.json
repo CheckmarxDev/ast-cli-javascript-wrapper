@@ -41,6 +41,6 @@
   },
   "overrides": {
     "glob": "9.3.5",
-    "globby": "13.2.2"
+    "globby": "14.0.1"
   }
 }
