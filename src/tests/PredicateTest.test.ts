@@ -3,7 +3,7 @@ import {CxCommandOutput} from "../main/wrapper/CxCommandOutput";
 import {BaseTest} from "./BaseTest";
 import CxResult from '../main/results/CxResult';
 import {CxConstants} from '../main/wrapper/CxConstants';
-
+//comment
 describe("Triage cases", () => {
     const cxScanConfig = new BaseTest();
 
