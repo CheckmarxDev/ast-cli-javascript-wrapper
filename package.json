@@ -41,7 +41,7 @@
   },
   "overrides": {
     "glob": "9.3.5",
-    "globby": "14.0.1",
-    "bluebird": "3.7.2"
+    "bluebird": "3.7.2",
+    "yauzl": "3.0.0"
   }
 }
