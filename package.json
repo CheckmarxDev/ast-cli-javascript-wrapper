@@ -40,6 +40,6 @@
     "registry": "https://npm.pkg.github.com"
   },
   "overrides": {
-    "glob": "10.3.10"
+    "glob": "7.2.0"
   }
 }
