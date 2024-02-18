@@ -26,7 +26,6 @@ describe("Triage cases", () => {
                 }
             }
         }
-//comment
         const cxShow: CxCommandOutput = await auth.triageShow(scan.projectID, result.similarityId, result.type);
 
         expect(cxShow.exitCode).toEqual(0);
