@@ -797,10 +797,5 @@
 				"vscode:prepublish": "npm run compile",
 				"watch": "tsc -w -p ./ \u0026\u0026 npm run copytestproject"
 		},
-		"overrides": {
-			"glob": "9.3.5",
-			"bluebird": "3.7.2",
-			"yauzl": "3.0.0"
-		},
 		"version": "2.0.4"
 }
