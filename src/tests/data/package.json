@@ -798,7 +798,8 @@
 				"watch": "tsc -w -p ./ \u0026\u0026 npm run copytestproject"
 		},
 		"overrides": {
-			"glob": "9.3.5"
+			"glob": "9.3.5",
+			"globby": "12.2.0"
 		},
 		"version": "2.0.4"
 }
