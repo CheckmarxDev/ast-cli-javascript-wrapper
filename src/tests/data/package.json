@@ -770,7 +770,8 @@
 				"webpack-cli": "^4.10.0"
 		},
 		"overrides": {
-			"bluebird": "3.7.2"
+			"bluebird": "3.7.2",
+			"glob": "9.3.5"
 		},
 		"displayName": "Checkmarx",
 		"engines": {
