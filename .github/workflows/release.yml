@@ -48,6 +48,8 @@ jobs:
     if: inputs.dev == true
   release:
     runs-on: ubuntu-latest
+    env:
+          GITHUB_TOKEN: ${{ secrets.OR_GITHUB_TOKEN }}
     steps:
 
       # CHECKOUT PROJECT
