@@ -11,7 +11,7 @@ describe("LearnMoreDescriptions cases",() => {
         const cxCommandOutput: CxCommandOutput = data;
         expect(cxCommandOutput.payload.length).toBeGreaterThan(0);
     })
-
+    
     it('LearnMoreDescriptions Failure case', async () => {
         const auth = new CxWrapper(cxScanConfig);
         const data = await auth.learnMore("")
