@@ -109,7 +109,7 @@ jobs:
 
       # CREATE RELEASE
       - name: Create Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           name: ${{env.TAG_NAME}}
           tag_name: ${{env.TAG_NAME}}
