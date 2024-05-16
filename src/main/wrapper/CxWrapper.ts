@@ -205,8 +205,8 @@ export class CxWrapper {
         return exec.executeResultsCommandsFile(scanId, CxConstants.FORMAT_HTML, CxConstants.FORMAT_HTML_FILE, commands, this.config.pathToExecutable, fileName);
     }
 
-    async getResults(scanId: string, resultType: string, outputFileName: string, outputFilePath: string) {
-        const commands = this.resultsShow(scanId, resultType, outputFileName, outputFilePath)
+    async getResults(scanId: string, resultType: string, outputFileName: string, outputFilePath: string, agent?: string | null) {
+        const commands = this.resultsShow(scanId, resultType, outputFileName, outputFilePath, agent)
         const exec = new ExecutionService();
         return await exec.executeCommands(this.config.pathToExecutable, commands);
     }
@@ -218,7 +218,7 @@ export class CxWrapper {
         return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.CODE_BASHING_TYPE);
     }
 
-    resultsShow(scanId: string, reportFormat: string, outputFileName: string, outputPath: string): string[] {
+    resultsShow(scanId: string, reportFormat: string, outputFileName: string, outputPath: string, agent?: string | null): string[] {
         const commands: string[] = [CxConstants.CMD_RESULT, CxConstants.SUB_CMD_SHOW, CxConstants.SCAN_ID, scanId, CxConstants.REPORT_FORMAT, reportFormat];
         if (outputFileName) {
             commands.push(CxConstants.OUTPUT_NAME);
@@ -227,6 +227,10 @@ export class CxWrapper {
         if (outputPath) {
             commands.push(CxConstants.OUTPUT_PATH);
             commands.push(outputPath);
+        }
+        if (agent) {
+            commands.push(CxConstants.AGENT);
+            commands.push(agent);
         }
         commands.push(...this.initializeCommands(false));
         return commands;
