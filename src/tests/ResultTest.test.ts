@@ -15,6 +15,16 @@ describe("Results cases",() => {
         });
     });
 
+    it('Result Test With Agent Flug Successful case', async () => {
+        const auth = new CxWrapper(cxScanConfig);
+        const cxCommandOutput: CxCommandOutput  = await auth.scanList("statuses=Completed");
+        const sampleId  = cxCommandOutput.payload.pop().id;
+        
+        auth.getResults(sampleId,"json","jsonList", ".", "jswrapper").then(() => {
+           fileExists("./jsonList.json").then(file => expect(file).toBe(true));
+        });
+    });
+
     it('Result List Successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);
         const scanList: CxCommandOutput = await auth.scanList("statuses=Completed");
