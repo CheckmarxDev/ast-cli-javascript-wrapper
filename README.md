@@ -88,5 +88,4 @@ Checkmarx - AST Integrations Team
 
 CxProject Link: [https://github.com/CheckmarxDev/ast-cli-javascript-wrapper](https://github.com/CheckmarxDev/ast-cli-javascript-wrapper)
 
-
 © 2021 Checkmarx Ltd. All Rights Reserved.
