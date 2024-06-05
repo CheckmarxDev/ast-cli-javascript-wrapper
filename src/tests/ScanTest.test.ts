@@ -125,4 +125,53 @@ describe("ScanCreate cases", () => {
         expect(aiEnabled).toBeDefined();
     })
 
+    it('ScanVorpal Successful case', async () => {
+        const auth = new CxWrapper(cxScanConfig);
+        const cxCommandOutput: CxCommandOutput = await auth.scanVorpal("tsc/tests/data/python-vul-file.py");
+        console.log("Json object from scanVorpal successful case: " + JSON.stringify(cxCommandOutput));
+        const scanObject = cxCommandOutput.payload.pop();
+        expect(cxCommandOutput.payload).toBeDefined();
+        expect(cxCommandOutput.exitCode).toBe(0);
+        expect(scanObject.status).toEqual(false);
+    });
+
+    it('ScanVorpal Successful case with update version', async () => {
+        const auth = new CxWrapper(cxScanConfig);
+        const cxCommandOutput: CxCommandOutput = await auth.scanVorpal("tsc/tests/data/python-vul-file.py", true);
+        console.log("Json object from scanVorpal successful case with update version: " + JSON.stringify(cxCommandOutput));
+        const scanObject = cxCommandOutput.payload.pop();
+        expect(cxCommandOutput.payload).toBeDefined();
+        expect(cxCommandOutput.exitCode).toBe(0);
+        expect(scanObject.status).toEqual(true);
+        expect(scanObject.scan_details).toEqual(expectedOutput.scan_details);
+    });
+
 });
+
+//this result from the file path 'tsc/tests/data/python-vul-file.py'
+const expectedOutput = {
+    scan_details: [
+        {
+            rule_id: 0,
+            language: "Python",
+            query_name: "Stored XSS",
+            severity: "High",
+            file_name: "python-vul-file.py",
+            line: 37,
+            length: 0,
+            remediation: "Fully encode all dynamic data, regardless of source, before embedding it in output.",
+            description: "The method undefined embeds untrusted data in generated output with write, at line 80 of /dsvw.py. This untrusted data is embedded into the output without proper sanitization or encoding, enabling an attacker to inject malicious code into the generated web-page. The attacker would be able to alter the returned web page by saving malicious data in a data-store ahead of time. The attacker's modified data is then read from the database by the undefined method with read, at line 37 of /dsvw.py. This untrusted data then flows through the code straight to the output web page, without sanitization.  This can enable a Stored Cross-Site Scripting (XSS) attack."
+        },
+        {
+            rule_id: 0,
+            language: "Python",
+            query_name: "Missing HSTS Header",
+            severity: "Medium",
+            file_name: "python-vul-file.py",
+            line: 76,
+            length: 0,
+            remediation: "Before setting the HSTS header - consider the implications it may have: Forcing HTTPS will prevent any future use of HTTP",
+            description: "The web-application does not define an HSTS header, leaving it vulnerable to attack."
+        }
+    ],
+};

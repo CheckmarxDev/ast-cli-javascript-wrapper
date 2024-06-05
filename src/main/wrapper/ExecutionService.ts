@@ -22,6 +22,7 @@ import CxKicsRemediation from "../remediation/CxKicsRemediation";
 import CxScaRealTime from "../scaRealtime/CxScaRealTime";
 import CxChat from "../chat/CxChat";
 import CxMask from "../mask/CxMask";
+import CxVorpal from "../vorpal/CxVorpal";
 
 
 function isJsonString(s: string) {
@@ -183,6 +184,10 @@ export class ExecutionService {
                   const scans = CxScan.parseProject(resultObject);
                   cxCommandOutput.payload = scans;
                   break;
+                case CxConstants.SCAN_VORPAL:
+                    const vorpal = CxVorpal.parseScan(resultObject);
+                    cxCommandOutput.payload = [vorpal];
+                    break;
                 case CxConstants.PROJECT_TYPE:
                   const projects = CxProject.parseProject(resultObject);
                   cxCommandOutput.payload = projects;
