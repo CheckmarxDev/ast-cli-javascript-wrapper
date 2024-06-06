@@ -84,7 +84,7 @@ setx PATH_TO_EXECUTABLE {value}
 <!-- CONTACT -->
 ## Contact
 
-Checkmarx - AST Integrations Team
+Checkmarx - AST Integrations Team Trigger Pip
 
 CxProject Link: [https://github.com/CheckmarxDev/ast-cli-javascript-wrapper](https://github.com/CheckmarxDev/ast-cli-javascript-wrapper)
 
