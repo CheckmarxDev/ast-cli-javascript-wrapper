@@ -125,6 +125,17 @@ describe("ScanCreate cases", () => {
         expect(aiEnabled).toBeDefined();
     })
 
+    /*
+    // add this test after cli update with new command 'scan vorpal'
+    it('ScanVorpal fail case Without extensions', async () => {
+        const auth = new CxWrapper(cxScanConfig);
+        const cxCommandOutput: CxCommandOutput = await auth.scanVorpal("tsc/tests/data/python-vul-file");
+        console.log(" Json object from failure case: " + JSON.stringify(cxCommandOutput));
+        expect(cxCommandOutput.payload).toBeUndefined();
+        expect(cxCommandOutput.exitCode).toBe(1);
+        expect(cxCommandOutput.status).toEqual("file must have an extension\n");
+    });
+
     it('ScanVorpal Successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput = await auth.scanVorpal("tsc/tests/data/python-vul-file.py");
@@ -145,9 +156,13 @@ describe("ScanCreate cases", () => {
         expect(scanObject.status).toEqual(true);
         expect(scanObject.scan_details).toEqual(expectedOutput.scan_details);
     });
+     */
 
 });
 
+
+/*
+add this for test after cli update
 //this result from the file path 'tsc/tests/data/python-vul-file.py'
 const expectedOutput = {
     scan_details: [
@@ -175,3 +190,4 @@ const expectedOutput = {
         }
     ],
 };
+ */
