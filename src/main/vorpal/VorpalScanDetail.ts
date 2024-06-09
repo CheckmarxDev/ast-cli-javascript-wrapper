@@ -1,20 +1,20 @@
 export default class VorpalScanDetail {
-    rule_id: number;
+    ruleId: number;
     language: string;
-    query_name: string;
+    queryName: string;
     severity: string;
-    file_name: string;
+    fileName: string;
     line: number;
     length: number;
     remediation: string;
     description: string;
 
     constructor() {
-        this.rule_id = 0;
+        this.ruleId = 0;
         this.language = '';
-        this.query_name = '';
+        this.queryName = '';
         this.severity = '';
-        this.file_name = '';
+        this.fileName = '';
         this.line = 0;
         this.length = 0;
         this.remediation = '';

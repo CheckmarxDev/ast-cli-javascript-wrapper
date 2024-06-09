@@ -125,11 +125,15 @@ export class CxWrapper {
         return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.SCAN_TYPE);
     }
 
-    async scanVorpal(sourceFile: string, updateVersion = false): Promise<CxCommandOutput> {
+    async scanVorpal(sourceFile: string, updateVersion = false, agent?: string | null): Promise<CxCommandOutput> {
         const commands: string[] = [CxConstants.CMD_SCAN, CxConstants.CMD_VORPAL, CxConstants.SOURCE_FILE, sourceFile];
 
         if (updateVersion) {
             commands.push(CxConstants.VORPAL_UPDATE_VERSION);
+        }
+        if (agent) {
+            commands.push(CxConstants.AGENT);
+            commands.push(agent);
         }
 
         commands.push(...this.initializeCommands(false));
