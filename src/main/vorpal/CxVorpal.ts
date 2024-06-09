@@ -27,12 +27,13 @@ export default class CxVorpal {
                 const scanDetail = new VorpalScanDetail();
                 scanDetail.ruleId = detail.rule_id;
                 scanDetail.language = detail.language;
-                scanDetail.queryName = detail.query_name;
+                scanDetail.ruleName = detail.rule_name;
                 scanDetail.severity = detail.severity;
                 scanDetail.fileName = detail.file_name;
                 scanDetail.line = detail.line;
                 scanDetail.length = detail.length;
-                scanDetail.remediation = detail.remediation;
+                scanDetail.problematicLine = detail.problematicLine;
+                scanDetail.remediationAdvise = detail.remediationAdvise;
                 scanDetail.description = detail.description;
                 return scanDetail;
             });
