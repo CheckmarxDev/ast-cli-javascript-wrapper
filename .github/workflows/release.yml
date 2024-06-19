@@ -91,7 +91,11 @@ jobs:
         run: |
           npm ci
           npm run build
-
+          
+      # PUSH TAG
+      - name: Push tag
+        run: git push --tags
+        
       # CREATE PR FOR VERSION AND TAG CHANGES
       - name: Create Pull Request
         id: create_pr
