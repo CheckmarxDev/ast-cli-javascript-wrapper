@@ -135,6 +135,12 @@ export class CxWrapper {
             commands.push(CxConstants.AGENT);
             commands.push(agent);
         }
+        else {
+            commands.push(CxConstants.AGENT);
+            // if we don't send any parameter in the flag
+            // then in the cli takes the default and this is not true
+            commands.push('"js-wrapper"');
+        }
 
         commands.push(...this.initializeCommands(false));
         const exec = new ExecutionService();
