@@ -1,4 +1,3 @@
-
 name: Javascript Wrapper Release
 
 on:
@@ -51,6 +50,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
           GITHUB_TOKEN: ${{ secrets.OR_GITHUB_TOKEN }}
+          BRANCH_NAME: npm-version-patch
     steps:
 
       # CHECKOUT PROJECT
@@ -91,11 +91,39 @@ jobs:
         run: |
           npm ci
           npm run build
-
-      # PUSH TAGS IF IT IS A RELEASE
-      - name: Push tag if release
+          
+      # # PUSH TAG
+      # - name: Push tag
+      #   run: git push --tags
+        
+      # CREATE PR FOR VERSION AND TAG CHANGES
+      - name: Create Pull Request
+        id: create_pr
         if: inputs.dev == false
-        run: git push && git push --tags
+        uses: peter-evans/create-pull-request@v6.0.5
+        with:
+          token: ${{ env.GITHUB_TOKEN }}
+          branch: ${{ env.BRANCH_NAME }}
+          title: "Update Version - Automated Changes"
+          body: "This is an automated PR created by GitHub Actions"
+          base: main
+          draft: false
+          
+      # WAIT FOR PR CREATION
+      - name: Wait for PR to be created
+        id: pr
+        if: inputs.dev == false
+        uses: octokit/request-action@v2.3.1
+        with:
+          route: GET /repos/${{ github.repository }}/pulls?head=${{ github.repository_owner }}:${{ env.BRANCH_NAME }}
+
+      # MERGE PR TO MAIN
+      - name: Merge Pull Request
+        if: inputs.dev == false
+        uses: octokit/request-action@v2.3.1
+        with:
+          route: PUT /repos/${{ github.repository }}/pulls/${{ steps.create_pr.outputs.pull-request-number }}/merge
+          merge_method: squash
 
       # PUBLISH NPM PACKAGE
       - name: Publish npm package
