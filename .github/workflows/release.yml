@@ -92,10 +92,12 @@ jobs:
           npm ci
           npm run build
 
+
       # PUSH TAGS IF IT IS A RELEASE
       - name: Push tag if release
         if: inputs.dev == false
         run: git push && git push --tags
+
 
       # PUBLISH NPM PACKAGE
       - name: Publish npm package
@@ -110,7 +112,7 @@ jobs:
 
       # CREATE RELEASE
       - name: Create Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@a6c7483a42ee9d5daced968f6c217562cd680f7f #v2
         with:
           name: ${{env.TAG_NAME}}
           tag_name: ${{env.TAG_NAME}}
