@@ -125,6 +125,28 @@ export class CxWrapper {
         return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.SCAN_TYPE);
     }
 
+    async scanVorpal(sourceFile: string, updateVersion = false, agent?: string | null): Promise<CxCommandOutput> {
+        const commands: string[] = [CxConstants.CMD_SCAN, CxConstants.CMD_VORPAL, CxConstants.SOURCE_FILE, sourceFile];
+
+        if (updateVersion) {
+            commands.push(CxConstants.VORPAL_UPDATE_VERSION);
+        }
+        if (agent) {
+            commands.push(CxConstants.AGENT);
+            commands.push(agent);
+        }
+        else {
+            commands.push(CxConstants.AGENT);
+            // if we don't send any parameter in the flag
+            // then in the cli takes the default and this is not true
+            commands.push('"js-wrapper"');
+        }
+
+        commands.push(...this.initializeCommands(false));
+        const exec = new ExecutionService();
+        return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.SCAN_VORPAL);
+    }
+
     async scanCancel(id: string): Promise<CxCommandOutput> {
         const commands: string[] = [CxConstants.CMD_SCAN, CxConstants.SUB_CMD_CANCEL, CxConstants.SCAN_ID, id];
         commands.push(...this.initializeCommands(false));

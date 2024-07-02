@@ -125,4 +125,36 @@ describe("ScanCreate cases", () => {
         expect(aiEnabled).toBeDefined();
     })
 
+    it('ScanVorpal fail case Without extensions', async () => {
+        const auth = new CxWrapper(cxScanConfig);
+        const cxCommandOutput: CxCommandOutput = await auth.scanVorpal("tsc/tests/data/python-file");
+        console.log(" Json object from failure case: " + JSON.stringify(cxCommandOutput));
+
+        expect(cxCommandOutput.payload[0].error.description).toEqual("The file name must have an extension.");
+        expect(cxCommandOutput.exitCode).toBe(0);
+        expect(cxCommandOutput.payload[0].status).toBeUndefined();
+    });
+
+    it('ScanVorpal Successful case', async () => {
+        const auth = new CxWrapper(cxScanConfig);
+        const cxCommandOutput: CxCommandOutput = await auth.scanVorpal("tsc/tests/data/python-vul-file.py");
+        console.log("Json object from scanVorpal successful case: " + JSON.stringify(cxCommandOutput));
+        const scanObject = cxCommandOutput.payload.pop();
+        expect(cxCommandOutput.payload).toBeDefined();
+        expect(cxCommandOutput.exitCode).toBe(0);
+        expect(scanObject.status).toEqual(true);
+    });
+
+    it('ScanVorpal Successful case with update version', async () => {
+        const auth = new CxWrapper(cxScanConfig);
+        const cxCommandOutput: CxCommandOutput = await auth.scanVorpal("tsc/tests/data/python-vul-file.py", true);
+        console.log("Json object from scanVorpal successful case with update version: " + JSON.stringify(cxCommandOutput));
+        const scanObject = cxCommandOutput.payload.pop();
+        expect(cxCommandOutput.payload).toBeDefined();
+        expect(cxCommandOutput.exitCode).toBe(0);
+        expect(scanObject.status).toEqual(true);
+        expect(Number.isInteger(scanObject.scanDetails[0].line)).toBe(true);
+        expect(typeof scanObject.scanDetails[0].description).toBe('string');
+    });
+
 });
