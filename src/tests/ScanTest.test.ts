@@ -132,7 +132,7 @@ describe("ScanCreate cases", () => {
 
         expect(cxCommandOutput.payload[0].error.description).toEqual("The file name must have an extension.");
         expect(cxCommandOutput.exitCode).toBe(0);
-        expect(cxCommandOutput.status).toBeUndefined();
+        expect(cxCommandOutput.payload[0].status).toBeUndefined();
     });
 
     it('ScanVorpal Successful case', async () => {
