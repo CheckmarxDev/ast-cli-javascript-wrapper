@@ -1,6 +1,6 @@
 {
   "name": "@CheckmarxDev/ast-cli-javascript-wrapper",
-  "version": "0.0.93",
+  "version": "0.0.103",
   "description": "AST CLI Javascript wrapper",
   "main": "dist/main/wrapper/CxWrapper.js",
   "typings": "dist/main/wrapper/CxWrapper.d.ts",
@@ -27,7 +27,7 @@
   "homepage": "https://github.com/CheckmarxDev/ast-cli-javascript-wrapper#readme",
   "devDependencies": {
     "@types/jest": "^27.5.0",
-    "@types/node": "^20.12.12",
+    "@types/node": "^20.14.6",
     "@typescript-eslint/eslint-plugin": "^5.29.0",
     "@typescript-eslint/parser": "^5.29.0",
     "copyfiles": "^2.4.1",
