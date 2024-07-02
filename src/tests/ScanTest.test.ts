@@ -127,7 +127,7 @@ describe("ScanCreate cases", () => {
 
     it('ScanVorpal fail case Without extensions', async () => {
         const auth = new CxWrapper(cxScanConfig);
-        const cxCommandOutput: CxCommandOutput = await auth.scanVorpal("tsc/tests/data/python-vul-file");
+        const cxCommandOutput: CxCommandOutput = await auth.scanVorpal("tsc/tests/data/python-file");
         console.log(" Json object from failure case: " + JSON.stringify(cxCommandOutput));
         expect(cxCommandOutput.payload).toBeUndefined();
         expect(cxCommandOutput.exitCode).toBe(1);
