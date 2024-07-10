@@ -18,6 +18,11 @@ jobs:
           sudo apt-get install git-lfs
           git lfs install
 
+      - name: Configure Git user
+        run: |
+          git config --global user.name github-actions
+          git config --global user.email github-actions@github.com
+
       - name: Get Latest Checkmarx API version
         id: checkmarx-ast-cli
         run: |
