@@ -15,12 +15,6 @@ jobs:
           sudo apt-get install git-lfs
           git lfs install
 
-      # GIT CONFIGURATION
-      - name: Configure Git user
-        run: |
-          git config --global user.email "you@example.com"
-          git config --global user.name "Your Name"
-
       - name: Use Node.js 14
         uses: actions/setup-node@v4.0.2
         with:
