@@ -98,7 +98,7 @@ jobs:
       - name: Create Pull Request
         id: create_pr
         if: inputs.dev == false
-        uses: peter-evans/create-pull-request@v6.0.5
+        uses: peter-evans/create-pull-request@6d6857d36972b65feb161a90e484f2984215f83e #v6.0.5
         with:
           token: ${{ env.GITHUB_TOKEN }}
           branch: ${{ env.BRANCH_NAME }}
@@ -111,14 +111,14 @@ jobs:
       - name: Wait for PR to be created
         id: pr
         if: inputs.dev == false
-        uses: octokit/request-action@v2.3.1
+        uses: octokit/request-action@872c5c97b3c85c23516a572f02b31401ef82415d #v2.3.1
         with:
           route: GET /repos/${{ github.repository }}/pulls?head=${{ github.repository_owner }}:${{ env.BRANCH_NAME }}
 
       # MERGE PR TO MAIN
       - name: Merge Pull Request
         if: inputs.dev == false
-        uses: octokit/request-action@v2.3.1
+        uses: octokit/request-action@872c5c97b3c85c23516a572f02b31401ef82415d #v2.3.1
         with:
           route: PUT /repos/${{ github.repository }}/pulls/${{ steps.create_pr.outputs.pull-request-number }}/merge
           merge_method: squash
