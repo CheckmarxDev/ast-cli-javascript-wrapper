@@ -42,7 +42,7 @@ function transformation(commands: string[]):string[] {
 
 function transform(n:string) {
     let r = "";
-    if(n) r = n.replace(/["']/g, "").replace("/[, ]/g",",");
+    if(n) r = n.replace(/["]/g, "").replace("/[, ]/g",",");
     return r;
 }
 
