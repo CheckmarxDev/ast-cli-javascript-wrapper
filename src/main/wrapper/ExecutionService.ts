@@ -24,7 +24,8 @@ import CxChat from "../chat/CxChat";
 import CxMask from "../mask/CxMask";
 import CxVorpal from "../vorpal/CxVorpal";
 
-let skipNext = false;
+let skipValue = false;
+const fileSourceFlag = "--file-source"
 
 function isJsonString(s: string) {
     try {
@@ -37,20 +38,20 @@ function isJsonString(s: string) {
 }
 
 function transformation(commands: string[]): string[] {
-    skipNext = false; // Reset the flag before processing
+    skipValue = false; // Reset the flag before processing
     const result: string[] = commands.map(transform);
     return result;
 }
 
 function transform(n:string) {
     // If the flag is set, return the current string as-is and reset the flag
-    if (skipNext) {
-        skipNext = false;
+    if (skipValue) {
+        skipValue = false;
         return n;
     }
     // If the current string is "--file-source", set the flag and return it as-is
-    if (n === "--file-source") {
-        skipNext = true;
+    if (n === fileSourceFlag) {
+        skipValue = true;
         return n;
     }
 
