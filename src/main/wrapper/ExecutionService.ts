@@ -24,6 +24,8 @@ import CxChat from "../chat/CxChat";
 import CxMask from "../mask/CxMask";
 import CxVorpal from "../vorpal/CxVorpal";
 
+let skipValue = false;
+const fileSourceFlag = "--file-source"
 
 function isJsonString(s: string) {
     try {
@@ -35,12 +37,26 @@ function isJsonString(s: string) {
     return true;
 }
 
-function transformation(commands: string[]):string[] {
-    const result:string[] = commands.map(transform);
+function transformation(commands: string[]): string[] {
+    skipValue = false; // Reset the flag before processing
+    const result: string[] = commands.map(transform);
     return result;
 }
 
 function transform(n:string) {
+
+// in case the file name looks like this: 'var express require('express');.js' we won't delete "'"
+    if (skipValue) {
+        skipValue = false;
+        let r = "";
+        if(n) r = n.replace(/["]/g, "").replace("/[, ]/g",",");
+        return r;
+    }
+    // If the current string is "--file-source", set the flag
+    if (n === fileSourceFlag) {
+        skipValue = true;
+    }
+
     let r = "";
     if(n) r = n.replace(/["']/g, "").replace("/[, ]/g",",");
     return r;
