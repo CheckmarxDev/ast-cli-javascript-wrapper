@@ -44,15 +44,17 @@ function transformation(commands: string[]): string[] {
 }
 
 function transform(n:string) {
-    // If the flag is set, return the current string as-is and reset the flag
+
+// in case the file name looks like this: 'var express require('express');.js' we won't delete "'"
     if (skipValue) {
         skipValue = false;
-        return n;
+        let r = "";
+        if(n) r = n.replace(/["]/g, "").replace("/[, ]/g",",");
+        return r;
     }
-    // If the current string is "--file-source", set the flag and return it as-is
+    // If the current string is "--file-source", set the flag
     if (n === fileSourceFlag) {
         skipValue = true;
-        return n;
     }
 
     let r = "";
