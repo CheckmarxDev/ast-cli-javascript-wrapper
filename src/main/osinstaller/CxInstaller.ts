@@ -205,7 +205,7 @@ async function downloadFile(downloadURLPath: string, filePath: string): Promise<
         console.log(`File downloaded successfully to ${filePath}`);
 
     } catch (error) {
-        console.error(`Error during file download: ${error.message}`);
+        console.log(`Error during file download:` + error.message);
         throw new Error(`Invoking HTTP request to download file failed - ${error.message}`);
     }
 }
