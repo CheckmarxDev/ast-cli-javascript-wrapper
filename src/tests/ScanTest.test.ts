@@ -125,9 +125,9 @@ describe("ScanCreate cases", () => {
         expect(aiEnabled).toBeDefined();
     })
 
-    it('ScanVorpal fail case Without extensions', async () => {
+    it('ScanAsca fail case Without extensions', async () => {
         const auth = new CxWrapper(cxScanConfig);
-        const cxCommandOutput: CxCommandOutput = await auth.scanVorpal("tsc/tests/data/python-file");
+        const cxCommandOutput: CxCommandOutput = await auth.scanAsca("tsc/tests/data/python-file");
         console.log(" Json object from failure case: " + JSON.stringify(cxCommandOutput));
 
         expect(cxCommandOutput.payload[0].error.description).toEqual("The file name must have an extension.");
@@ -135,30 +135,30 @@ describe("ScanCreate cases", () => {
         expect(cxCommandOutput.payload[0].status).toBeUndefined();
     });
 
-    it('ScanVorpal Successful case', async () => {
+    it('ScanAsca Successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);
-        const cxCommandOutput: CxCommandOutput = await auth.scanVorpal("tsc/tests/data/python-vul-file.py");
-        console.log("Json object from scanVorpal successful case: " + JSON.stringify(cxCommandOutput));
+        const cxCommandOutput: CxCommandOutput = await auth.scanAsca("tsc/tests/data/python-vul-file.py");
+        console.log("Json object from scanAsca successful case: " + JSON.stringify(cxCommandOutput));
         const scanObject = cxCommandOutput.payload.pop();
         expect(cxCommandOutput.payload).toBeDefined();
         expect(cxCommandOutput.exitCode).toBe(0);
         expect(scanObject.status).toEqual(true);
     });
 
-    it('ScanVorpal with complex name Successful case', async () => {
+    it('ScanAsca with complex name Successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);
-        const cxCommandOutput: CxCommandOutput = await auth.scanVorpal("tsc/tests/data/var express = require('express';.js");
-        console.log("Json object from scanVorpal successful case: " + JSON.stringify(cxCommandOutput));
+        const cxCommandOutput: CxCommandOutput = await auth.scanAsca("tsc/tests/data/var express = require('express';.js");
+        console.log("Json object from scanAsca successful case: " + JSON.stringify(cxCommandOutput));
         const scanObject = cxCommandOutput.payload.pop();
         expect(cxCommandOutput.payload).toBeDefined();
         expect(cxCommandOutput.exitCode).toBe(0);
         expect(scanObject.status).toEqual(true);
     });
 
-    it('ScanVorpal Successful case with update version', async () => {
+    it('ScanAsca Successful case with update version', async () => {
         const auth = new CxWrapper(cxScanConfig);
-        const cxCommandOutput: CxCommandOutput = await auth.scanVorpal("tsc/tests/data/python-vul-file.py", true);
-        console.log("Json object from scanVorpal successful case with update version: " + JSON.stringify(cxCommandOutput));
+        const cxCommandOutput: CxCommandOutput = await auth.scanAsca("tsc/tests/data/python-vul-file.py", true);
+        console.log("Json object from scanAsca successful case with update version: " + JSON.stringify(cxCommandOutput));
         const scanObject = cxCommandOutput.payload.pop();
         expect(cxCommandOutput.payload).toBeDefined();
         expect(cxCommandOutput.exitCode).toBe(0);
