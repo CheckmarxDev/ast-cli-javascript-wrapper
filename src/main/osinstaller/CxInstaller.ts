@@ -114,7 +114,7 @@ export class CxInstaller {
 
         const url = await this.getDownloadURL();
         if (!url) {
-            console.error('No valid download URL available for this platform.');
+            console.log('No valid download URL available for this platform.');
             return;
         }
         
@@ -143,7 +143,7 @@ export class CxInstaller {
             console.log(`Executable exists at: ${executablePath}`);
             return true;
         } catch (error) {
-            console.error(`Executable does not exist at: ${executablePath}`);
+            console.log(`Executable does not exist at: ${executablePath}`);
             return false;
         }
     }
