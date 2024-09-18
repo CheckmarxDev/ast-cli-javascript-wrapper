@@ -8,19 +8,22 @@ import * as fs from "fs"
 import * as os from "os";
 import CxBFL from "../bfl/CxBFL";
 import path = require('path');
+import {CxInstaller} from "../osinstaller/CxInstaller";
 
 type ParamTypeMap = Map<CxParamType, string>;
-
 export class CxWrapper {
     config: CxConfig = new CxConfig();
+    windows = 'win32';
+    mac = 'darwin';
+    linux = 'linux';
+    
 
-    constructor(cxScanConfig: CxConfig, logFilePath?: string) {
-
+    async constructor(cxScanConfig: CxConfig, logFilePath?: string) {
         getLoggerWithFilePath(logFilePath)
+        await this.downloadIfNotInstalledCLI(process.platform);
         if (cxScanConfig.apiKey) {
             this.config.apiKey = cxScanConfig.apiKey;
-        }
-        else if (cxScanConfig.clientId && cxScanConfig.clientSecret) {
+        } else if (cxScanConfig.clientId && cxScanConfig.clientSecret) {
             logger.info("Received clientId and clientSecret");
             this.config.clientId = cxScanConfig.clientId;
             this.config.clientSecret = cxScanConfig.clientSecret;
@@ -34,11 +37,11 @@ export class CxWrapper {
             executablePath = path.join(__dirname, '/resources/cx.exe');
             this.config.pathToExecutable = executablePath;
         } else if (process.platform === 'darwin') {
-            executablePath = path.join(__dirname, '/resources/cx-mac');
+            executablePath = path.join(__dirname, '/resources/cx');
             this.config.pathToExecutable = executablePath;
             fs.chmodSync(this.config.pathToExecutable, 0o777);
         } else {
-            executablePath = path.join(__dirname, '/resources/cx-linux');
+            executablePath = path.join(__dirname, '/resources/cx');
             this.config.pathToExecutable = executablePath;
             fs.chmodSync(this.config.pathToExecutable, 0o777);
         }
@@ -54,6 +57,12 @@ export class CxWrapper {
         if (cxScanConfig.additionalParameters) {
             this.config.additionalParameters = cxScanConfig.additionalParameters;
         }
+    }
+    
+    async downloadIfNotInstalledCLI(os: string){
+        
+        let cxInstaller = new CxInstaller(os);
+        await cxInstaller.install('/resources');
     }
 
     initializeCommands(formatRequired: boolean): string[] {
