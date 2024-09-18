@@ -114,7 +114,7 @@ export class CxInstaller {
 
         const url = await this.getDownloadURL();
         if (!url) {
-            console.log('No valid download URL available for this platform.');
+            console.error('No valid download URL available for this platform.');
             return;
         }
         
@@ -132,7 +132,7 @@ export class CxInstaller {
     // Check if the executable exists
     async checkExecutableExists(): Promise<boolean> {
         let executablePath;
-        const dirExecutablePath = path.join(__dirname, `../wrapper/resources/`);
+        const dirExecutablePath = path.join(__dirname, `../../wrapper/resources/`);
         if (this.platform === 'win32') {
             executablePath = path.join(dirExecutablePath, 'cx.exe');
         } else {
@@ -143,7 +143,7 @@ export class CxInstaller {
             console.log(`Executable exists at: ${executablePath}`);
             return true;
         } catch (error) {
-            console.log(`Executable does not exist at: ${executablePath}`);
+            console.error(`Executable does not exist at: ${executablePath}`);
             return false;
         }
     }
@@ -190,9 +190,9 @@ async function downloadFile(downloadURLPath: string, filePath: string): Promise<
             url: downloadURLPath,
             responseType: 'stream'
         });
-
         // Create the file stream at the specified filePath
-        const fileStream = createWriteStream("/Users/benalvo/CxDev/workspace/Pheonix-workspace/ast-cli-javascript-wrapper-runtime-cli/src/main/wrapper/resources/cx");
+        let check =process.cwd()+"/src/main/wrapper/resources/cx"
+        const fileStream = createWriteStream(check);
 
         // Pipe the response data to the file
         response.data.pipe(fileStream);
@@ -204,7 +204,6 @@ async function downloadFile(downloadURLPath: string, filePath: string): Promise<
         });
 
         console.log(`File downloaded successfully to ${filePath}`);
-        fileStream.close();
 
     } catch (error) {
         console.error(`Error during file download: ${error.message}`);
