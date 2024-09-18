@@ -18,9 +18,9 @@ export class CxWrapper {
     linux = 'linux';
     
 
-    async constructor(cxScanConfig: CxConfig, logFilePath?: string) {
+    constructor(cxScanConfig: CxConfig, logFilePath?: string) {
         getLoggerWithFilePath(logFilePath)
-        await this.downloadIfNotInstalledCLI(process.platform);
+        this.downloadIfNotInstalledCLI(process.platform);
         if (cxScanConfig.apiKey) {
             this.config.apiKey = cxScanConfig.apiKey;
         } else if (cxScanConfig.clientId && cxScanConfig.clientSecret) {
