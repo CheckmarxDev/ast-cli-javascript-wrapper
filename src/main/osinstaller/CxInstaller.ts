@@ -135,7 +135,7 @@ export class CxInstaller {
     // Check if the executable exists
     async checkExecutableExists(): Promise<boolean> {
         let executablePath;
-        let dirExecutablePath = path.join(__dirname, `/resources/${this.removeExtension(await this.getCLIExecutableName())}`);
+        const dirExecutablePath = path.join(__dirname, `/resources/${this.removeExtension(await this.getCLIExecutableName())}`);
         if (this.platform === 'win32') {
             executablePath = path.join(dirExecutablePath, 'cx.exe');
         } else {
