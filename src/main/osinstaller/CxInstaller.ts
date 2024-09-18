@@ -120,8 +120,8 @@ export class CxInstaller {
         
         try {
             console.log(`Downloading from: ${url}`);
-            await downloadFile(url, "/resources");
-            console.log(`Downloaded to: /resources`);
+            await downloadFile(url, outputPath);
+            console.log(`Downloaded to: ${outputPath}`);
 
             // Now extract the downloaded archive
         } catch (error) {
@@ -191,8 +191,7 @@ async function downloadFile(downloadURLPath: string, filePath: string): Promise<
             responseType: 'stream'
         });
         // Create the file stream at the specified filePath
-        let check =process.cwd()+"/src/main/wrapper/resources/cx"
-        const fileStream = createWriteStream(check);
+        const fileStream = createWriteStream(process.cwd()+"/src/main/wrapper/resources/cx");
 
         // Pipe the response data to the file
         response.data.pipe(fileStream);
