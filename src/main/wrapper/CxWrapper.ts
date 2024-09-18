@@ -19,43 +19,43 @@ export class CxWrapper {
 
     constructor(cxScanConfig: CxConfig, logFilePath?: string) {
         getLoggerWithFilePath(logFilePath)
-        this.downloadIfNotInstalledCLI(process.platform).then(() => {
-            logger.info("CLI downloaded successfully")
-        });
         const cxInstaller = new CxInstaller(process.platform);
-        if (cxScanConfig.apiKey) {
-            this.config.apiKey = cxScanConfig.apiKey;
-        } else if (cxScanConfig.clientId && cxScanConfig.clientSecret) {
-            logger.info("Received clientId and clientSecret");
-            this.config.clientId = cxScanConfig.clientId;
-            this.config.clientSecret = cxScanConfig.clientSecret;
-        } else {
-            logger.info("Did not receive ClientId/Secret or ApiKey from cli arguments");
-        }
-        const executablePath = cxInstaller.getExecutablePath();
-        if (cxScanConfig.pathToExecutable) {
-            this.config.pathToExecutable = cxScanConfig.pathToExecutable;
-        } else if (process.platform === 'win32') {
-            this.config.pathToExecutable = executablePath;
-        } else if (process.platform === 'darwin') {
-            this.config.pathToExecutable = executablePath;
-            fs.chmodSync(this.config.pathToExecutable, 0o777);
-        } else {
-            this.config.pathToExecutable = executablePath;
-            fs.chmodSync(this.config.pathToExecutable, 0o777);
-        }
-        if (cxScanConfig.baseUri) {
-            this.config.baseUri = cxScanConfig.baseUri;
-        }
-        if (cxScanConfig.baseAuthUri) {
-            this.config.baseAuthUri = cxScanConfig.baseAuthUri;
-        }
-        if (cxScanConfig.tenant) {
-            this.config.tenant = cxScanConfig.tenant;
-        }
-        if (cxScanConfig.additionalParameters) {
-            this.config.additionalParameters = cxScanConfig.additionalParameters;
-        }
+        this.config.pathToExecutable = cxInstaller.getExecutablePath();
+        this.downloadIfNotInstalledCLI(process.platform).then(() => {
+            if (cxScanConfig.apiKey) {
+                this.config.apiKey = cxScanConfig.apiKey;
+            } else if (cxScanConfig.clientId && cxScanConfig.clientSecret) {
+                logger.info("Received clientId and clientSecret");
+                this.config.clientId = cxScanConfig.clientId;
+                this.config.clientSecret = cxScanConfig.clientSecret;
+            } else {
+                logger.info("Did not receive ClientId/Secret or ApiKey from cli arguments");
+            }
+            const executablePath = cxInstaller.getExecutablePath();
+            if (cxScanConfig.pathToExecutable) {
+                this.config.pathToExecutable = cxScanConfig.pathToExecutable;
+            } else if (process.platform === 'win32') {
+                this.config.pathToExecutable = executablePath;
+            } else if (process.platform === 'darwin') {
+                this.config.pathToExecutable = executablePath;
+                fs.chmodSync(this.config.pathToExecutable, 0o777);
+            } else {
+                this.config.pathToExecutable = executablePath;
+                fs.chmodSync(this.config.pathToExecutable, 0o777);
+            }
+            if (cxScanConfig.baseUri) {
+                this.config.baseUri = cxScanConfig.baseUri;
+            }
+            if (cxScanConfig.baseAuthUri) {
+                this.config.baseAuthUri = cxScanConfig.baseAuthUri;
+            }
+            if (cxScanConfig.tenant) {
+                this.config.tenant = cxScanConfig.tenant;
+            }
+            if (cxScanConfig.additionalParameters) {
+                this.config.additionalParameters = cxScanConfig.additionalParameters;
+            }
+        });
     }
     
     async downloadIfNotInstalledCLI(os: string){
