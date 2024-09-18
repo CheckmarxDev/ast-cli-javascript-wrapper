@@ -61,7 +61,7 @@ export class CxWrapper {
     
     async downloadIfNotInstalledCLI(os: string){
         
-        let cxInstaller = new CxInstaller(os);
+        const cxInstaller = new CxInstaller(os);
         await cxInstaller.install('/resources');
     }
 
