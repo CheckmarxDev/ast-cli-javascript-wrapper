@@ -30,7 +30,7 @@ export class CxWrapper {
         } else {
             logger.info("Did not receive ClientId/Secret or ApiKey from cli arguments");
         }
-        let executablePath: string;
+        const executablePath: string;
         executablePath = cxInstaller.getExecutablePath();
         if (cxScanConfig.pathToExecutable) {
             this.config.pathToExecutable = cxScanConfig.pathToExecutable;
