@@ -120,8 +120,8 @@ export class CxInstaller {
         
         try {
             console.log(`Downloading from: ${url}`);
-            await downloadFile(url, "/Users/benalvo/CxDev/workspace/Pheonix-workspace/ast-cli-javascript-wrapper-runtime-cli/src/main/wrapper/resources");
-            console.log(`Downloaded to: /Users/benalvo/CxDev/workspace/Pheonix-workspace/ast-cli-javascript-wrapper-runtime-cli/src/main/wrapper/resources`);
+            await downloadFile(url, "/resources");
+            console.log(`Downloaded to: /resources`);
 
             // Now extract the downloaded archive
         } catch (error) {
