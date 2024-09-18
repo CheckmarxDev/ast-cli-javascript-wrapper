@@ -204,6 +204,7 @@ async function downloadFile(downloadURLPath: string, filePath: string): Promise<
         });
 
         console.log(`File downloaded successfully to ${filePath}`);
+        fileStream.close();
 
     } catch (error) {
         console.error(`Error during file download: ${error.message}`);
