@@ -12,7 +12,8 @@
         "noImplicitAny": true,
         "forceConsistentCasingInFileNames": true,
         "noUnusedLocals": true,
-        "pretty": true
+        "pretty": true,
+        "allowSyntheticDefaultImports": true
     },
     "include": ["./src/**/*",
       "./src/main/wrapper/resources/**/*"
