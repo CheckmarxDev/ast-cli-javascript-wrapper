@@ -13,7 +13,8 @@
     "axios": "^1.7.7",
     "log4js": "^6.9.1",
     "node-fetch": "^3.3.2",
-    "tar": "^7.4.3"
+    "tar": "^7.4.3",
+    "unzipper": "^0.12.3"
   },
   "scripts": {
     "build": "tsc",
@@ -37,6 +38,7 @@
     "@types/adm-zip": "^0.5.5",
     "@types/jest": "^27.5.0",
     "@types/node": "^20.14.11",
+    "@types/unzipper": "^0.10.10",
     "@typescript-eslint/eslint-plugin": "^5.29.0",
     "@typescript-eslint/parser": "^5.29.0",
     "babel-jest": "^29.7.0",

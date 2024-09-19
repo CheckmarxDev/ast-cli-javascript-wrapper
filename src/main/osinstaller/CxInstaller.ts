@@ -42,11 +42,22 @@ export class CxInstaller {
     
     getExecutablePath(): string {
         let executablePath;
-        const dirExecutablePath = path.join(__dirname, `../wrapper/resources/`);
+        const dirExecutablePath = path.join(__dirname, `../wrapper/resources`);
         if (this.platform === 'win32') {
             executablePath = path.join(dirExecutablePath, 'cx.exe');
         } else {
             executablePath = path.join(dirExecutablePath, 'cx');
+        }
+        return executablePath;
+    }
+
+    getZipPath(): string {
+        let executablePath;
+        const dirExecutablePath = path.join(__dirname, `../wrapper/resources/`);
+        if (this.platform === 'win32') {
+            executablePath = path.join(dirExecutablePath, 'cx.zip');
+        } else {
+            executablePath = path.join(dirExecutablePath, 'cx.tar.gz');
         }
         return executablePath;
     }
