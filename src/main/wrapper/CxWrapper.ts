@@ -7,7 +7,6 @@ import {getLoggerWithFilePath, logger} from "./loggerConfig";
 import * as os from "os";
 import CxBFL from "../bfl/CxBFL";
 import {CxInstaller} from "../osinstaller/CxInstaller";
-import fs1 from "fs";
 
 
 type ParamTypeMap = Map<CxParamType, string>;
@@ -52,7 +51,6 @@ export class CxWrapper {
 
     async initializeCommands(formatRequired: boolean): Promise<string[]> {
         await this.cxInstaller.downloadIfNotInstalledCLI()
-        fs1.chmodSync(this.cxInstaller.getExecutablePath(), 0o777);
         this.config.pathToExecutable = this.cxInstaller.getExecutablePath();
 
         const list: string[] = [];
