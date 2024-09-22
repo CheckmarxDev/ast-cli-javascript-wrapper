@@ -79,14 +79,6 @@ jobs:
             echo "TAG_NAME=$(npm version patch --no-git-tag-version)" >> $GITHUB_ENV
           fi
 
-      # DOWNLOAD CLI IF IT IS A DEV VERSION AND A CLI TAG WAS PROVIDED
-      - name: Download cli with tag ${{ inputs.cliTag }}
-        if: inputs.dev == true && inputs.cliTag != ''
-        run: |
-          # Update binaries
-          chmod +x ./.github/scripts/update_cli.sh
-          ./.github/scripts/update_cli.sh ${{ inputs.cliTag }}
-
       # RUN NPM INSTALL AND BUILD
       - name: NPM ci and build
         run: |
