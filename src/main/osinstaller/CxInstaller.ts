@@ -70,6 +70,7 @@ export class CxInstaller {
             console.log('Downloaded CLI to:', zipPath);
 
             await this.extractArchive(zipPath, this.resourceDirPath);
+            fs1.chmodSync(this.getExecutablePath(), 0o777);
             console.log('Extracted CLI to:', this.resourceDirPath);
         } catch (error) {
             console.error('Error during installation:', error);
