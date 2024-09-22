@@ -1,15 +1,16 @@
 import * as fs from 'fs/promises';
-import * as fs1 from "fs"
+import * as fs1 from 'fs';
 import * as path from 'path';
 import * as tar from 'tar';
 import axios from 'axios';
-import * as unzipper from "unzipper";
-
+import * as unzipper from 'unzipper';
+import { Semaphore } from 'async-mutex';
 
 export class CxInstaller {
     private readonly platform: string;
     private cliVersion: string;
     private readonly resourceDirPath: string;
+    private static installSemaphore = new Semaphore(1);  // Semaphore with 1 slot
 
     constructor(platform: string) {
         this.platform = platform;
@@ -41,7 +42,7 @@ export class CxInstaller {
 
         return `https://download.checkmarx.com/CxOne/CLI/${cliVersion}/ast-cli_${cliVersion}_${platformString}_x64.${archiveExtension}`;
     }
-    
+
     getExecutablePath(): string {
         let executablePath;
         if (this.platform === 'win32') {
@@ -53,33 +54,39 @@ export class CxInstaller {
     }
 
     async downloadIfNotInstalledCLI() {
-        if (!this.checkExecutableExists()) {
+        // Acquire the semaphore, ensuring only one installation happens at a time
+        const [_, release] = await CxInstaller.installSemaphore.acquire();
+        try {
+            if (this.checkExecutableExists()) {
+                console.log('Executable already installed.');
+                return;
+            }
+
             const url = await this.getDownloadURL();
             const zipPath = this.getZipPath();
-            try {
-                await this.downloadFile(url, zipPath);
-                console.log('Downloaded CLI to:', zipPath);
 
-                await this.extractArchive(zipPath, this.resourceDirPath);
-                console.log('Extracted CLI to:', this.resourceDirPath);
-                console.log('Done!');
-            } catch (error) {
-                console.error('Error:', error);
-            }
+            await this.downloadFile(url, zipPath);
+            console.log('Downloaded CLI to:', zipPath);
+
+            await this.extractArchive(zipPath, this.resourceDirPath);
+            console.log('Extracted CLI to:', this.resourceDirPath);
+        } catch (error) {
+            console.error('Error during installation:', error);
+        } finally {
+            // Release the semaphore lock to allow the next waiting process to continue
+            release(); // Call the release function
         }
     }
 
     async extractArchive(zipPath: string, extractPath: string): Promise<void> {
         if (zipPath.endsWith('.zip')) {
             console.log('Extracting ZIP file...');
-            // Use unzipper to extract ZIP files
             await unzipper.Open.file(zipPath)
-                .then(d => d.extract({path: extractPath}));
+                .then(d => d.extract({ path: extractPath }));
             console.log('Extracted ZIP file to:', extractPath);
         } else if (zipPath.endsWith('.tar.gz')) {
             console.log('Extracting TAR.GZ file...');
-            // Use tar.extract to extract TAR.GZ files
-            await tar.extract({file: zipPath, cwd: extractPath});
+            await tar.extract({ file: zipPath, cwd: extractPath });
             console.log('Extracted TAR.GZ file to:', extractPath);
         } else {
             console.error('Unsupported file type. Only .zip and .tar.gz are supported.');
@@ -89,11 +96,9 @@ export class CxInstaller {
     async downloadFile(url: string, outputPath: string) {
         console.log('Downloading file from:', url);
         const writer = fs1.createWriteStream(outputPath);
-        console.log('Downloading file to:', outputPath);
-        const response = await axios({url, responseType: 'stream'});
-        console.log('Downloading file...');
+        const response = await axios({ url, responseType: 'stream' });
         response.data.pipe(writer);
-        console.log('Downloaded file');
+
         return new Promise((resolve, reject) => {
             writer.on('finish', resolve);
             writer.on('error', reject);
@@ -101,40 +106,25 @@ export class CxInstaller {
     }
 
     getZipPath(): string {
-        let executablePath;
-        if (this.platform === 'win32') {
-            executablePath = path.join(this.resourceDirPath, 'cx.zip');
-        } else {
-            executablePath = path.join(this.resourceDirPath, 'cx.tar.gz');
-        }
-        console.log('Zip path:', executablePath)
-        return executablePath;
+        return this.platform === 'win32'
+            ? path.join(this.resourceDirPath, 'cx.zip')
+            : path.join(this.resourceDirPath, 'cx.tar.gz');
     }
 
     checkExecutableExists(): boolean {
-        if (fs1.existsSync(this.getExecutablePath())){
-            console.log('Executable exists:', this.getExecutablePath());
-            return true;
-        } else {
-            return false;
-        }
+        return fs1.existsSync(this.getExecutablePath());
     }
 
-    // Method to read the AST CLI version from the file
     async readASTCLIVersion(): Promise<string> {
         if (this.cliVersion) {
             return this.cliVersion;
         }
         try {
-            console.log('Reading AST CLI version...');
             const versionFilePath = path.join(process.cwd(), 'checkmarx-ast-cli.version');
             const versionContent = await fs.readFile(versionFilePath, 'utf-8');
-            console.log('AST CLI version:', versionContent.trim());
             return versionContent.trim();
         } catch (error) {
-            console.error('Error reading AST CLI version:', error);
-            throw error;
+            throw new Error('Error reading AST CLI version: ' + error.message);
         }
     }
 }
-
