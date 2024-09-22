@@ -1,7 +1,7 @@
 {
-  "name": "@CheckmarxDev/ast-cli-javascript-wrapper",
+  "name": "@CheckmarxDev/ast-cli-javascript-wrapper-runtime-cli",
   "version": "0.0.113",
-  "description": "AST CLI Javascript wrapper",
+  "description": "AST CLI Javascript wrapper runtime CLI",
   "main": "dist/main/wrapper/CxWrapper.js",
   "typings": "dist/main/wrapper/CxWrapper.d.ts",
   "files": [
@@ -22,15 +22,15 @@
     "postbuild": "copyfiles -u 1 src/main/wrapper/resources/cx* dist/;copyfiles -u 1 src/tests/data/* dist/;",
     "lint": "eslint . --ext .ts",
     "lint-and-fix": "eslint . --ext .ts --fix",
-    "test": "copyfiles -u 1 src/tests/data/* dist/; tsc && jest"
+    "test": "copyfiles -u 1 src/tests/data/* dist/; tsc && jest --runInBand"
   },
-  "repository": "https://github.com/CheckmarxDev/ast-cli-javascript-wrapper.git",
+  "repository": "https://github.com/CheckmarxDev/ast-cli-javascript-wrapper-runtime-cli.git",
   "author": "Jay Nanduri",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/CheckmarxDev/ast-cli-javascript-wrapper/issues"
+    "url": "https://github.com/CheckmarxDev/ast-cli-javascript-wrapper-runtime-cli/issues"
   },
-  "homepage": "https://github.com/CheckmarxDev/ast-cli-javascript-wrapper#readme",
+  "homepage": "https://github.com/CheckmarxDev/ast-cli-javascript-wrapper-runtime-cli#readme",
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@babel/plugin-transform-runtime": "^7.25.4",
