@@ -13,6 +13,7 @@ type ParamTypeMap = Map<CxParamType, string>;
 
 export class CxWrapper {
     config: CxConfig = new CxConfig();
+    cxInstaller: CxInstaller = new CxInstaller(process.platform);
     windows = 'win32';
     mac = 'darwin';
     linux = 'linux';
@@ -20,8 +21,6 @@ export class CxWrapper {
 
     constructor(cxScanConfig: CxConfig, logFilePath?: string) {
         getLoggerWithFilePath(logFilePath)
-        const cxInstaller = new CxInstaller(process.platform);
-        this.config.pathToExecutable = cxInstaller.getExecutablePath();
         if (cxScanConfig.apiKey) {
             this.config.apiKey = cxScanConfig.apiKey;
         } else if (cxScanConfig.clientId && cxScanConfig.clientSecret) {
@@ -31,7 +30,11 @@ export class CxWrapper {
         } else {
             logger.info("Did not receive ClientId/Secret or ApiKey from cli arguments");
         }
-        this.config.pathToExecutable = cxInstaller.getExecutablePath();
+        if (cxScanConfig.pathToExecutable) {
+            this.config.pathToExecutable = cxScanConfig.pathToExecutable;
+        } else {
+            this.config.pathToExecutable = this.cxInstaller.getExecutablePath();
+        }
         if (cxScanConfig.baseUri) {
             this.config.baseUri = cxScanConfig.baseUri;
         }
@@ -47,9 +50,8 @@ export class CxWrapper {
     }
 
     async initializeCommands(formatRequired: boolean): Promise<string[]> {
-        const cxInstaller = new CxInstaller(process.platform);
-        await cxInstaller.downloadIfNotInstalledCLI()
-        this.config.pathToExecutable = cxInstaller.getExecutablePath();
+        await this.cxInstaller.downloadIfNotInstalledCLI()
+        this.config.pathToExecutable = this.cxInstaller.getExecutablePath();
 
         const list: string[] = [];
         if (this.config.clientId) {
