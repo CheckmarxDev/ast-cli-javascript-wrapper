@@ -31,16 +31,7 @@ export class CxWrapper {
         } else {
             logger.info("Did not receive ClientId/Secret or ApiKey from cli arguments");
         }
-        const executablePath = cxInstaller.getExecutablePath();
-        if (cxScanConfig.pathToExecutable) {
-            this.config.pathToExecutable = cxScanConfig.pathToExecutable;
-        } else if (process.platform === 'win32') {
-            this.config.pathToExecutable = executablePath;
-        } else if (process.platform === 'darwin') {
-            this.config.pathToExecutable = executablePath;
-        } else {
-            this.config.pathToExecutable = executablePath;
-        }
+        this.config.pathToExecutable = cxInstaller.getExecutablePath();
         if (cxScanConfig.baseUri) {
             this.config.baseUri = cxScanConfig.baseUri;
         }
