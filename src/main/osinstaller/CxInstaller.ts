@@ -5,6 +5,7 @@ import * as tar from 'tar';
 import axios from 'axios';
 import * as unzipper from 'unzipper';
 import { Semaphore } from 'async-mutex';
+import * as os from "os";
 
 export class CxInstaller {
     private readonly platform: string;
@@ -63,7 +64,7 @@ export class CxInstaller {
             }
 
             const url = await this.getDownloadURL();
-            const zipPath = this.getZipPath();
+            const zipPath = path.join(os.tmpdir(), `ast-cli.${this.platform === 'win32' ? 'zip' : 'tar.gz'}`);
 
             await this.downloadFile(url, zipPath);
             console.log('Downloaded CLI to:', zipPath);
@@ -104,12 +105,6 @@ export class CxInstaller {
             writer.on('finish', resolve);
             writer.on('error', reject);
         });
-    }
-
-    getZipPath(): string {
-        return this.platform === 'win32'
-            ? path.join(this.resourceDirPath, 'cx.zip')
-            : path.join(this.resourceDirPath, 'cx.tar.gz');
     }
 
     checkExecutableExists(): boolean {
