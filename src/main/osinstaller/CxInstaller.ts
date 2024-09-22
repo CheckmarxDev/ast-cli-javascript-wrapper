@@ -87,9 +87,13 @@ export class CxInstaller {
     }
 
     async downloadFile(url: string, outputPath: string) {
+        console.log('Downloading file from:', url);
         const writer = fs1.createWriteStream(outputPath);
+        console.log('Downloading file to:', outputPath);
         const response = await axios({url, responseType: 'stream'});
+        console.log('Downloading file...');
         response.data.pipe(writer);
+        console.log('Downloaded file');
         return new Promise((resolve, reject) => {
             writer.on('finish', resolve);
             writer.on('error', reject);
@@ -103,6 +107,7 @@ export class CxInstaller {
         } else {
             executablePath = path.join(this.resourceDirPath, 'cx.tar.gz');
         }
+        console.log('Zip path:', executablePath)
         return executablePath;
     }
 
