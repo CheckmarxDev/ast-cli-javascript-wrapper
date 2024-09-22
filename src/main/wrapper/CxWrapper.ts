@@ -14,11 +14,6 @@ type ParamTypeMap = Map<CxParamType, string>;
 export class CxWrapper {
     config: CxConfig = new CxConfig();
     cxInstaller: CxInstaller = new CxInstaller(process.platform);
-    windows = 'win32';
-    mac = 'darwin';
-    linux = 'linux';
-
-
     constructor(cxScanConfig: CxConfig, logFilePath?: string) {
         getLoggerWithFilePath(logFilePath)
         if (cxScanConfig.apiKey) {
