@@ -4,13 +4,9 @@ import {CxConstants} from "./CxConstants";
 import {ExecutionService} from "./ExecutionService";
 import {CxCommandOutput} from "./CxCommandOutput";
 import {getLoggerWithFilePath, logger} from "./loggerConfig";
-import * as fs from "fs"
 import * as os from "os";
 import CxBFL from "../bfl/CxBFL";
 import {CxInstaller} from "../osinstaller/CxInstaller";
-import * as tar from 'tar';
-import axios from "axios";
-import * as unzipper from 'unzipper'; // For ZIP files
 
 
 type ParamTypeMap = Map<CxParamType, string>;
@@ -59,30 +55,11 @@ export class CxWrapper {
         }
     }
 
-    async downloadIfNotInstalledCLI(os: string) {
-
-        const cxInstaller = new CxInstaller(os);
-        await cxInstaller.install('/resources');
-    }
-
     async initializeCommands(formatRequired: boolean): Promise<string[]> {
         const cxInstaller = new CxInstaller(process.platform);
+        await cxInstaller.downloadIfNotInstalledCLI()
         this.config.pathToExecutable = cxInstaller.getExecutablePath();
-        if (!fs.existsSync(cxInstaller.getExecutablePath())) {
-            const url = await cxInstaller.getDownloadURL();
-            const zipPath = cxInstaller.getZipPath();
-            const extractPath = __dirname+"/"+ 'resources';
-            try {
-                await this.downloadFile(url, zipPath);
-                console.log('Downloaded CLI to:', zipPath);
 
-                await this.extractArchive(zipPath, extractPath);
-                console.log('Extracted CLI to:', extractPath);
-                console.log('Done!');
-            } catch (error) {
-                console.error('Error:', error);
-            }
-        }
         const list: string[] = [];
         if (this.config.clientId) {
             list.push(CxConstants.CLIENT_ID);
@@ -120,33 +97,6 @@ export class CxWrapper {
         return list;
     }
 
-
-    async extractArchive(zipPath: string, extractPath: string): Promise<void> {
-        if (zipPath.endsWith('.zip')) {
-            console.log('Extracting ZIP file...');
-            // Use unzipper to extract ZIP files
-            await unzipper.Open.file(zipPath)
-                .then(d => d.extract({ path: extractPath }));
-            console.log('Extracted ZIP file to:', extractPath);
-        } else if (zipPath.endsWith('.tar.gz')) {
-            console.log('Extracting TAR.GZ file...');
-            // Use tar.extract to extract TAR.GZ files
-            await tar.extract({ file: zipPath, cwd: extractPath });
-            console.log('Extracted TAR.GZ file to:', extractPath);
-        } else {
-            console.error('Unsupported file type. Only .zip and .tar.gz are supported.');
-        }
-    }
-    async downloadFile(url: string, outputPath: string){
-        const writer = fs.createWriteStream(outputPath);
-        const response = await axios({url, responseType: 'stream'});
-        response.data.pipe(writer);
-        return new Promise((resolve, reject) => {
-            writer.on('finish', resolve);
-            writer.on('error', reject);
-        });
-    }
-    
     async authValidate(): Promise<CxCommandOutput> {
         const commands: string[] = [CxConstants.CMD_AUTH, CxConstants.SUB_CMD_VALIDATE];
         commands.push(...await this.initializeCommands(false));
@@ -306,7 +256,7 @@ export class CxWrapper {
             commands.push(CxConstants.AGENT);
             commands.push(agent);
         }
-        commands.push(... await this.initializeCommands(false));
+        commands.push(...await this.initializeCommands(false));
         return commands;
     }
 
