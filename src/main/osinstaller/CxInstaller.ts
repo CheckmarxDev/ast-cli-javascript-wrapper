@@ -1,17 +1,20 @@
-import * as fs from 'fs/promises';
-import * as fs1 from 'fs';
+import * as fsPromises from 'fs/promises';
+import * as fs from 'fs';
 import * as path from 'path';
 import * as tar from 'tar';
 import axios from 'axios';
 import * as unzipper from 'unzipper';
-import { Semaphore } from 'async-mutex';
+import {Semaphore} from 'async-mutex';
 import * as os from "os";
 import {logger} from "../wrapper/loggerConfig";
+import {finished} from 'stream/promises';
 
+type SupportedPlatforms = 'win32' | 'darwin' | 'linux';
 export class CxInstaller {
     private readonly platform: string;
     private cliVersion: string;
     private readonly resourceDirPath: string;
+    private readonly cliDefaultVersion = '2.2.5'; // This will be used if the version file is not found. Should be updated with the latest version.
     private static installSemaphore = new Semaphore(1);  // Semaphore with 1 slot
 
     constructor(platform: string) {
@@ -19,30 +22,23 @@ export class CxInstaller {
         this.resourceDirPath = path.join(__dirname, `../wrapper/resources`);
     }
 
-    // Method to get the download URL based on OS and architecture
     async getDownloadURL(): Promise<string> {
         const cliVersion = await this.readASTCLIVersion();
-        let platformString: string;
-        let archiveExtension: string;
 
-        switch (this.platform) {
-            case 'win32':
-                platformString = 'windows';
-                archiveExtension = 'zip';
-                break;
-            case 'darwin':
-                archiveExtension = 'tar.gz';
-                platformString = 'darwin';
-                break;
-            case 'linux':
-                archiveExtension = 'tar.gz';
-                platformString = 'linux';
-                break;
-            default:
-                throw new Error('Unsupported platform or architecture');
+        const platforms: Record<SupportedPlatforms, { platform: string; extension: string }> = {
+            win32: { platform: 'windows', extension: 'zip' },
+            darwin: { platform: 'darwin', extension: 'tar.gz' },
+            linux: { platform: 'linux', extension: 'tar.gz' }
+        };
+
+        const platformKey = this.platform as SupportedPlatforms;
+
+        const platformData = platforms[platformKey];
+        if (!platformData) {
+            throw new Error('Unsupported platform or architecture');
         }
 
-        return `https://download.checkmarx.com/CxOne/CLI/${cliVersion}/ast-cli_${cliVersion}_${platformString}_x64.${archiveExtension}`;
+        return `https://download.checkmarx.com/CxOne/CLI/${cliVersion}/ast-cli_${cliVersion}_${platformData.platform}_x64.${platformData.extension}`;
     }
 
     getExecutablePath(): string {
@@ -55,7 +51,7 @@ export class CxInstaller {
         return executablePath;
     }
 
-    async downloadIfNotInstalledCLI() {
+    async downloadIfNotInstalledCLI(): Promise<void> {
         const [_, release] = await CxInstaller.installSemaphore.acquire();
         try {
             if (this.checkExecutableExists()) {
@@ -70,21 +66,21 @@ export class CxInstaller {
             logger.info('Downloaded CLI to:', zipPath);
 
             await this.extractArchive(zipPath, this.resourceDirPath);
-            fs1.chmodSync(this.getExecutablePath(), 0o777);
+            fs.chmodSync(this.getExecutablePath(), 0o755);
             logger.info('Extracted CLI to:', this.resourceDirPath);
         } catch (error) {
             logger.error('Error during installation:', error);
         } finally {
-            release(); 
+            release();
         }
     }
 
     async extractArchive(zipPath: string, extractPath: string): Promise<void> {
         if (zipPath.endsWith('.zip')) {
             await unzipper.Open.file(zipPath)
-                .then(d => d.extract({ path: extractPath }));
+                .then(d => d.extract({path: extractPath}));
         } else if (zipPath.endsWith('.tar.gz')) {
-            await tar.extract({ file: zipPath, cwd: extractPath });
+            await tar.extract({file: zipPath, cwd: extractPath});
         } else {
             logger.error('Unsupported file type. Only .zip and .tar.gz are supported.');
         }
@@ -92,18 +88,16 @@ export class CxInstaller {
 
     async downloadFile(url: string, outputPath: string) {
         logger.info('Downloading file from:', url);
-        const writer = fs1.createWriteStream(outputPath);
-        const response = await axios({ url, responseType: 'stream' });
+        const writer = fs.createWriteStream(outputPath);
+        const response = await axios({url, responseType: 'stream'});
         response.data.pipe(writer);
 
-        return new Promise((resolve, reject) => {
-            writer.on('finish', resolve);
-            writer.on('error', reject);
-        });
+        await finished(writer); // Use stream promises to await the writer
+        logger.info('Download finished');
     }
 
     checkExecutableExists(): boolean {
-        return fs1.existsSync(this.getExecutablePath());
+        return fs.existsSync(this.getExecutablePath());
     }
 
     async readASTCLIVersion(): Promise<string> {
@@ -112,10 +106,11 @@ export class CxInstaller {
         }
         try {
             const versionFilePath = path.join(process.cwd(), 'checkmarx-ast-cli.version');
-            const versionContent = await fs.readFile(versionFilePath, 'utf-8');
+            const versionContent = await fsPromises.readFile(versionFilePath, 'utf-8');
             return versionContent.trim();
         } catch (error) {
             logger.error('Error reading AST CLI version: ' + error.message);
+            return this.cliDefaultVersion;
         }
     }
 }
