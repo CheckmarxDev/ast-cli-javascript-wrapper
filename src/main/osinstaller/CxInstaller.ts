@@ -6,6 +6,7 @@ import axios from 'axios';
 import * as unzipper from 'unzipper';
 import { Semaphore } from 'async-mutex';
 import * as os from "os";
+import {logger} from "../wrapper/loggerConfig";
 
 export class CxInstaller {
     private readonly platform: string;
@@ -55,11 +56,10 @@ export class CxInstaller {
     }
 
     async downloadIfNotInstalledCLI() {
-        // Acquire the semaphore, ensuring only one installation happens at a time
         const [_, release] = await CxInstaller.installSemaphore.acquire();
         try {
             if (this.checkExecutableExists()) {
-                console.log('Executable already installed.');
+                logger.info('Executable already installed.');
                 return;
             }
 
@@ -67,36 +67,31 @@ export class CxInstaller {
             const zipPath = path.join(os.tmpdir(), `ast-cli.${this.platform === 'win32' ? 'zip' : 'tar.gz'}`);
 
             await this.downloadFile(url, zipPath);
-            console.log('Downloaded CLI to:', zipPath);
+            logger.info('Downloaded CLI to:', zipPath);
 
             await this.extractArchive(zipPath, this.resourceDirPath);
             fs1.chmodSync(this.getExecutablePath(), 0o777);
-            console.log('Extracted CLI to:', this.resourceDirPath);
+            logger.info('Extracted CLI to:', this.resourceDirPath);
         } catch (error) {
-            console.error('Error during installation:', error);
+            logger.error('Error during installation:', error);
         } finally {
-            // Release the semaphore lock to allow the next waiting process to continue
-            release(); // Call the release function
+            release(); 
         }
     }
 
     async extractArchive(zipPath: string, extractPath: string): Promise<void> {
         if (zipPath.endsWith('.zip')) {
-            console.log('Extracting ZIP file...');
             await unzipper.Open.file(zipPath)
                 .then(d => d.extract({ path: extractPath }));
-            console.log('Extracted ZIP file to:', extractPath);
         } else if (zipPath.endsWith('.tar.gz')) {
-            console.log('Extracting TAR.GZ file...');
             await tar.extract({ file: zipPath, cwd: extractPath });
-            console.log('Extracted TAR.GZ file to:', extractPath);
         } else {
-            console.error('Unsupported file type. Only .zip and .tar.gz are supported.');
+            logger.error('Unsupported file type. Only .zip and .tar.gz are supported.');
         }
     }
 
     async downloadFile(url: string, outputPath: string) {
-        console.log('Downloading file from:', url);
+        logger.info('Downloading file from:', url);
         const writer = fs1.createWriteStream(outputPath);
         const response = await axios({ url, responseType: 'stream' });
         response.data.pipe(writer);
@@ -120,7 +115,7 @@ export class CxInstaller {
             const versionContent = await fs.readFile(versionFilePath, 'utf-8');
             return versionContent.trim();
         } catch (error) {
-            throw new Error('Error reading AST CLI version: ' + error.message);
+            logger.error('Error reading AST CLI version: ' + error.message);
         }
     }
 }
