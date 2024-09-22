@@ -124,6 +124,7 @@ export class CxInstaller {
             console.log('Reading AST CLI version...');
             console.log('Current working directory:',process.cwd(), '/checkmarx-ast-cli.version');
             const versionFilePath = path.join(process.cwd(), 'checkmarx-ast-cli.version');
+            console.log('Version file path:', versionFilePath);
             const versionContent = await fs.readFile(versionFilePath, 'utf-8');
             return versionContent.trim();
         } catch (error) {
