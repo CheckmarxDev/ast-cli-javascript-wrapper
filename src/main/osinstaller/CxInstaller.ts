@@ -10,6 +10,7 @@ import {logger} from "../wrapper/loggerConfig";
 import {finished} from 'stream/promises';
 
 type SupportedPlatforms = 'win32' | 'darwin' | 'linux';
+
 export class CxInstaller {
     private readonly platform: string;
     private cliVersion: string;
@@ -26,9 +27,9 @@ export class CxInstaller {
         const cliVersion = await this.readASTCLIVersion();
 
         const platforms: Record<SupportedPlatforms, { platform: string; extension: string }> = {
-            win32: { platform: 'windows', extension: 'zip' },
-            darwin: { platform: 'darwin', extension: 'tar.gz' },
-            linux: { platform: 'linux', extension: 'tar.gz' }
+            win32: {platform: 'windows', extension: 'zip'},
+            darwin: {platform: 'darwin', extension: 'tar.gz'},
+            linux: {platform: 'linux', extension: 'tar.gz'}
         };
 
         const platformKey = this.platform as SupportedPlatforms;
@@ -42,14 +43,10 @@ export class CxInstaller {
     }
 
     getExecutablePath(): string {
-        let executablePath;
-        if (this.platform === 'win32') {
-            executablePath = path.join(this.resourceDirPath, 'cx.exe');
-        } else {
-            executablePath = path.join(this.resourceDirPath, 'cx');
-        }
-        return executablePath;
+        const executableName = this.platform === 'win32' ? 'cx.exe' : 'cx';
+        return path.join(this.resourceDirPath, executableName);
     }
+
 
     async downloadIfNotInstalledCLI(): Promise<void> {
         const [_, release] = await CxInstaller.installSemaphore.acquire();
@@ -58,7 +55,6 @@ export class CxInstaller {
                 logger.info('Executable already installed.');
                 return;
             }
-
             const url = await this.getDownloadURL();
             const zipPath = path.join(os.tmpdir(), `ast-cli.${this.platform === 'win32' ? 'zip' : 'tar.gz'}`);
 
