@@ -5,7 +5,6 @@ import * as tar from 'tar';
 import axios from 'axios';
 import * as unzipper from 'unzipper';
 import {Semaphore} from 'async-mutex';
-import * as os from "os";
 import {logger} from "../wrapper/loggerConfig";
 import {finished} from 'stream/promises';
 
@@ -56,12 +55,21 @@ export class CxInstaller {
                 return;
             }
             const url = await this.getDownloadURL();
-            const zipPath = path.join(os.tmpdir(), `ast-cli.${this.platform === 'win32' ? 'zip' : 'tar.gz'}`);
+            const zipPath = path.join(this.resourceDirPath, this.getCompressFolderName());
 
             await this.downloadFile(url, zipPath);
             logger.info('Downloaded CLI to:', zipPath);
 
             await this.extractArchive(zipPath, this.resourceDirPath);
+            
+            fs.unlink(zipPath, (err) => {
+                if (err) {
+                    logger.error('Error deleting the file:', err);
+                } else {
+                    logger.info('File deleted successfully!');
+                }
+            });
+            
             fs.chmodSync(this.getExecutablePath(), 0o755);
             logger.info('Extracted CLI to:', this.resourceDirPath);
         } catch (error) {
@@ -108,5 +116,9 @@ export class CxInstaller {
             logger.error('Error reading AST CLI version: ' + error.message);
             return this.cliDefaultVersion;
         }
+    }
+    
+    getCompressFolderName(): string {
+        return `ast-cli.${this.platform === 'win32' ? 'zip' : 'tar.gz'}`;
     }
 }
