@@ -50,6 +50,8 @@ export class CxInstaller {
     async downloadIfNotInstalledCLI(): Promise<void> {
         const [_, release] = await CxInstaller.installSemaphore.acquire();
         try {
+            await fs.promises.mkdir(this.resourceDirPath, { recursive: true });
+            
             if (this.checkExecutableExists()) {
                 logger.info('Executable already installed.');
                 return;
