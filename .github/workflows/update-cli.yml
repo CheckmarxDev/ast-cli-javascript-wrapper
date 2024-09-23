@@ -39,7 +39,7 @@ jobs:
         env:
           NEW_CLI_VERSION: ${{ steps.checkmarx-ast-cli.outputs.release_tag }}
         run: |
-          FILE_PATH="src/your-file-containing-CxInstaller.ts"
+          FILE_PATH="src/main/osinstaller/CxInstaller.ts"
           # Update the cliVersion field in the TypeScript file
           sed -i "s/\(private cliVersion = '\)[^']*\(';\)/\1${NEW_CLI_VERSION}\2/" $FILE_PATH
 
