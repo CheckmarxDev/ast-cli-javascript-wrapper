@@ -1,3 +1,4 @@
+import * as fsPromises from 'fs/promises';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as tar from 'tar';
@@ -11,8 +12,9 @@ type SupportedPlatforms = 'win32' | 'darwin' | 'linux';
 
 export class CxInstaller {
     private readonly platform: string;
-    private cliVersion = '2.2.5';
+    private cliVersion: string;
     private readonly resourceDirPath: string;
+    private readonly cliDefaultVersion = '2.2.5'; // This will be used if the version file is not found. Should be updated with the latest version.
     private static installSemaphore = new Semaphore(1);  // Semaphore with 1 slot
 
     constructor(platform: string) {
@@ -20,7 +22,9 @@ export class CxInstaller {
         this.resourceDirPath = path.join(__dirname, `../wrapper/resources`);
     }
 
-    getDownloadURL(): string {
+    async getDownloadURL(): Promise<string> {
+        const cliVersion = await this.readASTCLIVersion();
+
         const platforms: Record<SupportedPlatforms, { platform: string; extension: string }> = {
             win32: {platform: 'windows', extension: 'zip'},
             darwin: {platform: 'darwin', extension: 'tar.gz'},
@@ -34,7 +38,7 @@ export class CxInstaller {
             throw new Error('Unsupported platform or architecture');
         }
 
-        return `https://download.checkmarx.com/CxOne/CLI/${this.cliVersion}/ast-cli_${this.cliVersion}_${platformData.platform}_x64.${platformData.extension}`;
+        return `https://download.checkmarx.com/CxOne/CLI/${cliVersion}/ast-cli_${cliVersion}_${platformData.platform}_x64.${platformData.extension}`;
     }
 
     getExecutablePath(): string {
@@ -52,7 +56,7 @@ export class CxInstaller {
                 logger.info('Executable already installed.');
                 return;
             }
-            const url = this.getDownloadURL();
+            const url = await this.getDownloadURL();
             const zipPath = path.join(this.resourceDirPath, this.getCompressFolderName());
 
             await this.downloadFile(url, zipPath);
@@ -100,6 +104,20 @@ export class CxInstaller {
 
     checkExecutableExists(): boolean {
         return fs.existsSync(this.getExecutablePath());
+    }
+
+    async readASTCLIVersion(): Promise<string> {
+        if (this.cliVersion) {
+            return this.cliVersion;
+        }
+        try {
+            const versionFilePath = path.join(process.cwd(), 'checkmarx-ast-cli.version');
+            const versionContent = await fsPromises.readFile(versionFilePath, 'utf-8');
+            return versionContent.trim();
+        } catch (error) {
+            logger.error('Error reading AST CLI version: ' + error.message);
+            return this.cliDefaultVersion;
+        }
     }
     
     getCompressFolderName(): string {

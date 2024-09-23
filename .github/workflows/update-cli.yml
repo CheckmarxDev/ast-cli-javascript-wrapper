@@ -41,7 +41,7 @@ jobs:
         run: |
           FILE_PATH="src/main/osinstaller/CxInstaller.ts"
           # Update the cliVersion field in the TypeScript file
-          sed -i "s/\(private cliVersion = '\)[^']*\(';\)/\1${NEW_CLI_VERSION}\2/" $FILE_PATH
+          sed -i "s/\(private cliDefaultVersion = '\)[^']*\(';\)/\1${NEW_CLI_VERSION}\2/" $FILE_PATH
 
       # Create a Pull Request with the version changes
       - name: Create Pull Request
