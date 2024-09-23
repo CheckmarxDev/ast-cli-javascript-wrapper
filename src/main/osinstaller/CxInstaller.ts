@@ -111,7 +111,7 @@ export class CxInstaller {
             return this.cliVersion;
         }
         try {
-            const versionFilePath = path.join(process.cwd(), 'checkmarx-ast-cli.version');
+            const versionFilePath = path.join('checkmarx-ast-cli.version');
             const versionContent = await fsPromises.readFile(versionFilePath, 'utf-8');
             return versionContent.trim();
         } catch (error) {
