@@ -1,4 +1,3 @@
-import * as fsPromises from 'fs/promises';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as tar from 'tar';
@@ -12,7 +11,7 @@ type SupportedPlatforms = 'win32' | 'darwin' | 'linux';
 
 export class CxInstaller {
     private readonly platform: string;
-    private cliVersion = '2.2.6';
+    private cliVersion = '2.2.5';
     private readonly resourceDirPath: string;
     private static installSemaphore = new Semaphore(1);  // Semaphore with 1 slot
 
