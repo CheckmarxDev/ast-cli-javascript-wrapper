@@ -25,32 +25,50 @@ module.exports = {
   verbose: true,
   cacheDirectory: '<rootDir>/tmp/jest',
   moduleFileExtensions: ['ts', 'tsx', 'js', 'json'],
+  // preset configs
+  // preset: 'ts-jest/presets/js-with-ts',
+  // which files to test and which to ignore
   testMatch: ['**/src/tests/*.test.(ts|tsx)'],
   testPathIgnorePatterns: ['/node_modules/', '/tmp/', '/coverage/', '/stories/', '/\\.storybook/'],
+  // don't watch for file changes in node_modules
   watchPathIgnorePatterns: ['/node_modules/'],
+  // jest automock settings
   automock: false,
   unmockedModulePathPatterns: ['/node_modules/'],
   setupFilesAfterEnv: ['./jest.setup.js'],
+  // test environment setup
+  // setupFiles: [`${__dirname}/setup/setup.js`],
+  // setupFilesAfterEnv: [`${__dirname}/setup/setupAfterEnv.ts`],
+  // coverage settings
   collectCoverage: true,
   collectCoverageFrom: ['**/*.{ts,tsx}', '!**/*.d.ts', '!**/node_modules/**'],
   coverageThreshold: {
-    global: {
-      branches: 65,
-      functions: 80,
-      lines: 80,
-      statements: 80
+    "global": {
+      "branches": 65,
+      "functions": 80,
+      "lines": 80,
+      "statements": 80
     }
   },
   coveragePathIgnorePatterns: ['/node_modules/', '\\.json$', '/__tests__/', '/stories/', '/\\.storybook/'],
 
-  transform: {
-    '^.+\\.(ts|tsx)$': ['ts-jest', {
+  globals: {
+    'ts-jest': {
       tsconfig: `${__dirname}/tsconfig.json`,
+
+      // https://huafu.github.io/ts-jest/user/config/diagnostics
       diagnostics: false,
+
+      // Makes jest test run much faster, BUT, without type checking.
+      // Type checking in CI is done with `tsc --noEmit` or `yarn typecheck` command.
+      // https://huafu.github.io/ts-jest/user/config/isolatedModules
       isolatedModules: true,
-    }],
-    '^.+\\.(js|jsx)$': 'babel-jest',
+    },
   },
 
   transformIgnorePatterns: ['/node_modules/(?!(lodash-es|antd|[^/]+/es|rc-animate|rc-util)/).*'],
+  transform: {
+    '\\.(ts|tsx)$': 'ts-jest',
+    '/node_modules/((lodash-es|[^/]+/es)|rc-animate|rc-util)/.*': 'ts-jest',
+  },
 };
