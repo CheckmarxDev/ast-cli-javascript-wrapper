@@ -1,3 +1,0 @@
-src/main/wrapper/resources/cx-linux filter=lfs diff=lfs merge=lfs -text
-src/main/wrapper/resources/cx.exe filter=lfs diff=lfs merge=lfs -text
-src/main/wrapper/resources/cx-mac filter=lfs diff=lfs merge=lfs -text

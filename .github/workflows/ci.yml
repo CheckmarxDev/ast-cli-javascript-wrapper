@@ -6,42 +6,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          lfs: true
 
-      - name: Install Git LFS
-        run: |
-          sudo apt-get update
-          sudo apt-get install git-lfs
-          git lfs install
-
-      - name: Use Node.js 14
+      - name: Use Node.js 16
         uses: actions/setup-node@v4.0.2
         with:
-          node-version: 14
+          node-version: 16
           registry-url: https://npm.pkg.github.com/
       - run: npm ci
       - name: Code Linting
         run: npm run lint
       - run: npm run build --if-present
-
-      - name: Check existence of cx-linux binary
-        run: |
-          if [ ! -f "src/main/wrapper/resources/cx-linux" ]; then
-            echo "cx-linux binary does not exist"; exit 1;
-          fi
-
-      - name: Check existence of cx.exe binary
-        run: |
-          if [ ! -f "src/main/wrapper/resources/cx.exe" ]; then
-            echo "cx.exe binary does not exist"; exit 1;
-          fi
-
-      - name: Check existence of cx-mac binary
-        run: |
-          if [ ! -f "src/main/wrapper/resources/cx-mac" ]; then
-            echo "cx-mac binary does not exist"; exit 1;
-          fi
 
       - name: Run tests
         env:

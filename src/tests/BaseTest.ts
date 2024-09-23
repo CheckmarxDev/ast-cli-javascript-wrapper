@@ -17,8 +17,5 @@ export class BaseTest {
         this.tenant = process.env["CX_TENANT"];
         this.apiKey = process.env["CX_APIKEY"];
         this.additionalParameters = "--debug"
-        if (process.env["PATH_TO_EXECUTABLE"] !== null && process.env["PATH_TO_EXECUTABLE"] !== undefined) {
-            this.pathToExecutable = process.env["PATH_TO_EXECUTABLE"];
-        }
     }
 }

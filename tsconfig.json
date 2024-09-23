@@ -6,13 +6,14 @@
         "module": "commonjs",
         "moduleResolution": "node",
         "noEmitOnError": true,
-        "target": "es5",
+        "target": "ES2015",
         "declaration": true,
         "removeComments": false,
         "noImplicitAny": true,
         "forceConsistentCasingInFileNames": true,
         "noUnusedLocals": true,
-        "pretty": true
+        "pretty": true,
+        "allowSyntheticDefaultImports": true
     },
     "include": ["./src/**/*",
       "./src/main/wrapper/resources/**/*"
