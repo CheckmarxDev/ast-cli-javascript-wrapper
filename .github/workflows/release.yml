@@ -42,7 +42,7 @@ permissions:
 
 jobs:
   delete:
-    uses: CheckmarxDev/ast-cli-javascript-wrapper/.github/workflows/delete-packages-and-releases.yml@main
+    uses: CheckmarxDev/ast-cli-javascript-wrapper-runtime-cli/.github/workflows/delete-packages-and-releases.yml@main
     with:
       tag: ${{ inputs.jsTag }}
     secrets: inherit
