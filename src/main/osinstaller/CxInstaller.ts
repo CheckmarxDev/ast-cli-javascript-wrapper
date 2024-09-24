@@ -20,7 +20,7 @@ export class CxInstaller {
         this.resourceDirPath = path.join(__dirname, `../wrapper/resources`);
     }
 
-    async getDownloadURL(): Promise<string> {
+    private async getDownloadURL(): Promise<string> {
         const cliVersion = await this.readASTCLIVersion();
 
         const platforms: Record<SupportedPlatforms, { platform: string; extension: string }> = {
@@ -39,13 +39,13 @@ export class CxInstaller {
         return `https://download.checkmarx.com/CxOne/CLI/${cliVersion}/ast-cli_${cliVersion}_${platformData.platform}_x64.${platformData.extension}`;
     }
 
-    getExecutablePath(): string {
+    public getExecutablePath(): string {
         const executableName = this.platform === 'win32' ? 'cx.exe' : 'cx';
         return path.join(this.resourceDirPath, executableName);
     }
 
 
-    async downloadIfNotInstalledCLI(): Promise<void> {
+    public async downloadIfNotInstalledCLI(): Promise<void> {
         try {
             await fs.promises.mkdir(this.resourceDirPath, { recursive: true });
             
@@ -76,7 +76,7 @@ export class CxInstaller {
         }
     }
 
-    async extractArchive(zipPath: string, extractPath: string): Promise<void> {
+    private async extractArchive(zipPath: string, extractPath: string): Promise<void> {
         if (zipPath.endsWith('.zip')) {
             await unzipper.Open.file(zipPath)
                 .then(d => d.extract({path: extractPath}));
@@ -87,7 +87,7 @@ export class CxInstaller {
         }
     }
 
-    async downloadFile(url: string, outputPath: string) {
+    private async downloadFile(url: string, outputPath: string) {
         logger.info('Downloading file from:', url);
         const writer = fs.createWriteStream(outputPath);
         const response = await axios({url, responseType: 'stream'});
@@ -97,11 +97,11 @@ export class CxInstaller {
         logger.info('Download finished');
     }
 
-    checkExecutableExists(): boolean {
+    private checkExecutableExists(): boolean {
         return fs.existsSync(this.getExecutablePath());
     }
 
-    async readASTCLIVersion(): Promise<string> {
+    private async readASTCLIVersion(): Promise<string> {
         if (this.cliVersion) {
             return this.cliVersion;
         }
@@ -114,8 +114,8 @@ export class CxInstaller {
             return this.cliDefaultVersion;
         }
     }
-    
-    getCompressFolderName(): string {
+
+    private getCompressFolderName(): string {
         return `ast-cli.${this.platform === 'win32' ? 'zip' : 'tar.gz'}`;
     }
 }
