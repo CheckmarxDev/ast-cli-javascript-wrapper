@@ -1,12 +1,12 @@
-import {CxWrapper} from '../main/wrapper/CxWrapper';
 import {CxCommandOutput} from "../main/wrapper/CxCommandOutput";
 import {BaseTest} from "./BaseTest";
 import * as fs from "fs";
+import CxWrapperFactory from "../main/wrapper/CxWrapperFactory";
 
 describe("Results cases",() => {
     const cxScanConfig = new BaseTest();
     it('Result Test Successful case', async () => {
-        const auth = new CxWrapper(cxScanConfig);
+        const auth = await CxWrapperFactory.createWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput  = await auth.scanList("statuses=Completed");
         const sampleId  = cxCommandOutput.payload.pop().id;
         
@@ -16,7 +16,7 @@ describe("Results cases",() => {
     });
 
     it('Result Test With Agent Flug Successful case', async () => {
-        const auth = new CxWrapper(cxScanConfig);
+        const auth = await CxWrapperFactory.createWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput  = await auth.scanList("statuses=Completed");
         const sampleId  = cxCommandOutput.payload.pop().id;
         
@@ -26,7 +26,7 @@ describe("Results cases",() => {
     });
 
     it('Result List Successful case', async () => {
-        const auth = new CxWrapper(cxScanConfig);
+        const auth = await CxWrapperFactory.createWrapper(cxScanConfig);
         const scanList: CxCommandOutput = await auth.scanList("statuses=Completed");
         let output;
         while (!output && scanList && scanList.payload && scanList.payload.length > 0) {
@@ -42,7 +42,7 @@ describe("Results cases",() => {
     });
 
     it('Result summary html file generation successful case', async () => {
-        const auth = new CxWrapper(cxScanConfig);
+        const auth = await CxWrapperFactory.createWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput = await auth.scanList("statuses=Completed");
         const sampleId  = cxCommandOutput.payload.pop().id;
         await auth.getResults(sampleId,"summaryHTML","test", ".");
@@ -51,7 +51,7 @@ describe("Results cases",() => {
     });
 
     it('Result summary html string successful case', async () => {
-        const auth = new CxWrapper(cxScanConfig);
+        const auth = await CxWrapperFactory.createWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput = await auth.scanList("statuses=Completed");
         const sampleId  = cxCommandOutput.payload.pop().id;
         const written = await auth.getResultsSummary(sampleId);
@@ -59,7 +59,7 @@ describe("Results cases",() => {
     });
 
     it('Result codebashing successful case', async () => {
-        const auth = new CxWrapper(cxScanConfig);
+        const auth = await CxWrapperFactory.createWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput = await auth.codeBashingList("79","PHP","Reflected XSS All Clients");
         expect(cxCommandOutput.payload.length).toBeGreaterThan(0);
     });
