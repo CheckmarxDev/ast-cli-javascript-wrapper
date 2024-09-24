@@ -58,39 +58,6 @@ export class CxWrapper {
 
         return CxWrapper.instance;
     }
-    
-    setScanConfig(cxScanConfig: CxConfig) {
-        if (cxScanConfig.apiKey) {
-            this.config.apiKey = cxScanConfig.apiKey;
-        } else if (cxScanConfig.clientId && cxScanConfig.clientSecret) {
-            logger.info("Received clientId and clientSecret");
-            this.config.clientId = cxScanConfig.clientId;
-            this.config.clientSecret = cxScanConfig.clientSecret;
-        } else {
-            logger.info("Did not receive ClientId/Secret or ApiKey from cli arguments");
-        }
-        if (cxScanConfig.pathToExecutable) {
-            this.config.pathToExecutable = cxScanConfig.pathToExecutable;
-        } else {
-            this.config.pathToExecutable = this.cxInstaller.getExecutablePath();
-        }
-        if (cxScanConfig.baseUri) {
-            this.config.baseUri = cxScanConfig.baseUri;
-        }
-        if (cxScanConfig.baseAuthUri) {
-            this.config.baseAuthUri = cxScanConfig.baseAuthUri;
-        }
-        if (cxScanConfig.tenant) {
-            this.config.tenant = cxScanConfig.tenant;
-        }
-        if (cxScanConfig.additionalParameters) {
-            this.config.additionalParameters = cxScanConfig.additionalParameters;
-        }
-    }
-    
-    GetScanConfig(): CxConfig {
-        return this.config;
-    }
 
     async init(): Promise<void> {
         return await this.cxInstaller.downloadIfNotInstalledCLI();
