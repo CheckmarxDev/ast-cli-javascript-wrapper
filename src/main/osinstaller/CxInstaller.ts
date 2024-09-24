@@ -44,11 +44,10 @@ export class CxInstaller {
         return path.join(this.resourceDirPath, executableName);
     }
 
-
     public async downloadIfNotInstalledCLI(): Promise<void> {
         try {
-            await fs.promises.mkdir(this.resourceDirPath, { recursive: true });
-            
+            await fs.promises.mkdir(this.resourceDirPath, {recursive: true});
+
             if (this.checkExecutableExists()) {
                 logger.info('Executable already installed.');
                 return;
@@ -60,15 +59,15 @@ export class CxInstaller {
             logger.info('Downloaded CLI to:', zipPath);
 
             await this.extractArchive(zipPath, this.resourceDirPath);
-            
+
             fs.unlink(zipPath, (err) => {
                 if (err) {
-                    logger.error('Error deleting the file:', err);
+                    logger.warn('Error deleting the file:', err);
                 } else {
                     logger.info('File deleted successfully!');
                 }
             });
-            
+
             fs.chmodSync(this.getExecutablePath(), 0o755);
             logger.info('Extracted CLI to:', this.resourceDirPath);
         } catch (error) {
@@ -90,13 +89,20 @@ export class CxInstaller {
     private async downloadFile(url: string, outputPath: string) {
         logger.info('Downloading file from:', url);
         const writer = fs.createWriteStream(outputPath);
-        const response = await axios({url, responseType: 'stream'});
-        response.data.pipe(writer);
 
-        await finished(writer); // Use stream promises to await the writer
-        logger.info('Download finished');
+        try {
+            const response = await axios({url, responseType: 'stream'});
+            response.data.pipe(writer);
+
+            await finished(writer); // Use stream promises to await the writer
+            logger.info('Download finished');
+        } catch (error) {
+            logger.error('Error downloading file:', error.message || error);
+        } finally {
+            writer.close();
+        }
     }
-
+    
     private checkExecutableExists(): boolean {
         return fs.existsSync(this.getExecutablePath());
     }
@@ -110,7 +116,7 @@ export class CxInstaller {
             const versionContent = await fsPromises.readFile(versionFilePath, 'utf-8');
             return versionContent.trim();
         } catch (error) {
-            logger.error('Error reading AST CLI version: ' + error.message);
+            logger.warn('Error reading AST CLI version: ' + error.message);
             return this.cliDefaultVersion;
         }
     }
