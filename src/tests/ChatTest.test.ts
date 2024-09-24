@@ -13,6 +13,8 @@ function createOutput(exitCode:number,payload:CxChat):CxCommandOutput {
     return output;
 }
 
+const cxWrapperFactory = new CxWrapperFactory();
+
 describe("Gpt Chat Cases", () => {
     // tests preparation
     const cxScanConfig = new BaseTest();
@@ -39,7 +41,7 @@ describe("Gpt Chat Cases", () => {
     });
 
     it('KICS Gpt Chat Failed case', async () => {
-        const originalWrapper: CxWrapper = await CxWrapperFactory.createWrapper(cxScanConfig);
+        const originalWrapper: CxWrapper = await cxWrapperFactory.createWrapper(cxScanConfig);
         const cxCommandOutput = await originalWrapper.kicsChat(
             "APIKEY",
             "FILE",
@@ -55,7 +57,7 @@ describe("Gpt Chat Cases", () => {
     });
 
     it('Sast Gpt Chat Failed case', async () => {
-        const originalWrapper: CxWrapper = await CxWrapperFactory.createWrapper(cxScanConfig);
+        const originalWrapper: CxWrapper = await cxWrapperFactory.createWrapper(cxScanConfig);
         const cxCommandOutput = await originalWrapper.sastChat(
             "APIKEY",
             "SOURCE_FILE",
