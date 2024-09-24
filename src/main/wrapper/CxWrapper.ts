@@ -50,8 +50,8 @@ export class CxWrapper {
     }
 
     static async getInstance(cxScanConfig: CxConfig, logFilePath: string): Promise<CxWrapper> {
-        const [_, release] = await this.semaphore.acquire();
-        let key = this.generateKey(cxScanConfig, logFilePath);
+        const [, release] = await this.semaphore.acquire();
+        const key = this.generateKey(cxScanConfig, logFilePath);
         let wrapper = CxWrapper.instances.get(key);
         if (!wrapper) {
             wrapper = new CxWrapper(cxScanConfig, logFilePath);
