@@ -15,7 +15,6 @@ export class CxInstaller {
     private cliVersion: string;
     private readonly resourceDirPath: string;
     private readonly cliDefaultVersion = '2.2.5'; // This will be used if the version file is not found. Should be updated with the latest version.
-    private static installSemaphore = new Semaphore(1);  // Semaphore with 1 slot
 
     constructor(platform: string) {
         this.platform = platform;
@@ -48,7 +47,6 @@ export class CxInstaller {
 
 
     async downloadIfNotInstalledCLI(): Promise<void> {
-        const [_, release] = await CxInstaller.installSemaphore.acquire();
         try {
             await fs.promises.mkdir(this.resourceDirPath, { recursive: true });
             
@@ -76,8 +74,6 @@ export class CxInstaller {
             logger.info('Extracted CLI to:', this.resourceDirPath);
         } catch (error) {
             logger.error('Error during installation:', error);
-        } finally {
-            release();
         }
     }
 
