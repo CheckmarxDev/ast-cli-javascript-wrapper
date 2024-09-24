@@ -17,7 +17,7 @@ export class CxWrapper {
     private static semaphore = new Semaphore(1);  // Semaphore with 1 slot
     config: CxConfig;
     cxInstaller: CxInstaller;
-    constructor(cxScanConfig: CxConfig, logFilePath?: string) {
+    private constructor(cxScanConfig: CxConfig, logFilePath?: string) {
         this.cxInstaller = new CxInstaller(process.platform);
         this.config = new CxConfig();
         getLoggerWithFilePath(logFilePath)
@@ -61,6 +61,10 @@ export class CxWrapper {
 
     async init(): Promise<void> {
         return await this.cxInstaller.downloadIfNotInstalledCLI();
+    }
+    
+    public cloneWithNewConfig(scanConfig: CxConfig): CxWrapper {
+        return new CxWrapper(scanConfig);
     }
 
     initializeCommands(formatRequired: boolean): string[] {
