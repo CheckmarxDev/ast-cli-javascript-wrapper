@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       new_cli_version:
-        description: 'New CLI version'
+        description: 'New CLI version (optional)'
         required: false
   schedule:
     - cron: '0 0 * * *'
@@ -20,7 +20,11 @@ jobs:
       - name: Get Latest Checkmarx API version
         id: checkmarx-ast-cli
         run: |
-          LATEST_VERSION=$(curl -sL https://api.github.com/repos/Checkmarx/ast-cli/releases/latest | jq -r ".tag_name")
+          if [ "${{ github.event.inputs.new_cli_version }}" ]; then
+            LATEST_VERSION=${{ github.event.inputs.new_cli_version }}
+          else
+            LATEST_VERSION=$(curl -sL https://api.github.com/repos/Checkmarx/ast-cli/releases/latest | jq -r ".tag_name")
+          fi
           CURRENT_VERSION=$(<checkmarx-ast-cli.version)
           echo ::set-output name=release_tag::$LATEST_VERSION
           echo ::set-output name=current_tag::$CURRENT_VERSION
