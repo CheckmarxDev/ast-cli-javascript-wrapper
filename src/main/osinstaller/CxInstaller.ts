@@ -4,7 +4,6 @@ import * as path from 'path';
 import * as tar from 'tar';
 import axios from 'axios';
 import * as unzipper from 'unzipper';
-import {Semaphore} from 'async-mutex';
 import {logger} from "../wrapper/loggerConfig";
 import {finished} from 'stream/promises';
 
