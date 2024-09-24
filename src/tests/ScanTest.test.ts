@@ -3,10 +3,12 @@ import { CxParamType } from "../main/wrapper/CxParamType";
 import { BaseTest } from "./BaseTest";
 import CxWrapperFactory from "../main/wrapper/CxWrapperFactory";
 
+const cxWrapperFactory = new CxWrapperFactory();
+
 describe("ScanCreate cases", () => {
     const cxScanConfig = new BaseTest();
     it('ScanList Successful case', async () => {
-        const auth = await CxWrapperFactory.createWrapper(cxScanConfig);
+        const auth = await cxWrapperFactory.createWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput = await auth.scanList("");
         console.log(" Json object from scanList successful case: " + JSON.stringify(cxCommandOutput));
         expect(cxCommandOutput.payload.length).toBeGreaterThan(1);
@@ -20,7 +22,7 @@ describe("ScanCreate cases", () => {
         params.set(CxParamType.FILTER, "*.ts,!**/node_modules/**/*");
         params.set(CxParamType.BRANCH, "master");
         params.set(CxParamType.SCAN_TYPES,"kics");
-        const auth = await CxWrapperFactory.createWrapper(cxScanConfig);
+        const auth = await cxWrapperFactory.createWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput = await auth.scanCreate(params);
         const scanObject = cxCommandOutput.payload.pop();
         const scanShowObject = await auth.scanShow(scanObject.id);
@@ -35,7 +37,7 @@ describe("ScanCreate cases", () => {
         params.set(CxParamType.SAST_PRESET_NAME, "Checkmarx Default Fake");
         params.set(CxParamType.BRANCH, "master");
         params.set(CxParamType.SCAN_TYPES, "sast");
-        const auth = await CxWrapperFactory.createWrapper(cxScanConfig);
+        const auth = await cxWrapperFactory.createWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput = await auth.scanCreate(params);
         const scanObject = cxCommandOutput.payload.pop();
         const scanShowObject = await auth.scanShow(scanObject.id);
@@ -50,7 +52,7 @@ describe("ScanCreate cases", () => {
         params.set(CxParamType.FILTER, "*.ts,!**/node_modules/**/*");
         params.set(CxParamType.BRANCH, "master");
         params.set(CxParamType.ADDITIONAL_PARAMETERS, "--scan-types sast");
-        const auth = await CxWrapperFactory.createWrapper(cxScanConfig);
+        const auth = await cxWrapperFactory.createWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput = await auth.scanCreate(params);
         const scanObject = cxCommandOutput.payload.pop();
         const scanShowObject = await auth.scanShow(scanObject.id);
@@ -66,7 +68,7 @@ describe("ScanCreate cases", () => {
         params.set(CxParamType.SAST_PRESET_NAME, "Checkmarx Default Fake");
         params.set(CxParamType.ADDITIONAL_PARAMETERS, "--async");
         params.set(CxParamType.BRANCH, "master");
-        const auth = await CxWrapperFactory.createWrapper(cxScanConfig);
+        const auth = await cxWrapperFactory.createWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput = await auth.scanCreate(params);
         const scanObject = cxCommandOutput.payload.pop();
         const scanShowObject = await auth.scanShow(scanObject.id);
@@ -81,7 +83,7 @@ describe("ScanCreate cases", () => {
         params.set(CxParamType.BRANCH, "master");
         params.set(CxParamType.FILTER, "*.ts,!**/node_modules/**/*");
         params.set(CxParamType.ADDITIONAL_PARAMETERS, "--async");
-        const auth = await CxWrapperFactory.createWrapper(cxScanConfig);
+        const auth = await cxWrapperFactory.createWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput = await auth.scanCreate(params);
         const scanObject = cxCommandOutput.payload.pop();
         await auth.scanCancel(scanObject.id)
@@ -90,7 +92,7 @@ describe("ScanCreate cases", () => {
     })
 
     it('KicsRealtime Successful case ', async () => {
-        const auth = await CxWrapperFactory.createWrapper(cxScanConfig);
+        const auth = await cxWrapperFactory.createWrapper(cxScanConfig);
         const [outputProcess,pid] = await auth.kicsRealtimeScan("dist/tests/data/Dockerfile","docker","-v");
         const cxCommandOutput: CxCommandOutput = await outputProcess;
         console.log(" Json object from successful no wait mode case: " + JSON.stringify( cxCommandOutput.payload));
@@ -101,7 +103,7 @@ describe("ScanCreate cases", () => {
     })
 
     it('ScaRealtime Successful case', async () => {
-        const wrapper = await CxWrapperFactory.createWrapper(cxScanConfig);
+        const wrapper = await cxWrapperFactory.createWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput = await wrapper.runScaRealtimeScan(process.cwd());
         if(cxCommandOutput.exitCode == 1) {
             expect(cxCommandOutput.payload).toBeUndefined();
@@ -113,20 +115,20 @@ describe("ScanCreate cases", () => {
 
     it("Should check if scan create is possible", async() => {
         const cxScanConfig = new BaseTest();
-        const auth = await CxWrapperFactory.createWrapper(cxScanConfig);
+        const auth = await cxWrapperFactory.createWrapper(cxScanConfig);
         const tenantSettings: boolean = await auth.ideScansEnabled();
         expect(tenantSettings).toBeDefined();
     })
 
     it("Should check if AI guided remediation is active", async() => {
         const cxScanConfig = new BaseTest();
-        const auth = await CxWrapperFactory.createWrapper(cxScanConfig);
+        const auth = await cxWrapperFactory.createWrapper(cxScanConfig);
         const aiEnabled: boolean = await auth.guidedRemediationEnabled();
         expect(aiEnabled).toBeDefined();
     })
 
     it('ScanVorpal fail case Without extensions', async () => {
-        const auth = await CxWrapperFactory.createWrapper(cxScanConfig);
+        const auth = await cxWrapperFactory.createWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput = await auth.scanVorpal("tsc/tests/data/python-file");
         console.log(" Json object from failure case: " + JSON.stringify(cxCommandOutput));
 
@@ -136,7 +138,7 @@ describe("ScanCreate cases", () => {
     });
 
     it('ScanVorpal Successful case', async () => {
-        const auth = await CxWrapperFactory.createWrapper(cxScanConfig);
+        const auth = await cxWrapperFactory.createWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput = await auth.scanVorpal("tsc/tests/data/python-vul-file.py");
         console.log("Json object from scanVorpal successful case: " + JSON.stringify(cxCommandOutput));
         const scanObject = cxCommandOutput.payload.pop();
@@ -146,7 +148,7 @@ describe("ScanCreate cases", () => {
     });
 
     it('ScanVorpal with complex name Successful case', async () => {
-        const auth = await CxWrapperFactory.createWrapper(cxScanConfig);
+        const auth = await cxWrapperFactory.createWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput = await auth.scanVorpal("tsc/tests/data/var express = require('express';.js");
         console.log("Json object from scanVorpal successful case: " + JSON.stringify(cxCommandOutput));
         const scanObject = cxCommandOutput.payload.pop();
@@ -156,7 +158,7 @@ describe("ScanCreate cases", () => {
     });
 
     it('ScanVorpal Successful case with update version', async () => {
-        const auth = await CxWrapperFactory.createWrapper(cxScanConfig);
+        const auth = await cxWrapperFactory.createWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput = await auth.scanVorpal("tsc/tests/data/python-vul-file.py", true);
         console.log("Json object from scanVorpal successful case with update version: " + JSON.stringify(cxCommandOutput));
         const scanObject = cxCommandOutput.payload.pop();
