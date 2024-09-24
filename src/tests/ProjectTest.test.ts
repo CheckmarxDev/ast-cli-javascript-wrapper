@@ -1,13 +1,15 @@
-import {CxWrapper} from '../main/wrapper/CxWrapper';
 import {CxCommandOutput} from "../main/wrapper/CxCommandOutput";
 import {BaseTest} from "./BaseTest";
 import {CxParamType} from "../main/wrapper/CxParamType";
 import CxScan from "../main/scan/CxScan";
+import CxWrapperFactory from "../main/wrapper/CxWrapperFactory";
+
+const cxWrapperFactory = new CxWrapperFactory();
 
 describe("ProjectList cases",() => {
     const cxScanConfig = new BaseTest();
     it('ProjectList Successful case', async () => {
-        const auth = new CxWrapper(cxScanConfig);
+        const auth = await cxWrapperFactory.createWrapper(cxScanConfig);
         const data = await auth.projectList("");
         const cxCommandOutput: CxCommandOutput = data;
         expect(cxCommandOutput.payload.length).toBeGreaterThan(0);
@@ -19,7 +21,7 @@ describe("ProjectList cases",() => {
         params.set(CxParamType.S, "./src");
         params.set(CxParamType.FILTER, "*.ts,!**/node_modules/**/*");
         params.set(CxParamType.BRANCH, "master");
-        const auth = new CxWrapper(cxScanConfig);
+        const auth = await cxWrapperFactory.createWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput = await auth.scanCreate(params);
         const scan: CxScan = cxCommandOutput.payload.pop();
 
@@ -34,7 +36,7 @@ describe("ProjectList cases",() => {
         params.set(CxParamType.S, "./src");
         params.set(CxParamType.FILTER, "*.ts,!**/node_modules/**/*");
         params.set(CxParamType.BRANCH, "master");
-        const auth = new CxWrapper(cxScanConfig);
+        const auth = await cxWrapperFactory.createWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput = await auth.scanCreate(params);
         const scan: CxScan = cxCommandOutput.payload.pop();
 

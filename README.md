@@ -5,7 +5,7 @@
     <img src="./logo.png" alt="Logo" width="80" height="80">
   </a>
 
-<h3 align="center">AST-CLI-JAVASCRIPT-WRAPPER</h3>
+<h3 align="center">AST-CLI-JAVASCRIPT-WRAPPER-RUNTIME-CLI</h3>
 
 <!-- TABLE OF CONTENTS -->
 <details open="open">
@@ -40,7 +40,7 @@ Add the following dependency:
 
 ```     
 "dependencies": {
-    "@checkmarxdev/ast-cli-javascript-wrapper": "{version}"
+    "@checkmarxdev/ast-cli-javascript-wrapper-runtime-cli": "{version}"
 }
 ```
 
@@ -86,7 +86,7 @@ setx PATH_TO_EXECUTABLE {value}
 
 Checkmarx - AST Integrations Team
 
-CxProject Link: [https://github.com/CheckmarxDev/ast-cli-javascript-wrapper](https://github.com/CheckmarxDev/ast-cli-javascript-wrapper)
+CxProject Link: [https://github.com/CheckmarxDev/ast-cli-javascript-wrapper-runtime-cli](https://github.com/CheckmarxDev/ast-cli-javascript-wrapper-runtime-cli)
 
 
 © 2021 Checkmarx Ltd. All Rights Reserved.

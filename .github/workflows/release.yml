@@ -42,7 +42,7 @@ permissions:
 
 jobs:
   delete:
-    uses: CheckmarxDev/ast-cli-javascript-wrapper/.github/workflows/delete-packages-and-releases.yml@main
+    uses: CheckmarxDev/ast-cli-javascript-wrapper-runtime-cli/.github/workflows/delete-packages-and-releases.yml@main
     with:
       tag: ${{ inputs.jsTag }}
     secrets: inherit
@@ -58,7 +58,6 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          lfs: true  # Ensure LFS files are checked out
 
       # GIT CONFIGURATION
       - run: |
@@ -79,14 +78,6 @@ jobs:
           else
             echo "TAG_NAME=$(npm version patch --no-git-tag-version)" >> $GITHUB_ENV
           fi
-
-      # DOWNLOAD CLI IF IT IS A DEV VERSION AND A CLI TAG WAS PROVIDED
-      - name: Download cli with tag ${{ inputs.cliTag }}
-        if: inputs.dev == true && inputs.cliTag != ''
-        run: |
-          # Update binaries
-          chmod +x ./.github/scripts/update_cli.sh
-          ./.github/scripts/update_cli.sh ${{ inputs.cliTag }}
 
       # RUN NPM INSTALL AND BUILD
       - name: NPM ci and build
