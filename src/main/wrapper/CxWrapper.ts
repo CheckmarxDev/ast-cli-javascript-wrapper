@@ -13,7 +13,7 @@ import {Semaphore} from "async-mutex";
 type ParamTypeMap = Map<CxParamType, string>;
 
 export class CxWrapper {
-    private static instances =new Map<string, CxWrapper>();
+    private static instances =new Map<string, CxWrapper>(); // Multiton pattern
     private static semaphore = new Semaphore(1);  // Semaphore with 1 slot
     config: CxConfig;
     cxInstaller: CxInstaller;
