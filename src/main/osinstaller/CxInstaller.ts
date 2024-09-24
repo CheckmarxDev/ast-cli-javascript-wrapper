@@ -102,6 +102,10 @@ export class CxInstaller {
             writer.close();
         }
     }
+    
+    private checkExecutableExists(): boolean {
+        return fs.existsSync(this.getExecutablePath());
+    }
 
     private async readASTCLIVersion(): Promise<string> {
         if (this.cliVersion) {
