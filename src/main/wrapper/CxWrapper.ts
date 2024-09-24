@@ -13,7 +13,7 @@ import {Semaphore} from "async-mutex";
 type ParamTypeMap = Map<CxParamType, string>;
 
 export class CxWrapper {
-    private static instance: CxWrapper;
+    private static instances =new Map<string, CxWrapper>();
     private static semaphore = new Semaphore(1);  // Semaphore with 1 slot
     config: CxConfig;
     cxInstaller: CxInstaller;
@@ -51,12 +51,19 @@ export class CxWrapper {
 
     static async getInstance(cxScanConfig: CxConfig, logFilePath: string): Promise<CxWrapper> {
         const [_, release] = await this.semaphore.acquire();
-        if (!CxWrapper.instance) {
-            CxWrapper.instance = new CxWrapper(cxScanConfig, logFilePath);
+        let key = this.generateKey(cxScanConfig, logFilePath);
+        let wrapper = CxWrapper.instances.get(key);
+        if (!wrapper) {
+            wrapper = new CxWrapper(cxScanConfig, logFilePath);
+            CxWrapper.instances.set(key, wrapper);
         }
         release();
 
-        return CxWrapper.instance;
+        return wrapper;
+    }
+    
+    static generateKey(config:CxConfig,logFilePath:string): string {
+        return `${config.baseUri}${config.baseAuthUri}${config.clientId}${config.clientSecret}${config.apiKey}${config.tenant}${config.additionalParameters}${config.pathToExecutable}${logFilePath}`.toLowerCase();
     }
 
     async init(): Promise<void> {
