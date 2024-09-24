@@ -19,7 +19,6 @@ describe("Authentication validation", () => {
         cxScanConfig_fail.tenant = process.env["CX_TENANT"];
         cxScanConfig_fail.apiKey = "error";
         let auth = await CxWrapperFactory.createWrapper(cxScanConfig_fail);
-        auth = auth.cloneWithNewConfig(cxScanConfig_fail);
         const cxCommandOutput: CxCommandOutput = await auth.authValidate();
         expect(cxCommandOutput.exitCode).toBe(1);
     });
