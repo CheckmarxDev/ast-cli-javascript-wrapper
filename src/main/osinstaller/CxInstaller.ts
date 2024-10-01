@@ -1,4 +1,3 @@
-import * as fsPromises from 'fs/promises';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as tar from 'tar';
@@ -6,8 +5,10 @@ import axios from 'axios';
 import * as unzipper from 'unzipper';
 import {logger} from "../wrapper/loggerConfig";
 import {finished} from 'stream/promises';
+import {promisify} from "node:util";
 
 type SupportedPlatforms = 'win32' | 'darwin' | 'linux';
+const readFileAsync = promisify(fs.readFile);
 
 export class CxInstaller {
     private readonly platform: string;
@@ -106,15 +107,15 @@ export class CxInstaller {
     private checkExecutableExists(): boolean {
         return fs.existsSync(this.getExecutablePath());
     }
-
+    
     private async readASTCLIVersion(): Promise<string> {
         if (this.cliVersion) {
             return this.cliVersion;
         }
         try {
             const versionFilePath = path.join('checkmarx-ast-cli.version');
-            const versionContent = await fsPromises.readFile(versionFilePath, 'utf-8');
-            return versionContent.trim();
+            const versionContent = await readFileAsync(versionFilePath);
+            return versionContent.toString().trim();
         } catch (error) {
             logger.warn('Error reading AST CLI version: ' + error.message);
             return this.cliDefaultVersion;
