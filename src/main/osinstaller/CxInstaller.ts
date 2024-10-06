@@ -113,13 +113,21 @@ export class CxInstaller {
             return this.cliVersion;
         }
         try {
-            const versionFilePath = path.join('checkmarx-ast-cli.version');
+            const versionFilePath = this.getVersionFilePath();
             const versionContent = await readFileAsync(versionFilePath);
             return versionContent.toString().trim();
         } catch (error) {
             logger.warn('Error reading AST CLI version: ' + error.message);
             return this.cliDefaultVersion;
         }
+    }
+    
+    private getVersionFilePath(): string {
+        const dirname = __dirname;
+        if (dirname === '/') {  // This is the root directory
+            return 'checkmarx-ast-cli.version';
+        }
+        return path.join(dirname, 'checkmarx-ast-cli.version');
     }
 
     private getCompressFolderName(): string {
