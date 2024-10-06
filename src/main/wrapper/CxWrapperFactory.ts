@@ -8,7 +8,7 @@ export interface ICxWrapperFactory {
 
 class CxWrapperFactory implements ICxWrapperFactory {
     async createWrapper(cxScanConfig: CxConfig, logFilePath?: string): Promise<CxWrapper> {
-        return await CxWrapper.getInstance(cxScanConfig, logFilePath);;
+        return await CxWrapper.getInstance(cxScanConfig, logFilePath);
     }
 }
 
