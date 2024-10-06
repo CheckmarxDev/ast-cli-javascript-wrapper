@@ -11,13 +11,13 @@ import {Semaphore} from "async-mutex";
 
 
 type ParamTypeMap = Map<CxParamType, string>;
-const semaphore = new Semaphore(1);  // Semaphore with 1 slot
-
 
 export class CxWrapper {
-    private static instances =new Map<string, CxWrapper>(); // Multiton pattern
+    private static instances = new Map<string, CxWrapper>(); // Multiton pattern
+    private static semaphore = new Semaphore(1);  // Semaphore with 1 slot
     config: CxConfig;
     cxInstaller: CxInstaller;
+
     private constructor(cxScanConfig: CxConfig, logFilePath?: string) {
         this.cxInstaller = new CxInstaller(process.platform);
         this.config = new CxConfig();
@@ -51,27 +51,30 @@ export class CxWrapper {
     }
 
     static async getInstance(cxScanConfig: CxConfig, logFilePath: string): Promise<CxWrapper> {
-        const [, release] = await semaphore.acquire();
-        const key = this.generateKey(cxScanConfig, logFilePath);
-        let wrapper = CxWrapper.instances.get(key);
-        if (!wrapper) {
-            wrapper = new CxWrapper(cxScanConfig, logFilePath);
-            CxWrapper.instances.set(key, wrapper);
-            await wrapper.init();
+        const [, release] = await this.semaphore.acquire();
+        try {
+            const key = this.generateKey(cxScanConfig, logFilePath);
+            let wrapper = CxWrapper.instances.get(key);
+            if (!wrapper) {
+                wrapper = new CxWrapper(cxScanConfig, logFilePath);
+                CxWrapper.instances.set(key, wrapper);
+                await wrapper.init();
+            }
+            return wrapper;
+        } finally {
+            console.log(`Semaphore released by process: ${process.pid}`);
+            release();
         }
-        release();
-
-        return wrapper;
     }
-    
-    static generateKey(config:CxConfig,logFilePath:string): string {
+
+    static generateKey(config: CxConfig, logFilePath: string): string {
         return `${config.baseUri}${config.baseAuthUri}${config.clientId}${config.clientSecret}${config.apiKey}${config.tenant}${config.additionalParameters}${config.pathToExecutable}${logFilePath}`.toLowerCase();
     }
 
     async init(): Promise<void> {
         return await this.cxInstaller.downloadIfNotInstalledCLI();
     }
-    
+
     public cloneWithNewConfig(scanConfig: CxConfig): CxWrapper {
         return new CxWrapper(scanConfig);
     }
