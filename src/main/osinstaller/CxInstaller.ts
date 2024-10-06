@@ -112,13 +112,17 @@ export class CxInstaller {
             return this.cliVersion;
         }
         try {
-            const versionFilePath = path.join('checkmarx-ast-cli.version');
+            const versionFilePath = this.getVersionFilePath();
             const versionContent = await fsPromises.readFile(versionFilePath, 'utf-8');
             return versionContent.trim();
         } catch (error) {
             logger.warn('Error reading AST CLI version: ' + error.message);
             return this.cliDefaultVersion;
         }
+    }
+
+    private getVersionFilePath(): string {
+        return path.join(__dirname,'../../../checkmarx-ast-cli.version');
     }
 
     private getCompressFolderName(): string {
