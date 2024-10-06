@@ -56,6 +56,7 @@ export class CxWrapper {
         if (!wrapper) {
             wrapper = new CxWrapper(cxScanConfig, logFilePath);
             CxWrapper.instances.set(key, wrapper);
+            await wrapper.init();
         }
         release();
 
