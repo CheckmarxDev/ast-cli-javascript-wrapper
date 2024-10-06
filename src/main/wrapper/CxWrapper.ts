@@ -11,10 +11,11 @@ import {Semaphore} from "async-mutex";
 
 
 type ParamTypeMap = Map<CxParamType, string>;
+const semaphore = new Semaphore(1);  // Semaphore with 1 slot
+
 
 export class CxWrapper {
     private static instances =new Map<string, CxWrapper>(); // Multiton pattern
-    private static semaphore = new Semaphore(1);  // Semaphore with 1 slot
     config: CxConfig;
     cxInstaller: CxInstaller;
     private constructor(cxScanConfig: CxConfig, logFilePath?: string) {
@@ -50,7 +51,7 @@ export class CxWrapper {
     }
 
     static async getInstance(cxScanConfig: CxConfig, logFilePath: string): Promise<CxWrapper> {
-        const [, release] = await this.semaphore.acquire();
+        const [, release] = await semaphore.acquire();
         const key = this.generateKey(cxScanConfig, logFilePath);
         let wrapper = CxWrapper.instances.get(key);
         if (!wrapper) {
