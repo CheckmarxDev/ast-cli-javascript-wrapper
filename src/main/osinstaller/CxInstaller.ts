@@ -123,11 +123,7 @@ export class CxInstaller {
     }
     
     private getVersionFilePath(): string {
-        const processCwd = process.cwd();
-        if (processCwd === '/') {  // This is the root directory
-            return 'checkmarx-ast-cli.version';
-        }
-        return path.join(processCwd, 'checkmarx-ast-cli.version');
+        return path.join(process.cwd(), 'checkmarx-ast-cli.version');
     }
 
     private getCompressFolderName(): string {
