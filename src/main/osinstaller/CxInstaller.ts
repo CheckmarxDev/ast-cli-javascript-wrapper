@@ -41,10 +41,10 @@ export class CxInstaller {
             throw new Error('Unsupported platform or architecture');
         }
 
-        const arch = this.getArchitecture();
-        logger.info(`Platform: ${this.platform}, Arch: ${arch}`);
+        const architecture = this.getArchitecture();
+        logger.info(`Platform: ${this.platform}, Arch: ${architecture}`);
 
-        return `https://download.checkmarx.com/CxOne/CLI/${cliVersion}/ast-cli_${cliVersion}_${platformData.platform}_${arch}.${platformData.extension}`;
+        return `https://download.checkmarx.com/CxOne/CLI/${cliVersion}/ast-cli_${cliVersion}_${platformData.platform}_${architecture}.${platformData.extension}`;
     }
 
     private getArchitecture(): string {
