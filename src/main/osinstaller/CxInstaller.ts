@@ -2,42 +2,65 @@ import * as fsPromises from 'fs/promises';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as tar from 'tar';
-import axios, {AxiosRequestConfig} from 'axios';
 import * as unzipper from 'unzipper';
 import {logger} from "../wrapper/loggerConfig";
-import {finished} from 'stream/promises';
+import {Client} from "../client/Client";
 
 type SupportedPlatforms = 'win32' | 'darwin' | 'linux';
 
+interface PlatformData {
+    platform: string;
+    extension: string;
+}
+
 export class CxInstaller {
-    private readonly platform: string;
+    private readonly platform: SupportedPlatforms;
     private cliVersion: string;
     private readonly resourceDirPath: string;
     private readonly installedCLIVersionFileName = 'cli-version';
-    private readonly cliDefaultVersion = '2.2.5'; // This will be used if the version file is not found. Should be updated with the latest version.
+    private readonly cliDefaultVersion = '2.2.5'; // Update this with the latest version.
+    private readonly client;
 
-    constructor(platform: string) {
-        this.platform = platform;
-        this.resourceDirPath = path.join(__dirname, `../wrapper/resources`);
+    private static readonly PLATFORMS: Record<SupportedPlatforms, PlatformData> = {
+        win32: { platform: 'windows', extension: 'zip' },
+        darwin: { platform: 'darwin', extension: 'tar.gz' },
+        linux: { platform: 'linux', extension: 'tar.gz' }
+    };
+
+    constructor(platform: string, client: Client) {
+        this.platform = platform as SupportedPlatforms;
+        this.resourceDirPath = path.join(__dirname, '../wrapper/resources');
+        this.client = client;
     }
 
     private async getDownloadURL(): Promise<string> {
         const cliVersion = await this.readASTCLIVersion();
+        const platformData = CxInstaller.PLATFORMS[this.platform];
 
-        const platforms: Record<SupportedPlatforms, { platform: string; extension: string }> = {
-            win32: {platform: 'windows', extension: 'zip'},
-            darwin: {platform: 'darwin', extension: 'tar.gz'},
-            linux: {platform: 'linux', extension: 'tar.gz'}
-        };
-
-        const platformKey = this.platform as SupportedPlatforms;
-
-        const platformData = platforms[platformKey];
         if (!platformData) {
             throw new Error('Unsupported platform or architecture');
         }
 
-        return `https://download.checkmarx.com/CxOne/CLI/${cliVersion}/ast-cli_${cliVersion}_${platformData.platform}_x64.${platformData.extension}`;
+        const arch = this.getArchitecture();
+        logger.info(`Platform: ${this.platform}, Arch: ${arch}`);
+
+        return `https://download.checkmarx.com/CxOne/CLI/${cliVersion}/ast-cli_${cliVersion}_${platformData.platform}_${arch}.${platformData.extension}`;
+    }
+
+    private getArchitecture(): string {
+        // For non-linux platforms we default to x64.
+        if (this.platform !== 'linux') {
+            return 'x64';
+        }
+        
+        switch (process.arch) {
+            case 'arm64':
+                return 'arm64';
+            case 'arm':
+                return 'armv6';
+            default:
+                return 'x64';
+        }
     }
 
     public getExecutablePath(): string {
@@ -62,7 +85,7 @@ export class CxInstaller {
             const url = await this.getDownloadURL();
             const zipPath = path.join(this.resourceDirPath, this.getCompressFolderName());
 
-            await this.downloadFile(url, zipPath);
+            await this.client.downloadFile(url, zipPath);
             logger.info('Downloaded CLI to:', zipPath);
 
             await this.extractArchive(zipPath, this.resourceDirPath);
@@ -146,59 +169,6 @@ export class CxInstaller {
             return null;
         }
     }
-
-    private async downloadFile(url: string, outputPath: string) {
-        logger.info(`Starting download from URL: ${url}`);
-        const writer = fs.createWriteStream(outputPath);
-
-        try {
-            // Create base Axios configuration
-            const axiosConfig: AxiosRequestConfig = {
-                url,
-                responseType: 'stream',
-            };
-
-            // Configure proxy if HTTP_PROXY environment variable is set
-            const proxyUrl = process.env.HTTP_PROXY;
-            if (proxyUrl) {
-                logger.info(`Detected proxy configuration in HTTP_PROXY`);
-                const parsedProxy = new URL(proxyUrl);
-
-                axiosConfig.proxy = {
-                    host: parsedProxy.hostname,
-                    port: parseInt(parsedProxy.port, 10),
-                    protocol: parsedProxy.protocol.replace(':', ''), // remove the colon
-                    auth: parsedProxy.username && parsedProxy.password
-                        ? {username: parsedProxy.username, password: parsedProxy.password}
-                        : undefined, // Only include auth if credentials are provided
-                };
-
-                logger.info(
-                    `Using proxy - Host: ${axiosConfig.proxy.host}, Port: ${axiosConfig.proxy.port}, ` +
-                    `Protocol: ${axiosConfig.proxy.protocol}, Auth: ${axiosConfig.proxy.auth ? 'Yes' : 'No'}`
-                );
-            } else {
-                logger.info('No proxy configuration detected.');
-            }
-
-            // Perform the download request
-            logger.info(`Initiating download request to: ${url}`);
-            const response = await axios(axiosConfig);
-
-            // Pipe the response data to the output file
-            response.data.pipe(writer);
-
-            // Await the completion of the write stream
-            await finished(writer);
-            logger.info(`Download completed successfully. File saved to: ${outputPath}`);
-        } catch (error) {
-            logger.error(`Error downloading file from ${url}: ${error.message || error}`);
-        } finally {
-            writer.close();
-            logger.info('Write stream closed.');
-        }
-    }
-
 
     private checkExecutableExists(): boolean {
         return fs.existsSync(this.getExecutablePath());
