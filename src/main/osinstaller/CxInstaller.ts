@@ -19,7 +19,7 @@ export class CxInstaller {
     private readonly resourceDirPath: string;
     private readonly installedCLIVersionFileName = 'cli-version';
     private readonly cliDefaultVersion = '2.2.5'; // Update this with the latest version.
-    private readonly client;
+    private readonly client: Client;
 
     private static readonly PLATFORMS: Record<SupportedPlatforms, PlatformData> = {
         win32: { platform: 'windows', extension: 'zip' },
