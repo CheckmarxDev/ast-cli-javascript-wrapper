@@ -13,6 +13,7 @@ export class CxInstaller {
     private readonly platform: string;
     private cliVersion: string;
     private readonly resourceDirPath: string;
+    private readonly installedCLIVersionFileName = 'cli-version';
     private readonly cliDefaultVersion = '2.2.5'; // This will be used if the version file is not found. Should be updated with the latest version.
 
     constructor(platform: string) {
@@ -47,11 +48,17 @@ export class CxInstaller {
     public async downloadIfNotInstalledCLI(): Promise<void> {
         try {
             await fs.promises.mkdir(this.resourceDirPath, {recursive: true});
+            const cliVersion = await this.readASTCLIVersion();
 
             if (this.checkExecutableExists()) {
-                logger.info('Executable already installed.');
-                return;
+                const installedVersion = await this.readInstalledVersionFile(this.resourceDirPath);
+                if (installedVersion === cliVersion) {
+                    logger.info('Executable already installed.');
+                    return;
+                }
             }
+            
+            await this.cleanDirectoryContents(this.resourceDirPath);
             const url = await this.getDownloadURL();
             const zipPath = path.join(this.resourceDirPath, this.getCompressFolderName());
 
@@ -59,6 +66,7 @@ export class CxInstaller {
             logger.info('Downloaded CLI to:', zipPath);
 
             await this.extractArchive(zipPath, this.resourceDirPath);
+            await this.saveVersionFile(this.resourceDirPath, cliVersion);
 
             fs.unlink(zipPath, (err) => {
                 if (err) {
@@ -75,6 +83,33 @@ export class CxInstaller {
         }
     }
 
+    private async cleanDirectoryContents(directoryPath: string): Promise<void> {
+        try {
+            const files = await fsPromises.readdir(directoryPath);
+
+            await Promise.all(files.map(async (file) => {
+                const filePath = path.join(directoryPath, file);
+                const fileStat = await fsPromises.stat(filePath);
+
+                if (fileStat.isDirectory()) {
+                    await fsPromises.rm(filePath, { recursive: true, force: true });
+                    logger.info(`Directory ${filePath} deleted.`);
+                } else {
+                    await fsPromises.unlink(filePath);
+                    logger.info(`File ${filePath} deleted.`);
+                }
+            }));
+
+            logger.info(`All contents in ${directoryPath} have been cleaned.`);
+        } catch (error) {
+            if (error.code === 'ENOENT') {
+                logger.info(`Directory at ${directoryPath} does not exist.`);
+            } else {
+                logger.error(`Failed to clean directory contents: ${error.message}`);
+            }
+        }
+    }
+
     private async extractArchive(zipPath: string, extractPath: string): Promise<void> {
         if (zipPath.endsWith('.zip')) {
             await unzipper.Open.file(zipPath)
@@ -83,6 +118,32 @@ export class CxInstaller {
             await tar.extract({file: zipPath, cwd: extractPath});
         } else {
             logger.error('Unsupported file type. Only .zip and .tar.gz are supported.');
+        }
+    }
+
+    private async saveVersionFile(resourcePath: string, version: string): Promise<void> {
+        const versionFilePath = path.join(resourcePath, this.installedCLIVersionFileName);
+        try {
+            await fsPromises.writeFile(versionFilePath, `${version}`, 'utf8');
+            logger.info(`Version file created at ${versionFilePath} with version ${version}`);
+        } catch (error) {
+            logger.error(`Failed to create version file: ${error.message}`);
+        }
+    }
+
+    private async readInstalledVersionFile(resourcePath: string): Promise<string | null> {
+        const versionFilePath = path.join(resourcePath, this.installedCLIVersionFileName);
+        try {
+            const content = await fsPromises.readFile(versionFilePath, 'utf8');
+            logger.info(`Version file content: ${content}`);
+            return content;
+        } catch (error) {
+            if (error.code === 'ENOENT') {
+                logger.warn(`Version file not found at ${versionFilePath}.`);
+            } else {
+                logger.error(`Failed to read version file: ${error.message}`);
+            }
+            return null;
         }
     }
 
