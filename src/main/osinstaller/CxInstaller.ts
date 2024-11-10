@@ -2,7 +2,7 @@ import * as fsPromises from 'fs/promises';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as tar from 'tar';
-import axios from 'axios';
+import axios, {AxiosRequestConfig} from 'axios';
 import * as unzipper from 'unzipper';
 import {logger} from "../wrapper/loggerConfig";
 import {finished} from 'stream/promises';
@@ -57,7 +57,7 @@ export class CxInstaller {
                     return;
                 }
             }
-            
+
             await this.cleanDirectoryContents(this.resourceDirPath);
             const url = await this.getDownloadURL();
             const zipPath = path.join(this.resourceDirPath, this.getCompressFolderName());
@@ -92,7 +92,7 @@ export class CxInstaller {
                 const fileStat = await fsPromises.stat(filePath);
 
                 if (fileStat.isDirectory()) {
-                    await fsPromises.rm(filePath, { recursive: true, force: true });
+                    await fsPromises.rm(filePath, {recursive: true, force: true});
                     logger.info(`Directory ${filePath} deleted.`);
                 } else {
                     await fsPromises.unlink(filePath);
@@ -148,22 +148,58 @@ export class CxInstaller {
     }
 
     private async downloadFile(url: string, outputPath: string) {
-        logger.info('Downloading file from:', url);
+        logger.info(`Starting download from URL: ${url}`);
         const writer = fs.createWriteStream(outputPath);
 
         try {
-            const response = await axios({url, responseType: 'stream'});
+            // Create base Axios configuration
+            const axiosConfig: AxiosRequestConfig = {
+                url,
+                responseType: 'stream',
+            };
+
+            // Configure proxy if HTTP_PROXY environment variable is set
+            const proxyUrl = process.env.HTTP_PROXY;
+            if (proxyUrl) {
+                logger.info(`Detected proxy configuration in HTTP_PROXY`);
+                const parsedProxy = new URL(proxyUrl);
+
+                axiosConfig.proxy = {
+                    host: parsedProxy.hostname,
+                    port: parseInt(parsedProxy.port, 10),
+                    protocol: parsedProxy.protocol.replace(':', ''), // remove the colon
+                    auth: parsedProxy.username && parsedProxy.password
+                        ? {username: parsedProxy.username, password: parsedProxy.password}
+                        : undefined, // Only include auth if credentials are provided
+                };
+
+                logger.info(
+                    `Using proxy - Host: ${axiosConfig.proxy.host}, Port: ${axiosConfig.proxy.port}, ` +
+                    `Protocol: ${axiosConfig.proxy.protocol}, Auth: ${axiosConfig.proxy.auth ? 'Yes' : 'No'}`
+                );
+            } else {
+                logger.info('No proxy configuration detected.');
+            }
+
+            // Perform the download request
+            logger.info(`Initiating download request to: ${url}`);
+            const response = await axios(axiosConfig);
+
+            // Pipe the response data to the output file
             response.data.pipe(writer);
 
-            await finished(writer); // Use stream promises to await the writer
-            logger.info('Download finished');
+            // Await the completion of the write stream
+            await finished(writer);
+            logger.info(`Download completed successfully. File saved to: ${outputPath}`);
         } catch (error) {
-            logger.error('Error downloading file:', error.message || error);
+            logger.error(`Error downloading file from ${url}: ${error.message || error}`);
         } finally {
             writer.close();
+            logger.info('Write stream closed.');
         }
     }
-    
+
+
     private checkExecutableExists(): boolean {
         return fs.existsSync(this.getExecutablePath());
     }
@@ -183,7 +219,7 @@ export class CxInstaller {
     }
 
     private getVersionFilePath(): string {
-        return path.join(__dirname,'../../../checkmarx-ast-cli.version');
+        return path.join(__dirname, '../../../checkmarx-ast-cli.version');
     }
 
     private getCompressFolderName(): string {
