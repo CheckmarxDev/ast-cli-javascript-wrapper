@@ -42,7 +42,6 @@ export class CxInstaller {
         }
 
         const architecture = this.getArchitecture();
-        logger.info(`Platform: ${this.platform}, Arch: ${architecture}`);
 
         return `https://download.checkmarx.com/CxOne/CLI/${cliVersion}/ast-cli_${cliVersion}_${platformData.platform}_${architecture}.${platformData.extension}`;
     }
