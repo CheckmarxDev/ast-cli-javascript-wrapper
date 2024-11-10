@@ -52,15 +52,14 @@ export class CxInstaller {
         if (this.platform !== 'linux') {
             return 'x64';
         }
-        
-        switch (process.arch) {
-            case 'arm64':
-                return 'arm64';
-            case 'arm':
-                return 'armv6';
-            default:
-                return 'x64';
-        }
+
+        const archMap: Record<string, string> = {
+            'arm64': 'arm64',
+            'arm': 'armv6'
+        };
+
+        // Default to 'x64' if the current architecture is not found in the map.
+        return archMap[process.arch] || 'x64';
     }
 
     public getExecutablePath(): string {
