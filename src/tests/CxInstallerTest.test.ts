@@ -55,7 +55,7 @@ describe("CxInstaller checkExecutableExists cases", () => {
         await cxInstallerWindows.downloadIfNotInstalledCLI();
     });
 
-    it('CxInstaller checkExecutableExists Windows Successful case', () => {
+    it('CxInstaller checkExecutableExists Windows Fail case', () => {
         const exists = cxInstallerWindows.checkExecutableExists();
         expect(exists).toBe(false);
 
