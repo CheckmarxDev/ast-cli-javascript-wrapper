@@ -1,7 +1,5 @@
-import axios, {AxiosRequestConfig} from 'axios';
+import axios, {AxiosRequestConfig, AxiosResponse} from 'axios';
 import {logger} from '../wrapper/loggerConfig';
-import * as fs from 'fs';
-import {finished} from 'stream/promises';
 import {Client} from "./Client";
 
 export class HttpClient implements Client {
@@ -32,28 +30,22 @@ export class HttpClient implements Client {
         logger.info('No proxy configuration detected.');
         return undefined;
     }
-
-    public async downloadFile(url: string, outputPath: string): Promise<void> {
-        logger.info(`Starting download from URL: ${url}`);
-        const writer = fs.createWriteStream(outputPath);
-
+    
+    public async request(url: string, method: string, data: any): Promise<AxiosResponse<any, any>> {
+        logger.info(`Sending ${method} request to URL: ${url}`);
+        if (this.axiosConfig.proxy) {
+            logger.info(
+                `Using proxy - Host: ${this.axiosConfig.proxy.host}, Port: ${this.axiosConfig.proxy.port},`  +
+                `Protocol: ${this.axiosConfig.proxy.protocol}, Auth: ${this.axiosConfig.proxy.auth ? 'Yes' : 'No'}`
+            );
+        }
         try {
-            if (this.axiosConfig.proxy) {
-                logger.info(
-                    `Using proxy - Host: ${this.axiosConfig.proxy.host}, Port: ${this.axiosConfig.proxy.port},`  +
-                    `Protocol: ${this.axiosConfig.proxy.protocol}, Auth: ${this.axiosConfig.proxy.auth ? 'Yes' : 'No'}`
-                );
-            }
-            const response = await axios({...this.axiosConfig, url});
-            response.data.pipe(writer);
-            await finished(writer);
-            logger.info(`Download completed successfully. File saved to: ${outputPath}`);
+            const response = await axios({...this.axiosConfig, url, method, data});
+            logger.info(`Request completed successfully.`);
+            return response;
         } catch (error) {
-            logger.error(`Error downloading file from ${url}: ${error.message || error}`);
+            logger.error(`Error sending ${method} request to ${url}: ${error.message || error}`);
             throw error;
-        } finally {
-            writer.close();
-            logger.info('Write stream closed.');
         }
     }
 }
