@@ -25,7 +25,7 @@ export class CxInstaller {
     private readonly client: Client;
 
     private static readonly PLATFORMS: Record<SupportedPlatforms, PlatformData> = {
-        win32: { platform: winOS, extension: 'zip' },
+        win32: { platform: 'windows', extension: 'zip' },
         darwin: { platform: macOS, extension: 'tar.gz' },
         linux: { platform: linuxOS, extension: 'tar.gz' }
     };
@@ -36,7 +36,7 @@ export class CxInstaller {
         this.client = client;
     }
 
-    private async getDownloadURL(): Promise<string> {
+    async getDownloadURL(): Promise<string> {
         const cliVersion = await this.readASTCLIVersion();
         const platformData = CxInstaller.PLATFORMS[this.platform];
 
@@ -65,7 +65,7 @@ export class CxInstaller {
     }
 
     public getExecutablePath(): string {
-        const executableName = this.platform === 'win32' ? 'cx.exe' : 'cx';
+        const executableName = this.platform === winOS ? 'cx.exe' : 'cx';
         return path.join(this.resourceDirPath, executableName);
     }
 
@@ -170,7 +170,7 @@ export class CxInstaller {
         }
     }
 
-    private checkExecutableExists(): boolean {
+    public checkExecutableExists(): boolean {
         return fs.existsSync(this.getExecutablePath());
     }
 
@@ -194,5 +194,9 @@ export class CxInstaller {
 
     private getCompressFolderName(): string {
         return `ast-cli.${this.platform === winOS ? 'zip' : 'tar.gz'}`;
+    }
+    
+    public getPlatform(): SupportedPlatforms {
+        return this.platform;
     }
 }
