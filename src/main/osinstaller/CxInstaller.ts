@@ -6,6 +6,9 @@ import * as unzipper from 'unzipper';
 import {logger} from "../wrapper/loggerConfig";
 import {Client} from "../client/Client";
 
+const linuxOS = 'linux';
+const macOS = 'darwin';
+const winOS = 'win32';
 type SupportedPlatforms = 'win32' | 'darwin' | 'linux';
 
 interface PlatformData {
@@ -22,9 +25,9 @@ export class CxInstaller {
     private readonly client: Client;
 
     private static readonly PLATFORMS: Record<SupportedPlatforms, PlatformData> = {
-        win32: { platform: 'windows', extension: 'zip' },
-        darwin: { platform: 'darwin', extension: 'tar.gz' },
-        linux: { platform: 'linux', extension: 'tar.gz' }
+        win32: { platform: winOS, extension: 'zip' },
+        darwin: { platform: macOS, extension: 'tar.gz' },
+        linux: { platform: linuxOS, extension: 'tar.gz' }
     };
 
     constructor(platform: string, client: Client) {
@@ -48,7 +51,7 @@ export class CxInstaller {
 
     private getArchitecture(): string {
         // For non-linux platforms we default to x64.
-        if (this.platform !== 'linux') {
+        if (this.platform !== linuxOS) {
             return 'x64';
         }
 
@@ -84,7 +87,6 @@ export class CxInstaller {
             const zipPath = path.join(this.resourceDirPath, this.getCompressFolderName());
 
             await this.client.downloadFile(url, zipPath);
-            logger.info('Downloaded CLI to:', zipPath);
 
             await this.extractArchive(zipPath, this.resourceDirPath);
             await this.saveVersionFile(this.resourceDirPath, cliVersion);
@@ -191,6 +193,6 @@ export class CxInstaller {
     }
 
     private getCompressFolderName(): string {
-        return `ast-cli.${this.platform === 'win32' ? 'zip' : 'tar.gz'}`;
+        return `ast-cli.${this.platform === winOS ? 'zip' : 'tar.gz'}`;
     }
 }
