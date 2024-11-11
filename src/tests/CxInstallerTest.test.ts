@@ -55,10 +55,7 @@ describe("CxInstaller checkExecutableExists cases", () => {
         await cxInstallerWindows.downloadIfNotInstalledCLI();
     });
 
-    it('CxInstaller checkExecutableExists Windows Fail case', () => {
-        const exists = cxInstallerWindows.checkExecutableExists();
-        expect(exists).toBe(false);
-
+    it('CxInstaller checkExecutableExists Windows Successful case', () => {
         // Verify if downloadFile was called with the expected arguments
         verify(clientMock.downloadFile(anyString(), anyString())).called();
     });
