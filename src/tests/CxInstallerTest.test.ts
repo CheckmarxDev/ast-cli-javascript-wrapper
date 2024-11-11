@@ -1,13 +1,15 @@
 import { CxInstaller } from "../main/osinstaller/CxInstaller";
 import { anyString, mock, instance, when, verify } from "ts-mockito";
-import { HttpClient } from "../main/client/HttpClient";
+import { AstClient } from "../main/client/AstClient";
 
-const clientMock = mock(HttpClient);
-const clientMockInstance = instance(clientMock);
+// Mock AstClient and set up an instance from it
+const astClientMock = mock(AstClient);
+const astClientInstance = instance(astClientMock);
 
-const cxInstallerLinux = new CxInstaller("linux", clientMockInstance);
-const cxInstallerMac = new CxInstaller("darwin", clientMockInstance);
-const cxInstallerWindows = new CxInstaller("win32", clientMockInstance);
+// Create CxInstaller instances with the mocked AstClient
+const cxInstallerLinux = new CxInstaller("linux", astClientInstance);
+const cxInstallerMac = new CxInstaller("darwin", astClientInstance);
+const cxInstallerWindows = new CxInstaller("win32", astClientInstance);
 
 describe("CxInstaller cases", () => {
     it('CxInstaller getDownloadURL Linux Successful case', async () => {
@@ -48,16 +50,12 @@ describe("CxInstaller getExecutablePath cases", () => {
 
 describe("CxInstaller checkExecutableExists cases", () => {
     beforeAll(async () => {
-        // Set up mock behavior
-        when(clientMock.downloadFile(anyString(), anyString())).thenResolve();
-
-        // Trigger the download
+        when(astClientMock.downloadFile(anyString(), anyString())).thenResolve(); // Set up mock behavior here
         await cxInstallerWindows.downloadIfNotInstalledCLI();
     });
 
     it('CxInstaller checkExecutableExists Windows Successful case', () => {
-        // Verify if downloadFile was called with the expected arguments
-        verify(clientMock.downloadFile(anyString(), anyString())).called();
+        verify(astClientMock.downloadFile(anyString(), anyString())).called();
     });
 });
 

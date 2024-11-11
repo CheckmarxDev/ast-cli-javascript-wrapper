@@ -4,7 +4,7 @@ import * as path from 'path';
 import * as tar from 'tar';
 import * as unzipper from 'unzipper';
 import {logger} from "../wrapper/loggerConfig";
-import {Client} from "../client/Client";
+import {AstClient} from "../client/AstClient";
 
 const linuxOS = 'linux';
 const macOS = 'darwin';
@@ -22,7 +22,7 @@ export class CxInstaller {
     private readonly resourceDirPath: string;
     private readonly installedCLIVersionFileName = 'cli-version';
     private readonly cliDefaultVersion = '2.2.5'; // Update this with the latest version.
-    private readonly client: Client;
+    private readonly client: AstClient;
 
     private static readonly PLATFORMS: Record<SupportedPlatforms, PlatformData> = {
         win32: { platform: 'windows', extension: 'zip' },
@@ -30,7 +30,7 @@ export class CxInstaller {
         linux: { platform: linuxOS, extension: 'tar.gz' }
     };
 
-    constructor(platform: string, client: Client) {
+    constructor(platform: string, client: AstClient) {
         this.platform = platform as SupportedPlatforms;
         this.resourceDirPath = path.join(__dirname, '../wrapper/resources');
         this.client = client;
