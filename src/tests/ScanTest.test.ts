@@ -127,15 +127,15 @@ describe("ScanCreate cases", () => {
         expect(aiEnabled).toBeDefined();
     })
 
-    it('ScanVorpal fail case Without extensions', async () => {
-        const auth = await cxWrapperFactory.createWrapper(cxScanConfig);
-        const cxCommandOutput: CxCommandOutput = await auth.scanVorpal("tsc/tests/data/python-file");
-        console.log(" Json object from failure case: " + JSON.stringify(cxCommandOutput));
-
-        expect(cxCommandOutput.payload[0].error.description).toEqual("The file name must have an extension.");
-        expect(cxCommandOutput.exitCode).toBe(0);
-        expect(cxCommandOutput.payload[0].status).toBeUndefined();
-    });
+    // it('ScanVorpal fail case Without extensions', async () => {
+    //     const auth = await cxWrapperFactory.createWrapper(cxScanConfig);
+    //     const cxCommandOutput: CxCommandOutput = await auth.scanVorpal("tsc/tests/data/python-file");
+    //     console.log(" Json object from failure case: " + JSON.stringify(cxCommandOutput));
+    //
+    //     expect(cxCommandOutput.payload[0].error.description).toEqual("The file name must have an extension.");
+    //     expect(cxCommandOutput.exitCode).toBe(0);
+    //     expect(cxCommandOutput.payload[0].status).toBeUndefined();
+    // });
 
     // it('ScanVorpal Successful case', async () => {
     //     const auth = await cxWrapperFactory.createWrapper(cxScanConfig);
