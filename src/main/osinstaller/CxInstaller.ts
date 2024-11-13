@@ -174,7 +174,7 @@ export class CxInstaller {
         return fs.existsSync(this.getExecutablePath());
     }
 
-    private async readASTCLIVersion(): Promise<string> {
+    async readASTCLIVersion(): Promise<string> {
         if (this.cliVersion) {
             return this.cliVersion;
         }
