@@ -14,20 +14,23 @@ const cxInstallerWindows = new CxInstaller("win32", astClientInstance);
 describe("CxInstaller cases", () => {
     it('CxInstaller getDownloadURL Linux Successful case', async () => {
         const url = await cxInstallerLinux.getDownloadURL();
+        const version = await cxInstallerLinux.readASTCLIVersion();
         const architecture = getArchitecture(cxInstallerLinux.getPlatform());
-        expect(url).toBe(`https://download.checkmarx.com/CxOne/CLI/2.2.5/ast-cli_2.2.5_linux_${architecture}.tar.gz`);
+        expect(url).toBe(`https://download.checkmarx.com/CxOne/CLI/${version}/ast-cli_${version}_linux_${architecture}.tar.gz`);
     });
 
     it('CxInstaller getDownloadURL Mac Successful case', async () => {
         const url = await cxInstallerMac.getDownloadURL();
+        const version = await cxInstallerLinux.readASTCLIVersion();
         const architecture = getArchitecture(cxInstallerMac.getPlatform());
-        expect(url).toBe(`https://download.checkmarx.com/CxOne/CLI/2.2.5/ast-cli_2.2.5_darwin_${architecture}.tar.gz`);
+        expect(url).toBe(`https://download.checkmarx.com/CxOne/CLI/${version}/ast-cli_${version}_darwin_${architecture}.tar.gz`);
     });
 
     it('CxInstaller getDownloadURL Windows Successful case', async () => {
         const url = await cxInstallerWindows.getDownloadURL();
+        const version = await cxInstallerLinux.readASTCLIVersion();
         const architecture = getArchitecture(cxInstallerWindows.getPlatform());
-        expect(url).toBe(`https://download.checkmarx.com/CxOne/CLI/2.2.5/ast-cli_2.2.5_windows_${architecture}.zip`);
+        expect(url).toBe(`https://download.checkmarx.com/CxOne/CLI/${version}/ast-cli_${version}_windows_${architecture}.zip`);
     });
 });
 
