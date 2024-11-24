@@ -105,7 +105,6 @@ export class CxInstaller {
         } catch (error) {
             logger.error('Error during installation:', error);
             if (error instanceof CxError) {
-                logger.error('Error message:', error.message);
                 process.exit(1);
             }
         }
