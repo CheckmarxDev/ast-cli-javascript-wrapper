@@ -25,9 +25,9 @@ export class CxInstaller {
     private readonly client: AstClient;
 
     private static readonly PLATFORMS: Record<SupportedPlatforms, PlatformData> = {
-        win32: { platform: 'windows', extension: 'zip' },
-        darwin: { platform: macOS, extension: 'tar.gz' },
-        linux: { platform: linuxOS, extension: 'tar.gz' }
+        win32: {platform: 'windows', extension: 'zip'},
+        darwin: {platform: macOS, extension: 'tar.gz'},
+        linux: {platform: linuxOS, extension: 'tar.gz'}
     };
 
     constructor(platform: string, client: AstClient) {
@@ -74,12 +74,8 @@ export class CxInstaller {
             await fs.promises.mkdir(this.resourceDirPath, {recursive: true});
             const cliVersion = await this.readASTCLIVersion();
 
-            if (this.checkExecutableExists()) {
-                const installedVersion = await this.readInstalledVersionFile(this.resourceDirPath);
-                if (installedVersion === cliVersion) {
-                    logger.info('Executable already installed.');
-                    return;
-                }
+            if (await this.checkLatestExecutableVersionIsInstalled()) {
+                return;
             }
 
             await this.cleanDirectoryContents(this.resourceDirPath);
@@ -102,9 +98,25 @@ export class CxInstaller {
             fs.chmodSync(this.getExecutablePath(), 0o755);
             logger.info('Extracted CLI to:', this.resourceDirPath);
         } catch (error) {
+            if (await this.checkLatestExecutableVersionIsInstalled()) {
+                return;
+            }
             logger.error('Error during installation:', error);
             process.exit(1);
         }
+    }
+
+    private async checkLatestExecutableVersionIsInstalled(): Promise<boolean> {
+        const cliVersion = await this.readASTCLIVersion();
+
+        if (this.checkExecutableExists()) {
+            const installedVersion = await this.readInstalledVersionFile(this.resourceDirPath);
+            if (installedVersion === cliVersion) {
+                logger.info('Executable already installed.');
+                return true;
+            }
+        }
+        return false;
     }
 
     private async cleanDirectoryContents(directoryPath: string): Promise<void> {
@@ -196,7 +208,7 @@ export class CxInstaller {
     private getCompressFolderName(): string {
         return `ast-cli.${this.platform === winOS ? 'zip' : 'tar.gz'}`;
     }
-    
+
     public getPlatform(): SupportedPlatforms {
         return this.platform;
     }
