@@ -2,6 +2,7 @@ import {logger} from '../wrapper/loggerConfig';
 import * as fs from 'fs';
 import {finished} from 'stream/promises';
 import {Client} from "./Client";
+import {CxError} from "../errors/CxError";
 
 export class AstClient {
     private client: Client;
@@ -20,7 +21,7 @@ export class AstClient {
             logger.info(`Download completed successfully. File saved to: ${outputPath}`);
         } catch (error) {
             logger.error(`Error downloading file from ${url}: ${error.message || error}`);
-            throw error;
+            throw new CxError(error.message || error);
         } finally {
             writer.close();
         }

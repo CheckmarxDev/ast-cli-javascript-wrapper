@@ -5,6 +5,7 @@ import * as tar from 'tar';
 import * as unzipper from 'unzipper';
 import {logger} from "../wrapper/loggerConfig";
 import {AstClient} from "../client/AstClient";
+import {CxError} from "../errors/CxError";
 
 const linuxOS = 'linux';
 const macOS = 'darwin';
@@ -41,7 +42,7 @@ export class CxInstaller {
         const platformData = CxInstaller.PLATFORMS[this.platform];
 
         if (!platformData) {
-            throw new Error('Unsupported platform or architecture');
+            throw new CxError('Unsupported platform or architecture');
         }
 
         const architecture = this.getArchitecture();
@@ -103,7 +104,10 @@ export class CxInstaller {
             logger.info('Extracted CLI to:', this.resourceDirPath);
         } catch (error) {
             logger.error('Error during installation:', error);
-            process.exit(1);
+            if (error instanceof CxError) {
+                logger.error('Error message:', error.message);
+                process.exit(1);
+            }
         }
     }
 
