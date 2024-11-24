@@ -98,11 +98,7 @@ export class CxInstaller {
             fs.chmodSync(this.getExecutablePath(), 0o755);
             logger.info('Extracted CLI to:', this.resourceDirPath);
         } catch (error) {
-            if (await this.checkLatestExecutableVersionIsInstalled()) {
-                return;
-            }
             logger.error('Error during installation:', error);
-            process.exit(1);
         }
     }
 
