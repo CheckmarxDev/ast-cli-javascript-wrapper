@@ -103,6 +103,7 @@ export class CxInstaller {
             logger.info('Extracted CLI to:', this.resourceDirPath);
         } catch (error) {
             logger.error('Error during installation:', error);
+            process.exit(1);
         }
     }
 

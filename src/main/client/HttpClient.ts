@@ -4,6 +4,7 @@ import {Client} from "./Client";
 
 export class HttpClient implements Client {
     private readonly axiosConfig: AxiosRequestConfig;
+    private readonly domainErrMsg = 'Unable to download the CLI from the URL. Try adding the domain: \'download.checkmarx.com\' to your allow list.';
 
     constructor() {
         this.axiosConfig = {
@@ -45,6 +46,9 @@ export class HttpClient implements Client {
             return response;
         } catch (error) {
             logger.error(`Error sending ${method} request to ${url}: ${error.message || error}`);
+            if (this.axiosConfig.proxy!==undefined) {
+                throw new Error(`${this.domainErrMsg} \nError: ${error.message || error}`);
+            }
             throw error;
         }
     }

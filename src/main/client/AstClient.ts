@@ -23,7 +23,6 @@ export class AstClient {
             throw error;
         } finally {
             writer.close();
-            logger.info('Write stream closed.');
         }
     }
 }
