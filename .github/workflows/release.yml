@@ -145,7 +145,7 @@ jobs:
 
       # CREATE RELEASE
       - name: Create Release
-        uses: softprops/action-gh-release@a74c6b72af54cfa997e81df42d94703d6313a2d0 #v2
+        uses: softprops/action-gh-release@e7a8f85e1c67a31e6ed99a94b41bd0b71bbee6b8 #v2
         with:
           name: ${{env.TAG_NAME}}
           tag_name: ${{env.TAG_NAME}}
