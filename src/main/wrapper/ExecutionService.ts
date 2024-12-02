@@ -153,7 +153,6 @@ export class ExecutionService {
                 logger.info("Exit code received from AST-CLI: " + code);
                 if(code==1){
                     stderr = stdout
-                    reject(stderr)
                 }
                 resolve(ExecutionService.onCloseMapTenantOutputCommand(code, stderr, stdout));
             });
