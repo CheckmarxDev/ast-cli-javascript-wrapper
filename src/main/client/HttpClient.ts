@@ -1,6 +1,7 @@
-import axios, {AxiosRequestConfig, AxiosResponse} from 'axios';
-import {logger} from '../wrapper/loggerConfig';
-import {Client} from "./Client";
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { logger } from '../wrapper/loggerConfig';
+import { Client } from "./Client";
+import { HttpsProxyAgent } from 'https-proxy-agent';
 
 export class HttpClient implements Client {
     private readonly axiosConfig: AxiosRequestConfig;
@@ -9,7 +10,7 @@ export class HttpClient implements Client {
     constructor() {
         this.axiosConfig = {
             responseType: 'stream',
-            proxy: this.getProxyConfig(),
+            httpsAgent: this.getProxyConfig(), // Use httpsAgent instead of proxy
         };
     }
 
@@ -17,36 +18,24 @@ export class HttpClient implements Client {
         const proxyUrl = process.env.HTTP_PROXY;
         if (proxyUrl) {
             logger.info(`Detected proxy configuration in HTTP_PROXY`);
-            const parsedProxy = new URL(proxyUrl);
-
-            return {
-                host: parsedProxy.hostname,
-                port: parseInt(parsedProxy.port, 10),
-                protocol: parsedProxy.protocol.replace(':', ''), // remove the colon
-                auth: parsedProxy.username && parsedProxy.password
-                    ? {username: parsedProxy.username, password: parsedProxy.password}
-                    : undefined,
-            };
+            return new HttpsProxyAgent(proxyUrl);
         }
         logger.info('No proxy configuration detected.');
         return undefined;
     }
-    
+
     public async request(url: string, method: string, data: any): Promise<AxiosResponse<any, any>> {
         logger.info(`Sending ${method} request to URL: ${url}`);
-        if (this.axiosConfig.proxy) {
-            logger.info(
-                `Using proxy - Host: ${this.axiosConfig.proxy.host}, Port: ${this.axiosConfig.proxy.port},`  +
-                `Protocol: ${this.axiosConfig.proxy.protocol}, Auth: ${this.axiosConfig.proxy.auth ? 'Yes' : 'No'}`
-            );
+        if (this.axiosConfig.httpsAgent) {
+            logger.info(`Using proxy - URL: ${process.env.HTTP_PROXY}`);
         }
         try {
-            const response = await axios({...this.axiosConfig, url, method, data});
+            const response = await axios({ ...this.axiosConfig, url, method, data });
             logger.info(`Request completed successfully.`);
             return response;
         } catch (error) {
             logger.error(`Error sending ${method} request to ${url}: ${error.message || error}`);
-            if (this.axiosConfig.proxy!==undefined) {
+            if (this.axiosConfig.httpsAgent !== undefined) {
                 throw new Error(`${this.domainErrMsg} \nError: ${error.message || error}`);
             }
             throw error;
