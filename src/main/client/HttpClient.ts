@@ -18,7 +18,7 @@ export class HttpClient implements Client {
         const proxyUrl = process.env.HTTP_PROXY;
         if (proxyUrl) {
             logger.info(`Detected proxy configuration in HTTP_PROXY`);
-            return HttpsProxyAgent(proxyUrl); // Use as a function
+            return new HttpsProxyAgent(proxyUrl);
         }
         logger.info('No proxy configuration detected.');
         return undefined;
