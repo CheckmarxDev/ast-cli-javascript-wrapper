@@ -96,7 +96,7 @@ jobs:
       - name: Debug CLI version path
         run: |
           echo "Current directory: $(pwd)"
-          cd ../../src/main/wrapper/resources || exit 1
+          cd ./src/main/wrapper/resources || exit 1
           echo "Files in the current directory:"
           ls -la
 
