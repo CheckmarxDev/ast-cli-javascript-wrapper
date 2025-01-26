@@ -93,6 +93,13 @@ jobs:
           chmod +x ./.github/scripts/update_cli.sh
           ./.github/scripts/update_cli.sh ${{ inputs.cliTag }}
 
+      - name: Debug CLI version path
+        run: |
+          echo "Current directory: $(pwd)"
+          cd ../../src/main/wrapper/resources || exit 1
+          echo "Files in the current directory:"
+          ls -la
+
       - name: Extract cli version
         id: extract_cli_version
         run: |
