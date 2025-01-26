@@ -164,8 +164,8 @@ jobs:
     uses: Checkmarx/plugins-release-workflow/.github/workflows/release-notify.yml@main
     with:
       product_name: Javascript Wrapper
-      release_version: ${{env.TAG_NAME}}
-      cli_release_version: ${{env.CLI_VERSION}}
+      release_version: ${{ env.TAG_NAME }}
+      cli_release_version: ${{ env.CLI_VERSION }}
       release_author: "Phoenix Team"
       release_url: https://github.com/CheckmarxDev/ast-cli-javascript-wrapper/releases/tag/${{env.TAG_NAME}}
       jira_product_name: JAVASCRIPT_WRAPPER
