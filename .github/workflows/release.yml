@@ -88,6 +88,12 @@ jobs:
           chmod +x ./.github/scripts/update_cli.sh
           ./.github/scripts/update_cli.sh ${{ inputs.cliTag }}
 
+      - name: Extract cli version
+        run: |
+            CLI_VERSION=$(../src/main/wrapper/resources/cx-linux --version)
+            echo "Cli version being packed is $CLI_VERSION"
+            echo "CLI_VERSION=$CLI_VERSION" >> $GITHUB_ENV
+
       # RUN NPM INSTALL AND BUILD
       - name: NPM ci and build
         run: |
@@ -151,3 +157,16 @@ jobs:
           tag_name: ${{env.TAG_NAME}}
           generate_release_notes: true
           prerelease: ${{ inputs.dev }}
+
+  notify:
+    if: inputs.dev == false
+    needs: release
+    uses: Checkmarx/plugins-release-workflow/.github/workflows/release-notify.yml@main
+    with:
+      product_name: Javascript Wrapper
+      release_version: ${{env.TAG_NAME}}
+      cli_release_version: ${{env.CLI_VERSION}}
+      release_author: "Phoenix Team"
+      release_url: https://github.com/CheckmarxDev/ast-cli-javascript-wrapper/releases/tag/${{env.TAG_NAME}}
+      jira_product_name: JAVASCRIPT_WRAPPER
+    secrets: inherit
