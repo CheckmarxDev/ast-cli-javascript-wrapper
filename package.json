@@ -12,6 +12,7 @@
   "dependencies": {
     "async-mutex": "^0.5.0",
     "axios": "^1.7.7",
+    "azure-pipelines-tool-lib": "^2.0.8",
     "https-proxy-agent": "^7.0.6",
     "log4js": "^6.9.1",
     "node-fetch": "^3.3.2",
@@ -40,6 +41,7 @@
     "@types/adm-zip": "^0.5.5",
     "@types/jest": "^27.5.0",
     "@types/node": "^22.9.0",
+    "@types/tunnel": "^0.0.7",
     "@types/unzipper": "^0.10.10",
     "@typescript-eslint/eslint-plugin": "^5.29.0",
     "@typescript-eslint/parser": "^5.29.0",
