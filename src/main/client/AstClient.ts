@@ -4,52 +4,65 @@ import { CxError } from "../errors/CxError";
 import * as tunnel from 'tunnel';
 
 export class AstClient {
+    /**
+     * Creates a request handler with a proxy agent if the HTTP_PROXY environment variable is set.
+     * Returns `undefined` if no proxy is configured or if an error occurs while parsing the proxy URL.
+     */
+    private createProxyRequestHandler(): any | undefined {
+        const proxyEnv = process.env.HTTP_PROXY;
+        if (!proxyEnv) {
+            logger.info('No proxy configured; proceeding with direct download.');
+            return undefined;
+        }
+
+        try {
+            const proxyUrl = new URL(proxyEnv);
+            if (proxyUrl.port === '') {
+                logger.error(`Invalid proxy URL: ${proxyUrl}. Port is missing. Proceeding without proxy agent.`);
+                return undefined;
+            }
+            
+            const proxyAuth = proxyUrl.username && proxyUrl.password ?
+                `${proxyUrl.username}:${proxyUrl.password}`
+                : undefined;
+
+            const agent = tunnel.httpsOverHttp({
+                proxy: {
+                    host: proxyUrl.hostname,
+                    port: Number(proxyUrl.port),
+                    proxyAuth,
+                }
+            });
+
+            logger.info(`Using proxy agent for host: ${proxyUrl.hostname} and port: ${proxyUrl.port}`);
+
+            return {
+                prepareRequest: (options: any): any => {
+                    options.agent = agent;
+                    return options;
+                }
+            };
+        } catch (error) {
+            logger.error(
+                `Error parsing HTTP_PROXY value: ${proxyEnv}. Proceeding without proxy agent. Error: ${error}`
+            );
+            return undefined;
+        }
+    }
+
     public async downloadFile(url: string, outputPath: string): Promise<void> {
         logger.info(`Starting download from URL: ${url}`);
 
         const requestHandlers: any[] = [];
-
-        if (process.env.HTTP_PROXY) {
-            try {
-                const proxyUrl = process.env.HTTP_PROXY;
-                const parsedUrl = new URL(proxyUrl);
-
-                const proxyPort = parsedUrl.port ? Number(parsedUrl.port) : 80;
-
-                // Extract credentials if provided in the URL (e.g., http://username:password@host:port)
-                let proxyAuth: string | undefined = undefined;
-                if (parsedUrl.username && parsedUrl.password) {
-                    proxyAuth = `${parsedUrl.username}:${parsedUrl.password}`;
-                }
-
-                const agent = tunnel.httpsOverHttp({
-                    proxy: {
-                        host: parsedUrl.hostname,
-                        port: proxyPort,
-                        proxyAuth: proxyAuth,
-                    }
-                });
-
-                logger.info(`Using proxy agent for host: ${parsedUrl.hostname} and port: ${proxyPort}`);
-
-                // Add a handler that applies the proxy agent to each request.
-                requestHandlers.push({
-                    prepareRequest: (options: any): any => {
-                        options.agent = agent;
-                        return options;
-                    }
-                });
-            } catch (err) {
-                logger.error(`Error parsing HTTP_PROXY value: ${process.env.HTTP_PROXY}. Proceeding without proxy agent. Error: ${err}`);
-            }
-        } else {
-            logger.info('No proxy configured; proceeding with direct download.');
+        const proxyHandler = this.createProxyRequestHandler();
+        if (proxyHandler) {
+            requestHandlers.push(proxyHandler);
         }
 
         try {
             const downloadedPath = await toolLib.downloadTool(url, outputPath, requestHandlers);
             logger.info(`Download completed successfully. File saved to: ${downloadedPath}`);
-        } catch (error) {
+        } catch (error: any) {
             logger.error(`Error downloading file from ${url}: ${error.message || error}`);
             throw new CxError(error.message || error);
         }
