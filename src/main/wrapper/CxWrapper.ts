@@ -8,7 +8,6 @@ import * as os from "os";
 import CxBFL from "../bfl/CxBFL";
 import {CxInstaller} from "../osinstaller/CxInstaller";
 import {Semaphore} from "async-mutex";
-import {HttpClient} from "../client/HttpClient";
 import {AstClient} from "../client/AstClient";
 
 
@@ -20,7 +19,7 @@ export class CxWrapper {
     config: CxConfig;
     cxInstaller: CxInstaller;
     private constructor(cxScanConfig: CxConfig, logFilePath?: string) {
-        this.cxInstaller = new CxInstaller(process.platform, new AstClient(new HttpClient()));
+        this.cxInstaller = new CxInstaller(process.platform, new AstClient());
         this.config = new CxConfig();
         getLoggerWithFilePath(logFilePath)
         if (cxScanConfig.apiKey) {
