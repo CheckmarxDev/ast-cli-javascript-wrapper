@@ -8,6 +8,8 @@ export class AstClient {
      * Creates a request handler with a proxy agent if the HTTP_PROXY environment variable is set.
      * Returns `undefined` if no proxy is configured or if an error occurs while parsing the proxy URL.
      */
+    private retryInterval = 2000;
+    private maxAttempts = 3;
     private createProxyRequestHandler(): any | undefined {
         const proxyEnv = process.env.HTTP_PROXY;
         if (!proxyEnv) {
@@ -60,7 +62,7 @@ export class AstClient {
         }
 
         try {
-            const downloadedPath = await toolLib.downloadTool(url, outputPath, requestHandlers);
+            const downloadedPath = await toolLib.downloadToolWithRetries(url, outputPath, requestHandlers, undefined, this.maxAttempts, this.retryInterval);
             logger.info(`Download completed successfully. File saved to: ${downloadedPath}`);
         } catch (error: any) {
             logger.error(`Error downloading file from ${url}: ${error.message || error}`);
