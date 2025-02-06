@@ -10,6 +10,7 @@
     "checkmarx-ast-cli.version"
   ],
   "dependencies": {
+    "async-mutex": "^0.5.0",
     "azure-pipelines-tool-lib": "^2.0.8",
     "https-proxy-agent": "^7.0.6",
     "log4js": "^6.9.1",
