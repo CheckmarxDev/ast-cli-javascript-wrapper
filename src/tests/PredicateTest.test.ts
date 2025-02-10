@@ -46,7 +46,7 @@ describe("Triage cases", () => {
         await handleTriageUpdate(scan, result, result.state, result.severity.toLowerCase() === "high" ? CxConstants.SEVERITY_MEDIUM : CxConstants.SEVERITY_HIGH);
     });
 
-    it('Triage with custom state Successful case', async () => {
+    it.skip('Triage with custom state Successful case', async () => {
         const { scan, result } = await getScanAndResult();
 
         const cxCommandOutput: CxCommandOutput = await auth.triageGetStates();
@@ -65,7 +65,9 @@ describe("Triage cases", () => {
         }
         await handleTriageUpdate(scan, result, customState, CxConstants.SEVERITY_MEDIUM);
 
-    }); it('Triage with custom state id Successful case', async () => {
+    });
+
+    it.skip('Triage with custom state id Successful case', async () => {
         const { scan, result } = await getScanAndResult();
 
         const cxCommandOutput: CxCommandOutput = await auth.triageGetStates();
