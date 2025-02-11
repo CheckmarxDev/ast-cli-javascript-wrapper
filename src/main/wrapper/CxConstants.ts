@@ -37,6 +37,7 @@ export enum CxConstants {
     CMD_TRIAGE = "triage",
     SUB_CMD_UPDATE = "update",
     SUB_CMD_GET_STATES = "get-states",
+    ALL_STATES_FLAG = "--all",
     CMD_RESULT = "results",
     SUB_CMD_BFL = "bfl",
     CMD_CODE_BASHING = "codebashing",

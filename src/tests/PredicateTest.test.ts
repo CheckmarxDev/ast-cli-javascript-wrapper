@@ -31,13 +31,20 @@ describe("Triage cases", () => {
         expect(cxShow.exitCode).toEqual(0);
     }
 
-    const handleTriageUpdate = async (scan: any, result: CxResult, newState: string, newSeverity: string, newStateId="") => {
+    const handleTriageUpdate = async (scan: any, result: CxResult, newState: string, newSeverity: string, newStateId = "") => {
         const cxUpdate: CxCommandOutput = await auth.triageUpdate(
             scan.projectID, result.similarityId, result.type, newState,
             "Edited via JavascriptWrapper",
             newSeverity, newStateId
         );
         expect(cxUpdate.exitCode).toEqual(0);
+    };
+    const handlegetStates = async () => {
+        const cxCommandOutput: CxCommandOutput = await auth.triageGetStates(false);
+        console.log("Json object from states successful case: " + JSON.stringify(cxCommandOutput));
+        expect(cxCommandOutput.payload.length).toBeGreaterThanOrEqual(1);
+        expect(cxCommandOutput.exitCode).toBe(0);
+        return cxCommandOutput
     };
 
     it('Triage Successful case', async () => {
@@ -49,10 +56,7 @@ describe("Triage cases", () => {
     it.skip('Triage with custom state Successful case', async () => {
         const { scan, result } = await getScanAndResult();
 
-        const cxCommandOutput: CxCommandOutput = await auth.triageGetStates();
-        console.log("Json object from states successful case: " + JSON.stringify(cxCommandOutput));
-        expect(cxCommandOutput.payload.length).toBeGreaterThan(1);
-        expect(cxCommandOutput.exitCode).toBe(0);
+        const cxCommandOutput = await handlegetStates();
 
         let customState = cxCommandOutput.payload[0].name
 
@@ -70,10 +74,8 @@ describe("Triage cases", () => {
     it.skip('Triage with custom state id Successful case', async () => {
         const { scan, result } = await getScanAndResult();
 
-        const cxCommandOutput: CxCommandOutput = await auth.triageGetStates();
-        console.log("Json object from states successful case: " + JSON.stringify(cxCommandOutput));
-        expect(cxCommandOutput.payload.length).toBeGreaterThan(1);
-        expect(cxCommandOutput.exitCode).toBe(0);
+        const cxCommandOutput = await handlegetStates();
+
         const allStates = cxCommandOutput.payload;
         let customStateId = allStates[0].id
         const customStateName = allStates[0].name
