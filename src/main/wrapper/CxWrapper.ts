@@ -200,9 +200,9 @@ export class CxWrapper {
         return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.PREDICATE_TYPE);
     }
 
-    async triageUpdate(projectId: string, similarityId: string, scanType: string, state: string, comment: string, severity: string, stateId = -1): Promise<CxCommandOutput> {
+    async triageUpdate(projectId: string, similarityId: string, scanType: string, state: string, comment: string, severity: string, stateId:number|null = null): Promise<CxCommandOutput> {
         const commands: string[] = [CxConstants.CMD_TRIAGE, CxConstants.SUB_CMD_UPDATE, CxConstants.PROJECT_ID, projectId, CxConstants.SIMILARITY_ID, similarityId, CxConstants.SCAN_TYPES_SUB_CMD, scanType, CxConstants.STATE, state, CxConstants.COMMENT, comment, CxConstants.SEVERITY, severity];
-        if(stateId!==-1) {
+        if(stateId) {
             commands.push(CxConstants.STATE_ID)
             commands.push(stateId.toString())
         }

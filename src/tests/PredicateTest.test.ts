@@ -31,7 +31,7 @@ describe("Triage cases", () => {
         expect(cxShow.exitCode).toEqual(0);
     }
 
-    const handleTriageUpdate = async (scan: any, result: CxResult, newState: string, newSeverity: string, newStateId = -1) => {
+    const handleTriageUpdate = async (scan: any, result: CxResult, newState: string, newSeverity: string, newStateId: number|null = null ) => {
         const cxUpdate: CxCommandOutput = await auth.triageUpdate(
             scan.projectID, result.similarityId, result.type, newState,
             "Edited via JavascriptWrapper",
