@@ -31,7 +31,7 @@ describe("Triage cases", () => {
         expect(cxShow.exitCode).toEqual(0);
     }
 
-    const handleTriageUpdate = async (scan: any, result: CxResult, newState: string, newSeverity: string, newStateId = "") => {
+    const handleTriageUpdate = async (scan: any, result: CxResult, newState: string, newSeverity: string, newStateId: number|null = null ) => {
         const cxUpdate: CxCommandOutput = await auth.triageUpdate(
             scan.projectID, result.similarityId, result.type, newState,
             "Edited via JavascriptWrapper",
@@ -87,6 +87,6 @@ describe("Triage cases", () => {
                 await handleTriageUpdate(scan, result, CxConstants.STATE_CONFIRMED, CxConstants.SEVERITY_MEDIUM);
             }
         }
-        await handleTriageUpdate(scan, result, "", CxConstants.SEVERITY_MEDIUM, customStateId.toString());
+        await handleTriageUpdate(scan, result, "", CxConstants.SEVERITY_MEDIUM, customStateId);
     });
 });
