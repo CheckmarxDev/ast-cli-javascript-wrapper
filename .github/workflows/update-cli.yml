@@ -6,8 +6,8 @@ on:
       new_cli_version:
         description: 'New CLI version (optional)'
         required: false
-  schedule:
-    - cron: '0 0 * * *'
+  repository_dispatch:
+    types: [cli-version-update]
 
 jobs:
   update-checkmarx-cli:
