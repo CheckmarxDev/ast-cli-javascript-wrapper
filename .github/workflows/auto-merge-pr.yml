@@ -1,0 +1,16 @@
+name: Post-Check Actions
+
+on:
+  check_suite:
+    types: [completed]
+
+jobs:
+  post_check_actions:
+    runs-on: ubuntu-latest
+    if: ${{ contains(github.event.pull_request.base.ref, 'feature/update_cli') && github.event.check_suite.conclusion == 'success' }}
+    steps:
+      - uses: hmarr/auto-approve-action@v4
+        with:
+          review-message: "Auto approved automated PR"
+          github-token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          pull-request-number: ${{ github.event.pull_request.number }}
