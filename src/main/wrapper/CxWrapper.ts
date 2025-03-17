@@ -228,6 +228,20 @@ export class CxWrapper {
         // Reads the result file and retrieves the results
         return exec.executeResultsCommandsFile(scanId, CxConstants.FORMAT_JSON, CxConstants.FORMAT_JSON_FILE, commands, this.config.pathToExecutable, fileName);
     }
+    
+    async riskManagementResults(projectId: string, limit?: number):  Promise<CxCommandOutput> {
+        const commands: string[] = [CxConstants.CMD_RESULT, CxConstants.CMD_RISK_MANAGEMENT];
+        commands.push(CxConstants.PROJECT_ID, projectId);
+    
+        if (limit !== undefined) {
+            commands.push(CxConstants.CMD_LIMIT, limit.toString());
+        }
+    
+        commands.push(...this.initializeCommands(false));
+    
+        const exec = new ExecutionService();
+        return await exec.executeCommands(this.config.pathToExecutable, commands);
+    }
 
     async getResultsSummary(scanId: string): Promise<CxCommandOutput> {
         const exec = new ExecutionService();
