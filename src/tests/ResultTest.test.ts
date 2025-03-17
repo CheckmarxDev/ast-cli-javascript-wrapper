@@ -83,6 +83,7 @@ describe("Results cases", () => {
 
   // The project ID is hardcoded because there is no dynamic way to associate 
   // an application with a project through the CLI.
+  // link to the our application: https://deu.ast.checkmarx.net/applications/5dff8d1c-d27f-4910-afc1-0b9df02324b4/overview
   it("Risk Management - Successful case", async () => {
     const auth = new CxWrapper(cxScanConfig);
     const projectId = "18bcbafc-d20e-424b-9c7e-8f007f340dee"
@@ -99,6 +100,7 @@ describe("Results cases", () => {
 
    // The project ID is hardcoded because there is no dynamic way to associate 
   // an application with a project through the CLI.
+  // link to the our application: https://deu.ast.checkmarx.net/applications/5dff8d1c-d27f-4910-afc1-0b9df02324b4/overview
   it("Risk Management - With Limit", async () => {
     const auth = new CxWrapper(cxScanConfig);
     const projectId = "18bcbafc-d20e-424b-9c7e-8f007f340dee"
