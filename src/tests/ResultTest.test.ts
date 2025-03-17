@@ -81,9 +81,11 @@ describe("Results cases", () => {
     expect(cxCommandOutput.payload.length).toBeGreaterThan(0);
   });
 
+  // The project ID is hardcoded because there is no dynamic way to associate 
+  // an application with a project through the CLI.
   it("Risk Management - Successful case", async () => {
     const auth = new CxWrapper(cxScanConfig);
-    const projectId = await getProjectId(auth);
+    const projectId = "18bcbafc-d20e-424b-9c7e-8f007f340dee"
 
     const cxCommandOutput: CxCommandOutput = await auth.riskManagementResults(
       projectId
@@ -94,9 +96,12 @@ describe("Results cases", () => {
     expect(cxCommandOutput.payload.length).toBeGreaterThan(0);
   });
 
+
+   // The project ID is hardcoded because there is no dynamic way to associate 
+  // an application with a project through the CLI.
   it("Risk Management - With Limit", async () => {
     const auth = new CxWrapper(cxScanConfig);
-    const projectId = await getProjectId(auth);
+    const projectId = "18bcbafc-d20e-424b-9c7e-8f007f340dee"
     const cxCommandOutput: CxCommandOutput = await auth.riskManagementResults(
       projectId,
       10
@@ -110,18 +115,6 @@ describe("Results cases", () => {
     expect(cxCommandOutput.payload.length).toBeLessThanOrEqual(10);
   });
 });
-
-const getProjectId = async (auth: CxWrapper): Promise<string> => {
-    const scanList: CxCommandOutput = await auth.scanList("statuses=Completed");
-    if (!scanList.payload.length) {
-        throw new Error("No completed scans found.");
-    }
-    const scan = scanList.payload.find((scan) => scan.projectID);
-    if (!scan) {
-        throw new Error("No valid projectId found.");
-    }
-    return scan.projectID;
-};
 
 
 const fileExists = (file: string) => {
