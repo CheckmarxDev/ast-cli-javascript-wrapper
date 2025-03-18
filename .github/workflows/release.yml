@@ -177,3 +177,14 @@ jobs:
       release_url: https://github.com/CheckmarxDev/ast-cli-javascript-wrapper/releases/tag/${{ needs.release.outputs.TAG_NAME }}
       jira_product_name: JAVASCRIPT_WRAPPER
     secrets: inherit
+  
+  dispatch_auto_release:
+    name: Update VS Code Extension With new Wrapper Version
+    if: inputs.dev == false
+    needs: notify
+    uses: Checkmarx/plugins-release-workflow/.github/workflows/dispatch-workflow.yml@main
+    with:
+      cli_version: ${{ needs.release.outputs.CLI_VERSION }}
+      is_cli_release: false
+      is_js_release: true
+    secrets: inherit
