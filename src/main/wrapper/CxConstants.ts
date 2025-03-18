@@ -39,6 +39,8 @@ export enum CxConstants {
     SUB_CMD_GET_STATES = "get-states",
     ALL_STATES_FLAG = "--all",
     CMD_RESULT = "results",
+    CMD_RISK_MANAGEMENT = "risk-management",
+    CMD_LIMIT = "--limit",
     SUB_CMD_BFL = "bfl",
     CMD_CODE_BASHING = "codebashing",
     CMD_KICS_REALTIME = "kics-realtime",
