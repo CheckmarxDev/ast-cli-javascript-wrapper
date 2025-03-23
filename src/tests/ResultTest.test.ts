@@ -92,7 +92,7 @@ describe("Results cases", () => {
       projectId
     );
 
-    var str = JSON.stringify(cxCommandOutput);
+    const str = JSON.stringify(cxCommandOutput);
     console.log("Risk Management Exit code 1: " + cxCommandOutput.exitCode);
     console.log("Risk Management Results 1: " + str);
 
@@ -112,7 +112,7 @@ describe("Results cases", () => {
       10
     );
 
-    var str = JSON.stringify(cxCommandOutput);
+    const str = JSON.stringify(cxCommandOutput);
     console.log("Risk Management Exit code 2: " + cxCommandOutput.exitCode);
     console.log("Risk Management Results 2: " + str);
 
