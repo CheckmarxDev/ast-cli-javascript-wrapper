@@ -57,7 +57,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.AUTOMATION_TOKEN }}
 
-
       # - name: Create Pull Request
       #   id: cretae_pull_request
       #   if: steps.checkmarx-ast-cli.outputs.current_tag != steps.checkmarx-ast-cli.outputs.release_tag
