@@ -93,11 +93,12 @@ describe("Results cases", () => {
     );
 
     const str = JSON.stringify(cxCommandOutput);
+    console.log("Risk Management Result 1: " + str);
     console.log("Risk Management Exit code 1: " + cxCommandOutput.exitCode);
-    console.log("Risk Management Results 1: " + str);
+    console.log("Risk Management payload 1: " + cxCommandOutput.payload);
 
     expect(cxCommandOutput.exitCode).toBe(0);
-    expect(str).toBeGreaterThan(0);
+    expect(Object.keys(cxCommandOutput.payload).length).toBeGreaterThan(0);
   });
 
 
@@ -113,11 +114,12 @@ describe("Results cases", () => {
     );
 
     const str = JSON.stringify(cxCommandOutput);
+    console.log("Risk Management Result 2: " + str);
     console.log("Risk Management Exit code 2: " + cxCommandOutput.exitCode);
-    console.log("Risk Management Results 2: " + str);
+    console.log("Risk Management payload 2: " + cxCommandOutput.payload);
 
     expect(cxCommandOutput.exitCode).toBe(0);
-    expect(str).toBeGreaterThan(0);
+    expect(Object.keys(cxCommandOutput.payload).length).toBeGreaterThan(0);
   });
 });
 
