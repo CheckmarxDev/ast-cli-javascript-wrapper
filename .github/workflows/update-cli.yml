@@ -53,6 +53,10 @@ jobs:
           git add .gitattributes
           git add src/main/wrapper/resources/cx-linux src/main/wrapper/resources/cx.exe src/main/wrapper/resources/cx-mac
           git commit -m "Track Checkmarx CLI binaries with Git LFS"
+          git push origin HEAD:${{ github.ref_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.AUTOMATION_TOKEN }}
+
 
       # - name: Create Pull Request
       #   id: cretae_pull_request
