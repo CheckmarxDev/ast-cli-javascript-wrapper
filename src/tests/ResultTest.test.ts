@@ -63,7 +63,51 @@ describe("Results cases",() => {
         const cxCommandOutput: CxCommandOutput = await auth.codeBashingList("79","PHP","Reflected XSS All Clients");
         expect(cxCommandOutput.payload.length).toBeGreaterThan(0);
     });
-});
+
+    // The project ID is hardcoded because there is no dynamic way to associate 
+  // an application with a project through the CLI.
+  // link to the our application: https://deu.ast.checkmarx.net/applications/5dff8d1c-d27f-4910-afc1-0b9df02324b4/overview
+  it("Risk Management - Successful case", async () => {
+    const auth = new CxWrapper(cxScanConfig);
+    const projectId = "a5d99fa4-973d-48b5-86c7-6401487e1d52"
+
+    const cxCommandOutput: CxCommandOutput = await auth.riskManagementResults(
+      projectId
+    );
+
+    const str = JSON.stringify(cxCommandOutput);
+    console.log("Risk Management Result 1: " + str);
+    console.log("Risk Management Exit code 1: " + cxCommandOutput.exitCode);
+    console.log("Risk Management payload 1: " + cxCommandOutput.payload);
+
+    expect(cxCommandOutput.exitCode).toBe(0);
+    expect(Object.keys(cxCommandOutput.payload).length).toBeGreaterThan(0);
+  });
+
+
+   // The project ID is hardcoded because there is no dynamic way to associate 
+  // an application with a project through the CLI.
+  // link to the our application: https://deu.ast.checkmarx.net/applications/5dff8d1c-d27f-4910-afc1-0b9df02324b4/overview
+  it("Risk Management - With Limit", async () => {
+    const auth = new CxWrapper(cxScanConfig);
+    const projectId = "a5d99fa4-973d-48b5-86c7-6401487e1d52"
+    const cxCommandOutput: CxCommandOutput = await auth.riskManagementResults(
+      projectId,
+      10
+    );
+
+    const str = JSON.stringify(cxCommandOutput);
+    console.log("Risk Management Result 2: " + str);
+    console.log("Risk Management Exit code 2: " + cxCommandOutput.exitCode);
+    console.log("Risk Management payload 2: " + cxCommandOutput.payload);
+
+    expect(cxCommandOutput.exitCode).toBe(0);
+    expect(Object.keys(cxCommandOutput.payload).length).toBeGreaterThan(0);
+  });
+
+})
+
+
 
 const fileExists = (file:string) => {
     return new Promise((resolve) => {
