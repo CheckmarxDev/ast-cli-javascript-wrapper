@@ -49,7 +49,7 @@ describe("AstClient - createProxyRequestHandler", () => {
     });
 
     it("should use default port 80 when HTTP_PROXY is http without port", () => {
-        process.env.HTTP_PROXY = "http://31.220.15.234"; // ללא פורט מפורש
+        process.env.HTTP_PROXY = "http://31.220.15.234"; 
 
         const client = new AstClient();
         const handler = (client as any).createProxyRequestHandler();
@@ -58,7 +58,7 @@ describe("AstClient - createProxyRequestHandler", () => {
     });
 
     it("should use default port 443 when HTTP_PROXY is https without port", () => {
-        process.env.HTTP_PROXY = "https://31.220.15.234"; // ללא פורט מפורש
+        process.env.HTTP_PROXY = "https://31.220.15.234"; 
 
         const client = new AstClient();
         const handler = (client as any).createProxyRequestHandler();
