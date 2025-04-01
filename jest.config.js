@@ -28,7 +28,7 @@ module.exports = {
   // preset configs
   // preset: 'ts-jest/presets/js-with-ts',
   // which files to test and which to ignore
-  testMatch: ['**/src/tests/*.test.(ts|tsx)'],
+  testMatch: ['**/src/tests/**/*.test.(ts|tsx)'],
   testPathIgnorePatterns: ['/node_modules/', '/tmp/', '/coverage/', '/stories/', '/\\.storybook/'],
   // don't watch for file changes in node_modules
   watchPathIgnorePatterns: ['/node_modules/'],
