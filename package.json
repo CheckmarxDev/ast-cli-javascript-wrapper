@@ -23,7 +23,8 @@
     "postbuild": "copyfiles -u 1 src/tests/data/* dist/;",
     "lint": "eslint . --ext .ts",
     "lint-and-fix": "eslint . --ext .ts --fix",
-    "test": "copyfiles -u 1 src/tests/data/* dist/; tsc && jest --runInBand"
+    "test": "copyfiles -u 1 src/tests/data/* dist/; tsc && jest --runInBand",
+    "test:unit": "tsc && jest --runInBand --testPathPattern=tests/unit"
   },
   "repository": "https://github.com/CheckmarxDev/ast-cli-javascript-wrapper-runtime-cli.git",
   "author": "Jay Nanduri",
