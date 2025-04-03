@@ -19,7 +19,8 @@ export class AstClient {
 
         try {
             const proxyUrl = new URL(proxyEnv);
-            if (proxyUrl.port === '') {
+            const proxyPort = Number(proxyUrl.port) || (proxyUrl.protocol === 'http:' ? 80 : proxyUrl.protocol === 'https:' ? 443 : 0);
+            if (proxyPort === 0) {
                 logger.error(`Invalid proxy URL: ${proxyUrl}. Port is missing. Proceeding without proxy agent.`);
                 return undefined;
             }
@@ -31,12 +32,12 @@ export class AstClient {
             const agent = tunnel.httpsOverHttp({
                 proxy: {
                     host: proxyUrl.hostname,
-                    port: Number(proxyUrl.port),
+                    port: proxyPort,
                     proxyAuth,
                 }
             });
 
-            logger.info(`Using proxy agent for host: ${proxyUrl.hostname} and port: ${proxyUrl.port}`);
+            logger.info(`Using proxy agent for host: ${proxyUrl.hostname} and port: ${proxyPort}`);
 
             return {
                 prepareRequest: (options: any): any => {

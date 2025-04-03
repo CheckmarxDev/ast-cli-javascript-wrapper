@@ -28,7 +28,7 @@ module.exports = {
   // preset configs
   // preset: 'ts-jest/presets/js-with-ts',
   // which files to test and which to ignore
-  testMatch: ['**/src/tests/*.test.(ts|tsx)'],
+  testMatch: ['**/src/tests/**/*.test.(ts|tsx)'],
   testPathIgnorePatterns: ['/node_modules/', '/tmp/', '/coverage/', '/stories/', '/\\.storybook/'],
   // don't watch for file changes in node_modules
   watchPathIgnorePatterns: ['/node_modules/'],
@@ -41,15 +41,14 @@ module.exports = {
   // setupFilesAfterEnv: [`${__dirname}/setup/setupAfterEnv.ts`],
   // coverage settings
   collectCoverage: true,
-  collectCoverageFrom: ['**/*.{ts,tsx}', '!**/*.d.ts', '!**/node_modules/**'],
-  coverageThreshold: {
+coverageThreshold: {
     "global": {
-      "branches": 60,
-      "functions": 80,
-      "lines": 80,
-      "statements": 80
+        "branches": 60,
+        "functions": 80,
+        "lines": 80,
+        "statements": 80
     }
-  },
+},
   coveragePathIgnorePatterns: ['/node_modules/', '\\.json$', '/__tests__/', '/stories/', '/\\.storybook/'],
 
   globals: {
