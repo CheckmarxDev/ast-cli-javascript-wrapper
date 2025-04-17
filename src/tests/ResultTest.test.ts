@@ -70,9 +70,10 @@ describe("Results cases",() => {
   it("Risk Management - Successful case", async () => {
     const auth = new CxWrapper(cxScanConfig);
     const projectId = "a5d99fa4-973d-48b5-86c7-6401487e1d52"
+    const scanId = "068feb0f-cb8a-4f79-b9b1-e6bec009e517"
 
     const cxCommandOutput: CxCommandOutput = await auth.riskManagementResults(
-      projectId
+      projectId, scanId
     );
 
     const str = JSON.stringify(cxCommandOutput);
@@ -91,8 +92,11 @@ describe("Results cases",() => {
   it("Risk Management - With Limit", async () => {
     const auth = new CxWrapper(cxScanConfig);
     const projectId = "a5d99fa4-973d-48b5-86c7-6401487e1d52"
+    const scanId = "068feb0f-cb8a-4f79-b9b1-e6bec009e517"
+
     const cxCommandOutput: CxCommandOutput = await auth.riskManagementResults(
       projectId,
+      scanId,
       10
     );
 
