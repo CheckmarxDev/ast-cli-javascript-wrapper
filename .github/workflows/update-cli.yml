@@ -27,7 +27,7 @@ jobs:
       - name: Set Hardcoded Checkmarx CLI version
         id: checkmarx-ast-cli
         run: |
-          echo "release_tag=2.3.19-traits" >> $GITHUB_OUTPUT
+          echo "release_tag=2.3.19-daniel" >> $GITHUB_OUTPUT
           echo "current_tag=$(<checkmarx-ast-cli.version)" >> $GITHUB_OUTPUT
 
       - name: Update Checkmarx cli version
