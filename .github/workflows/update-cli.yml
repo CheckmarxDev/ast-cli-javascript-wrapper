@@ -51,3 +51,5 @@ jobs:
           git add src/main/wrapper/resources/cx-linux src/main/wrapper/resources/cx.exe src/main/wrapper/resources/cx-mac checkmarx-ast-cli.version
           git commit -m "Update Checkmarx CLI to ${{ steps.checkmarx-ast-cli.outputs.release_tag }}" || echo "No changes to commit"
           git push origin HEAD
+
+          
