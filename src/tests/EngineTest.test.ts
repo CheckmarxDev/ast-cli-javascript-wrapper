@@ -12,7 +12,7 @@ describe("EngineListAPI cases", () => {
         expect(cxCommandOutput.exitCode).toBe(0);
     });
 
-    it('EngineListAPI Successful case with enegine name sast', async () => {
+    it('EngineListAPI Successful case with engine name sast', async () => {
         const auth = new CxWrapper(cxEngineConfig);
         const engineName = 'sast';
         const cxCommandOutput: CxCommandOutput = await auth.enginesApiList(engineName);
@@ -22,7 +22,7 @@ describe("EngineListAPI cases", () => {
         expect(cxCommandOutput.exitCode).toBe(0);
     })
 
-    it('EngineListAPI Successful case with enegine name sca', async () => {
+    it('EngineListAPI Successful case with engine name sca', async () => {
         const auth = new CxWrapper(cxEngineConfig);
         const engineName = 'sca';
         const cxCommandOutput: CxCommandOutput = await auth.enginesApiList(engineName);
