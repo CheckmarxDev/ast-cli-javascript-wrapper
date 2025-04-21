@@ -101,6 +101,19 @@ export class CxWrapper {
         return await exec.executeCommands(this.config.pathToExecutable, commands);
     }
 
+    async enginesApiList(engineName:string | null = "",engineOutputFormat:string | null = "json"): Promise<CxCommandOutput> {
+        const commands: string[] = [CxConstants.CMD_ENGINES, CxConstants.SUB_CMD_LISTAPI];
+        commands.push(...this.initializeCommands(false));
+        if(engineName != "") {
+            commands.push(CxConstants.ENGINE_NAME);
+            commands.push(engineName)
+        }
+        commands.push(CxConstants.ENGINE_OUTPUT_FORMAT);
+        commands.push(engineOutputFormat);
+        const exec = new ExecutionService();
+        return await exec.executeCommands(this.config.pathToExecutable, commands);
+    }
+
     async scanCreate(params: ParamTypeMap): Promise<CxCommandOutput> {
         const commands: string[] = [CxConstants.CMD_SCAN, CxConstants.SUB_CMD_CREATE];
         commands.push(...this.initializeCommands(false));
