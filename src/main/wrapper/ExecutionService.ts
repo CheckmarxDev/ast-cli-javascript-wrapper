@@ -23,6 +23,7 @@ import CxScaRealTime from "../scaRealtime/CxScaRealTime";
 import CxChat from "../chat/CxChat";
 import CxMask from "../mask/CxMask";
 import CxAsca from "../asca/CxAsca";
+import CxEngineListAPI from "../engine/CxEngineListAPI";
 
 let skipValue = false;
 const fileSourceFlag = "--file-source"
@@ -201,6 +202,10 @@ export class ExecutionService {
                   const scans = CxScan.parseProject(resultObject);
                   cxCommandOutput.payload = scans;
                   break;
+                case CxConstants.ENGINE_TYPE:
+                    const engines = CxEngineListAPI.parseEngineApis(resultObject);
+                    cxCommandOutput.payload = engines;
+                    break;
                 case CxConstants.SCAN_ASCA:
                     const asca = CxAsca.parseScan(resultObject);
                     cxCommandOutput.payload = [asca];
