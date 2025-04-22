@@ -177,6 +177,16 @@ export class CxWrapper {
         return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.PROJECT_TYPE);
     }
 
+    async engineApiList(filters: string): Promise<CxCommandOutput> {
+        const validated_filters = this.filterEnginesName(filters);
+        const commands: string[] = [CxConstants.CMD_ENGINES, "list-api","--output-format", "json"].concat(validated_filters);
+        commands.push(...this.initializeCommands(false));
+        const filterEngineCommand = commands.filter(item => item !== "--debug");
+        console.log(filterEngineCommand)
+        const exec = new ExecutionService();
+        return await exec.executeCommands(this.config.pathToExecutable, filterEngineCommand, CxConstants.ENGINE_TYPE);
+    }
+
     async projectBranches(projectId: string, filters: string): Promise<CxCommandOutput> {
         // Verify and add possible branch filter by name
         const validated_filters = this.filterArguments(CxConstants.BRANCH_NAME + filters)
@@ -469,6 +479,27 @@ export class CxWrapper {
             r.push(CxConstants.FILTER);
             r.push(filters);
         }
+        return r;
+    }
+
+    filterEnginesName(filters: string): string[] {
+        const r = [];
+        if (filters.length > 0) {
+            r.push(CxConstants.ENGINE_NAME);
+            if(filters==="SAST")
+            {
+                r.push("SAST");
+            }
+            if(filters==="SCA")
+            {
+               r.push("SCA");
+            }
+            if(filters==="Iac")
+            {
+                r.push("Iac");
+            }
+        } 
+
         return r;
     }
 }
