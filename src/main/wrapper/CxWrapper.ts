@@ -94,6 +94,45 @@ export class CxWrapper {
         return list;
     }
 
+
+    initializeCommandsEngine(formatRequired: boolean): string[] {
+        const list: string[] = [];
+        if (this.config.clientId) {
+            list.push(CxConstants.CLIENT_ID);
+            list.push(this.config.clientId);
+        }
+        if (this.config.clientSecret) {
+            list.push(CxConstants.CLIENT_SECRET);
+            list.push(this.config.clientSecret);
+        }
+        if (this.config.apiKey) {
+            list.push(CxConstants.API_KEY);
+            list.push(this.config.apiKey);
+        }
+        if (this.config.baseUri) {
+            list.push(CxConstants.BASE_URI);
+            list.push(this.config.baseUri);
+        }
+        if (this.config.baseAuthUri) {
+            list.push(CxConstants.BASE_AUTH_URI);
+            list.push(this.config.baseAuthUri);
+        }
+        if (this.config.tenant) {
+            list.push(CxConstants.TENANT);
+            list.push(this.config.tenant);
+        }
+        if(this.config.additionalParameters){
+            this.prepareAdditionalParams(this.config.additionalParameters).forEach(function (param){
+                list.push(param)
+            })
+        }
+        if (formatRequired) {
+            list.push(CxConstants.OUTPUT_FORMAT);
+            list.push(CxConstants.FORMAT_JSON);
+        }
+        return list;
+    }
+
     async authValidate(): Promise<CxCommandOutput> {
         const commands: string[] = [CxConstants.CMD_AUTH, CxConstants.SUB_CMD_VALIDATE];
         commands.push(...this.initializeCommands(false));
@@ -167,6 +206,18 @@ export class CxWrapper {
         commands.push(...this.initializeCommands(true));
         const exec = new ExecutionService();
         return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.SCAN_TYPE);
+    }
+
+
+    async engineList(engineName:string):Promise<CxCommandOutput>{
+        const commands:string[]=[CxConstants.CMD_ENGINE,"list-api"]
+        if(engineName!=""){
+            commands.push(CxConstants.FLAG_ENGINE_NAME);
+            commands.push(engineName)
+        }
+        commands.push(...this.initializeCommandsEngine(true));
+        const exec = new ExecutionService();
+        return await exec.executeCommands(this.config.pathToExecutable, commands);
     }
 
     async projectList(filters: string): Promise<CxCommandOutput> {
