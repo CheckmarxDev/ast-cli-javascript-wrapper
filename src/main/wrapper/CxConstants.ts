@@ -106,5 +106,8 @@ export enum CxConstants {
     STATE_CONFIRMED = "confirmed",
     CMD_LEARN_MORE = "learn-more",
     IDE_SCANS_KEY = " scan.config.plugins.ideScans",
-    AI_GUIDED_REMEDIATION_KEY = " scan.config.plugins.aiGuidedRemediation"
+    AI_GUIDED_REMEDIATION_KEY = " scan.config.plugins.aiGuidedRemediation",
+    CMD_ENGINES = "engines",
+    ENGINE_NAME="--engine-name",
+    ENGINE_TYPE="EngineParser"
 }

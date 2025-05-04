@@ -23,6 +23,7 @@ import CxScaRealTime from "../scaRealtime/CxScaRealTime";
 import CxChat from "../chat/CxChat";
 import CxMask from "../mask/CxMask";
 import CxAsca from "../asca/CxAsca";
+import EngineParser from "../engines/CxEngines";
 
 let skipValue = false;
 const fileSourceFlag = "--file-source"
@@ -80,6 +81,7 @@ export class ExecutionService {
             });
             this.fsObject.on('exit',(code: number) => {
 
+                console.log("code",code)
                 logger.info("Exit code received from AST-CLI: " + code);
                 if(code==1){
                     stderr = stdout
@@ -209,6 +211,10 @@ export class ExecutionService {
                   const projects = CxProject.parseProject(resultObject);
                   cxCommandOutput.payload = projects;
                   break;
+                  case CxConstants.ENGINE_TYPE:
+                    const engines = EngineParser.parseEngine(resultObject);
+                    cxCommandOutput.payload = engines
+                    break;
                 case CxConstants.CODE_BASHING_TYPE:
                   const codeBashing = CxCodeBashing.parseCodeBashing(resultObject);
                   cxCommandOutput.payload = codeBashing;
