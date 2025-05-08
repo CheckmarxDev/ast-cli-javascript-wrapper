@@ -20,7 +20,7 @@ export default class CxOssResult {
         ossResult.packageManager = member.PackageManager;
         ossResult.packageName = member.PackageName;
         ossResult.version = member.Version;
-        ossResult.filepath = member.FilePath;
+        ossResult.filepath = member.Filepath;
         ossResult.lineStart = member.LineStart;
         ossResult.lineEnd = member.LineEnd;
         ossResult.startIndex = member.StartIndex;
