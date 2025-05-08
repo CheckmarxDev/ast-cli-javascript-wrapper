@@ -1,5 +1,5 @@
 export enum CxManifestStatus {
-    MALICIOUS = 'malicious',
-    UNKNOWN = 'unknown',
-    OK = 'ok'
+    malicious = "malicious",
+    ok = "ok",
+    unknown = "unknown"
 }
