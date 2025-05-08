@@ -147,6 +147,13 @@ export class CxWrapper {
         return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.SCAN_ASCA);
     }
 
+    async scanOSS(sourceFile: string): Promise<CxCommandOutput> {
+        const commands: string[] = [CxConstants.CMD_SCAN, CxConstants.CMD_OSS, CxConstants.SOURCE, sourceFile];
+        commands.push(...this.initializeCommands(false));
+        const exec = new ExecutionService();
+        return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.SCAN_OSS);
+    }
+
     async scanCancel(id: string): Promise<CxCommandOutput> {
         const commands: string[] = [CxConstants.CMD_SCAN, CxConstants.SUB_CMD_CANCEL, CxConstants.SCAN_ID, id];
         commands.push(...this.initializeCommands(false));
