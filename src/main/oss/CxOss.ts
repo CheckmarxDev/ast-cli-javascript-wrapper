@@ -14,9 +14,9 @@ export default class CxOssResult {
 
   static parseResult(resultObject: any): CxOssResult[] {
     let ossResults: CxOssResult[] = [];
-    const ossResult = new CxOssResult();
     if (resultObject instanceof Array) {
         ossResults = resultObject.map((member: any) => {
+        const ossResult = new CxOssResult();
         ossResult.packageManager = member.PackageManager;
         ossResult.packageName = member.PackageName;
         ossResult.version = member.Version;
@@ -29,6 +29,7 @@ export default class CxOssResult {
         return ossResult;
       });
     } else {
+        const ossResult = new CxOssResult();
         ossResult.packageManager = resultObject.PackageManager;
         ossResult.packageName = resultObject.PackageName;
         ossResult.version = resultObject.Version;
