@@ -166,5 +166,13 @@ describe("ScanCreate cases", () => {
         expect(Number.isInteger(scanObject.scanDetails[0].line)).toBe(true);
         expect(typeof scanObject.scanDetails[0].description).toBe('string');
     });
+    
+    it('ScanOss Successful case', async () => {
+        const auth = new CxWrapper(cxScanConfig);
+        const cxCommandOutput: CxCommandOutput = await auth.scanOSS("tsc/tests/data/python-vul-file.py");
+        console.log("Json object from scanOSS successful case: " + JSON.stringify(cxCommandOutput));
+        expect(cxCommandOutput.payload).toBeDefined();
+        expect(cxCommandOutput.exitCode).toBe(0);
+    });
 
 });
