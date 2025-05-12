@@ -7,7 +7,7 @@
 
 <h3 align="center">AST-CLI-JAVASCRIPT-WRAPPER</h3>
 
-<!-- TABLE OF CONTENTS -->
+<!-- TABLE OF CONTENTS  -->
 <details open="open">
   <summary>Table of Contents</summary>
   <ol>
