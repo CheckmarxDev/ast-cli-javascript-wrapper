@@ -23,6 +23,7 @@ import CxScaRealTime from "../scaRealtime/CxScaRealTime";
 import CxChat from "../chat/CxChat";
 import CxMask from "../mask/CxMask";
 import CxAsca from "../asca/CxAsca";
+import CxOssResult from "../oss/CxOss";
 
 let skipValue = false;
 const fileSourceFlag = "--file-source"
@@ -204,6 +205,10 @@ export class ExecutionService {
                 case CxConstants.SCAN_ASCA:
                     const asca = CxAsca.parseScan(resultObject);
                     cxCommandOutput.payload = [asca];
+                    break;
+                case CxConstants.SCAN_OSS:
+                    const oss = CxOssResult.parseResult(resultObject);
+                    cxCommandOutput.payload = [oss];
                     break;
                 case CxConstants.PROJECT_TYPE:
                   const projects = CxProject.parseProject(resultObject);
