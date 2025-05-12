@@ -169,7 +169,7 @@ describe("ScanCreate cases", () => {
     
     it('ScanOss Successful case', async () => {
         const auth = new CxWrapper(cxScanConfig);
-        const cxCommandOutput: CxCommandOutput = await auth.scanOSS("tsc/tests/data/python-vul-file.py");
+        const cxCommandOutput: CxCommandOutput = await auth.scanOss("tsc/tests/data/package.json");
         console.log("Json object from scanOSS successful case: " + JSON.stringify(cxCommandOutput));
         expect(cxCommandOutput.payload).toBeDefined();
         expect(cxCommandOutput.exitCode).toBe(0);

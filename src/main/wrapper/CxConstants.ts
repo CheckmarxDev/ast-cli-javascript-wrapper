@@ -88,7 +88,7 @@ export enum CxConstants {
     ENGINE = "--engine",
     SCAN_TYPE = "CxScan",
     SCAN_ASCA = "CxAsca",
-    SCAN_OSS = "CxOSS",
+    SCAN_OSS = "CxOss",
     PROJECT_TYPE = "CxProject",
     PREDICATE_TYPE = "CxPredicate",
     CODE_BASHING_TYPE = "CxCodeBashing",
