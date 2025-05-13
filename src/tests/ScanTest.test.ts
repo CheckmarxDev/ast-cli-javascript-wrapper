@@ -168,8 +168,8 @@ describe("ScanCreate cases", () => {
     });
     
     it('ScanOss Successful case', async () => {
-        const auth = new CxWrapper(cxScanConfig);
-        const cxCommandOutput: CxCommandOutput = await auth.scanOss("tsc/tests/data/package.json");
+        const wrapper = new CxWrapper(cxScanConfig);
+        const cxCommandOutput: CxCommandOutput = await wrapper.scanOss("tsc/tests/data/package.json");
         console.log("Json object from scanOSS successful case: " + JSON.stringify(cxCommandOutput));
         expect(cxCommandOutput.payload).toBeDefined();
         expect(cxCommandOutput.exitCode).toBe(0);
