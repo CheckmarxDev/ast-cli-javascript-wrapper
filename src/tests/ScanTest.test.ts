@@ -166,5 +166,13 @@ describe("ScanCreate cases", () => {
         expect(Number.isInteger(scanObject.scanDetails[0].line)).toBe(true);
         expect(typeof scanObject.scanDetails[0].description).toBe('string');
     });
+    
+    it.skip('ScanOss Successful case', async () => {
+        const wrapper = new CxWrapper(cxScanConfig);
+        const cxCommandOutput: CxCommandOutput = await wrapper.scanOss("tsc/tests/data/package.json");
+        console.log("Json object from scanOSS successful case: " + JSON.stringify(cxCommandOutput));
+        expect(cxCommandOutput.payload).toBeDefined();
+        expect(cxCommandOutput.exitCode).toBe(0);
+    });
 
 });
