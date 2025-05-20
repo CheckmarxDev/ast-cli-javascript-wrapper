@@ -13,7 +13,7 @@ export default class CxOssResult {
 
 
   static parseResult(resultObject: any): CxOssResult[] {
-    let packages = resultObject.Packages;
+    const packages = resultObject.Packages;
     let ossResults: CxOssResult[] = [];
     if (packages instanceof Array) {
         ossResults = packages.map((member: any) => {
