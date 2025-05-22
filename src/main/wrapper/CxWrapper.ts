@@ -147,7 +147,7 @@ export class CxWrapper {
         return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.SCAN_ASCA);
     }
 
-    async scanOss(sourceFile: string): Promise<CxCommandOutput> {
+    async ossScanResults(sourceFile: string): Promise<CxCommandOutput> {
         const commands: string[] = [CxConstants.CMD_SCAN, CxConstants.CMD_OSS, CxConstants.SOURCE, sourceFile];
         commands.push(...this.initializeCommands(false));
         const exec = new ExecutionService();
