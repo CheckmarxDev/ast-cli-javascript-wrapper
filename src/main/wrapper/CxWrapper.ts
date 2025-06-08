@@ -376,7 +376,7 @@ export class CxWrapper {
     const exec = new ExecutionService();
     const output = await exec.executeMapTenantOutputCommands(this.config.pathToExecutable, commands);
     return output.has(CxConstants.AI_MCP_SERVER_KEY) &&
-           output.get(CxConstants.AI_MCP_SERVER_KEY).toLowerCase() === "true";
+           output.get(CxConstants.AI_MCP_SERVER_KEY).toLowerCase() === " true";
 }
 
     async kicsChat(apikey: string, file: string, line: number, severity: string, vulnerability: string, input: string, conversationId?: string, model?: string): Promise<CxCommandOutput> {
