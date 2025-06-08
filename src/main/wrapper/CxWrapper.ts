@@ -369,6 +369,16 @@ export class CxWrapper {
         return output.has(CxConstants.AI_GUIDED_REMEDIATION_KEY) && output.get(CxConstants.AI_GUIDED_REMEDIATION_KEY).toLowerCase() === " true";
     }
 
+
+    async aiMcpServerEnabled(): Promise<boolean> {
+    const commands: string[] = [CxConstants.CMD_UTILS, CxConstants.SUB_CMD_TENANT];
+    commands.push(...this.initializeCommands(false));
+    const exec = new ExecutionService();
+    const output = await exec.executeMapTenantOutputCommands(this.config.pathToExecutable, commands);
+    return output.has(CxConstants.AI_MCP_SERVER_KEY) &&
+           output.get(CxConstants.AI_MCP_SERVER_KEY).toLowerCase() === "true";
+}
+
     async kicsChat(apikey: string, file: string, line: number, severity: string, vulnerability: string, input: string, conversationId?: string, model?: string): Promise<CxCommandOutput> {
         const commands: string[] = [
             CxConstants.CMD_CHAT,
