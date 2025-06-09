@@ -6,10 +6,9 @@ export default class CxSecretsResult {
     locations: { line: number, startIndex: number, endIndex: number }[];
 
     static parseResult(resultObject: any): CxSecretsResult[] {
-        const results = resultObject.Packages;
         let secretsResults: CxSecretsResult[] = [];
-        if (results instanceof Array) {
-            secretsResults = results.map((member: any) => {
+        if (resultObject instanceof Array) {
+            secretsResults = resultObject.map((member: any) => {
                 const secretsResult = new CxSecretsResult();
                 secretsResult.title = member.Title;
                 secretsResult.description = member.Description;
@@ -26,13 +25,13 @@ export default class CxSecretsResult {
             });
         } else {
             const secretsResult = new CxSecretsResult();
-            secretsResult.title = results.Title;
-            secretsResult.description = results.Description;
-            secretsResult.severity = results.Severity;
-            secretsResult.filepath = results.FilePath;
-            secretsResult.filepath = results.FilePath;
-            secretsResult.locations = Array.isArray(results.Locations)
-                ? results.Locations.map((l: any) => ({
+            secretsResult.title = resultObject.Title;
+            secretsResult.description = resultObject.Description;
+            secretsResult.severity = resultObject.Severity;
+            secretsResult.filepath = resultObject.FilePath;
+            secretsResult.filepath = resultObject.FilePath;
+            secretsResult.locations = Array.isArray(resultObject.Locations)
+                ? resultObject.Locations.map((l: any) => ({
                     line: l.Line,
                     startIndex: l.StartIndex,
                     endIndex: l.EndIndex,
