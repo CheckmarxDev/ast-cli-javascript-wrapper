@@ -14,6 +14,7 @@ export default class CxSecretsResult {
                 secretsResult.title = member.Title;
                 secretsResult.description = member.Description;
                 secretsResult.filepath = member.FilePath;
+                secretsResult.severity = member.Severity;
                 secretsResult.locations = Array.isArray(member.Locations)
                     ? member.Locations.map((l: any) => ({
                         line: l.Line,
@@ -27,6 +28,7 @@ export default class CxSecretsResult {
             const secretsResult = new CxSecretsResult();
             secretsResult.title = results.Title;
             secretsResult.description = results.Description;
+            secretsResult.severity = results.Severity;
             secretsResult.filepath = results.FilePath;
             secretsResult.filepath = results.FilePath;
             secretsResult.locations = Array.isArray(results.Locations)
