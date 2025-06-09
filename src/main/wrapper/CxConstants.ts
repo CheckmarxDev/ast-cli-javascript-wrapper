@@ -90,6 +90,7 @@ export enum CxConstants {
     SCAN_TYPE = "CxScan",
     SCAN_ASCA = "CxAsca",
     SCAN_OSS = "CxOss",
+    SCAN_SECRETS = "CxSecrets",
     PROJECT_TYPE = "CxProject",
     PREDICATE_TYPE = "CxPredicate",
     CODE_BASHING_TYPE = "CxCodeBashing",

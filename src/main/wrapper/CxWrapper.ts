@@ -160,7 +160,7 @@ export class CxWrapper {
         const commands: string[] = [CxConstants.CMD_SCAN, CxConstants.CMD_OSS, CxConstants.SOURCE, sourceFile];
         commands.push(...this.initializeCommands(false));
         const exec = new ExecutionService();
-        return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.SCAN_OSS);
+        return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.SCAN_SECRETS);
     }
 
     async scanCancel(id: string): Promise<CxCommandOutput> {
