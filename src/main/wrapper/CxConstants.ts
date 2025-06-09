@@ -107,8 +107,8 @@ export enum CxConstants {
     SEVERITY_MEDIUM = "medium",
     STATE_CONFIRMED = "confirmed",
     CMD_LEARN_MORE = "learn-more",
-    IDE_SCANS_KEY = " scan.config.plugins.ideScans",
-    AI_GUIDED_REMEDIATION_KEY = " scan.config.plugins.aiGuidedRemediation",
+    IDE_SCANS_KEY = "scan.config.plugins.ideScans",
+    AI_GUIDED_REMEDIATION_KEY = "scan.config.plugins.aiGuidedRemediation",
     AI_MCP_SERVER_KEY = "scan.config.plugins.aiMcpServer"
 
 }

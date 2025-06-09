@@ -125,6 +125,13 @@ describe("ScanCreate cases", () => {
         expect(aiEnabled).toBeDefined();
     })
 
+    it("Should check if AI MCP server is active", async () => {
+    const cxScanConfig = new BaseTest();
+    const auth = new CxWrapper(cxScanConfig);
+    const aiMcpEnabled: boolean = await auth.aiMcpServerEnabled();
+    expect(typeof aiMcpEnabled).toBe("boolean");
+});
+
     it('ScanAsca fail case Without extensions', async () => {
         const auth = new CxWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput = await auth.scanAsca("tsc/tests/data/python-file");

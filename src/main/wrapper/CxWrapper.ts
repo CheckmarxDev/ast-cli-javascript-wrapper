@@ -8,6 +8,7 @@ import * as fs from "fs"
 import * as os from "os";
 import CxBFL from "../bfl/CxBFL";
 import path = require('path');
+import {getTrimmedMapValue} from "./utils";
 
 type ParamTypeMap = Map<CxParamType, string>;
 
@@ -56,6 +57,7 @@ export class CxWrapper {
         }
     }
 
+    
     initializeCommands(formatRequired: boolean): string[] {
         const list: string[] = [];
         if (this.config.clientId) {
@@ -353,30 +355,38 @@ export class CxWrapper {
         return exec.executeCommands(this.config.pathToExecutable, commands);
     }
 
-    async ideScansEnabled() : Promise<boolean> {
-        const commands: string[] = [CxConstants.CMD_UTILS, CxConstants.SUB_CMD_TENANT];
-        commands.push(...this.initializeCommands(false));
-        const exec = new ExecutionService();
-        const output =  await exec.executeMapTenantOutputCommands(this.config.pathToExecutable, commands);
-        return output.has(CxConstants.IDE_SCANS_KEY) && output.get(CxConstants.IDE_SCANS_KEY).toLowerCase() === " true";
-    }
-
-    async guidedRemediationEnabled() : Promise<boolean> {
-        const commands: string[] = [CxConstants.CMD_UTILS, CxConstants.SUB_CMD_TENANT];
-        commands.push(...this.initializeCommands(false));
-        const exec = new ExecutionService();
-        const output =  await exec.executeMapTenantOutputCommands(this.config.pathToExecutable, commands);
-        return output.has(CxConstants.AI_GUIDED_REMEDIATION_KEY) && output.get(CxConstants.AI_GUIDED_REMEDIATION_KEY).toLowerCase() === " true";
-    }
-
-
-    async aiMcpServerEnabled(): Promise<boolean> {
+    async ideScansEnabled(): Promise<boolean> {
     const commands: string[] = [CxConstants.CMD_UTILS, CxConstants.SUB_CMD_TENANT];
     commands.push(...this.initializeCommands(false));
+
     const exec = new ExecutionService();
     const output = await exec.executeMapTenantOutputCommands(this.config.pathToExecutable, commands);
-    return output.has(CxConstants.AI_MCP_SERVER_KEY) &&
-           output.get(CxConstants.AI_MCP_SERVER_KEY).toLowerCase() === "true";
+
+    const value = getTrimmedMapValue(output, CxConstants.IDE_SCANS_KEY);
+    return value?.toLowerCase() === "true";
+}
+
+    async guidedRemediationEnabled(): Promise<boolean> {
+    const commands: string[] = [CxConstants.CMD_UTILS, CxConstants.SUB_CMD_TENANT];
+    commands.push(...this.initializeCommands(false));
+
+    const exec = new ExecutionService();
+    const output = await exec.executeMapTenantOutputCommands(this.config.pathToExecutable, commands);
+
+    const value = getTrimmedMapValue(output, CxConstants.AI_GUIDED_REMEDIATION_KEY);
+    return value?.toLowerCase() === "true";
+}
+
+
+   async aiMcpServerEnabled(): Promise<boolean> {
+  const commands: string[] = [CxConstants.CMD_UTILS, CxConstants.SUB_CMD_TENANT];
+  commands.push(...this.initializeCommands(false));
+
+  const exec = new ExecutionService();
+  const output = await exec.executeMapTenantOutputCommands(this.config.pathToExecutable, commands);
+
+  const value = getTrimmedMapValue(output, CxConstants.AI_MCP_SERVER_KEY);
+  return value?.toLowerCase() === "true";
 }
 
     async kicsChat(apikey: string, file: string, line: number, severity: string, vulnerability: string, input: string, conversationId?: string, model?: string): Promise<CxCommandOutput> {
