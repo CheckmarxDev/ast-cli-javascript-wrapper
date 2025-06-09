@@ -73,6 +73,7 @@ export enum CxConstants {
     SOURCE_FILE = "--file-source",
     ASCA_UPDATE_VERSION = "--asca-latest-version",
     CMD_OSS = "oss-realtime",
+    CMD_SECRETS = "secrets-realtime",
     PROJECT_ID = "--project-id",
     SIMILARITY_ID = "--similarity-id",
     QUERY_ID = "--query-id",
