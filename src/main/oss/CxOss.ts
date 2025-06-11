@@ -1,14 +1,17 @@
 import { CxManifestStatus } from './CxManifestStatus';
 
+export interface Location {
+  line: number;
+  startIndex: number;
+  endIndex: number;
+}
+
 export default class CxOssResult {
   packageManager: string;
   packageName: string;
   version: string;
   filepath: string;
-  lineStart: number;
-  lineEnd: number;
-  startIndex: number;
-  endIndex: number;
+  locations: Location[];
   status: CxManifestStatus;
   vulnerabilities: { cve: string, description: string, severity: string }[];
 
@@ -20,12 +23,15 @@ export default class CxOssResult {
         const ossResult = new CxOssResult();
         ossResult.packageManager = member.PackageManager;
         ossResult.packageName = member.PackageName;
-        ossResult.version = member.PackageVersion;
+        ossResult.version = member.Version;
         ossResult.filepath = member.FilePath;
-        ossResult.lineStart = member.LineStart;
-        ossResult.lineEnd = member.LineEnd;
-        ossResult.startIndex = member.StartIndex;
-        ossResult.endIndex = member.EndIndex;
+        ossResult.locations = Array.isArray(member.Locations)
+          ? member.Locations.map((loc: any) => ({
+            line: loc.Line,
+            startIndex: loc.StartIndex,
+            endIndex: loc.EndIndex
+          }))
+          : [];
         ossResult.status = member.Status as CxManifestStatus;
         ossResult.vulnerabilities = Array.isArray(member.Vulnerabilities)
           ? member.Vulnerabilities.map((vul: any) => ({
@@ -40,12 +46,15 @@ export default class CxOssResult {
       const ossResult = new CxOssResult();
       ossResult.packageManager = packages.PackageManager;
       ossResult.packageName = packages.PackageName;
-      ossResult.version = packages.PackageVersion;
+      ossResult.version = packages.Version;
       ossResult.filepath = packages.FilePath;
-      ossResult.lineStart = packages.LineStart;
-      ossResult.lineEnd = packages.LineEnd;
-      ossResult.startIndex = packages.StartIndex;
-      ossResult.endIndex = packages.EndIndex;
+      ossResult.locations = Array.isArray(packages.Locations)
+        ? packages.Locations.map((loc: any) => ({
+          line: loc.Line,
+          startIndex: loc.StartIndex,
+          endIndex: loc.EndIndex
+        }))
+        : [];
       ossResult.status = packages.Status as CxManifestStatus;
       ossResult.vulnerabilities = Array.isArray(packages.Vulnerabilities)
     ? packages.Vulnerabilities.map((vul: any) => ({
