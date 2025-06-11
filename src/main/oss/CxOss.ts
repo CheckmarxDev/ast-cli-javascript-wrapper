@@ -23,7 +23,7 @@ export default class CxOssResult {
         const ossResult = new CxOssResult();
         ossResult.packageManager = member.PackageManager;
         ossResult.packageName = member.PackageName;
-        ossResult.version = member.PackageVersion;
+        ossResult.version = member.Version;
         ossResult.filepath = member.FilePath;
         ossResult.locations = Array.isArray(member.Locations)
           ? member.Locations.map((loc: any) => ({
@@ -46,7 +46,7 @@ export default class CxOssResult {
       const ossResult = new CxOssResult();
       ossResult.packageManager = packages.PackageManager;
       ossResult.packageName = packages.PackageName;
-      ossResult.version = packages.PackageVersion;
+      ossResult.version = packages.Version;
       ossResult.filepath = packages.FilePath;
       ossResult.locations = Array.isArray(packages.Locations)
         ? packages.Locations.map((loc: any) => ({
