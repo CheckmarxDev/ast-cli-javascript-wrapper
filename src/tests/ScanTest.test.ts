@@ -174,7 +174,7 @@ describe("ScanCreate cases", () => {
         expect(typeof scanObject.scanDetails[0].description).toBe('string');
     });
     
-    it.skip('ScanOss Successful case', async () => {
+    it('ScanOss Successful case', async () => {
         const wrapper = new CxWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput = await wrapper.ossScanResults("tsc/tests/data/package.json");
         console.log("Json object from scanOSS successful case: " + JSON.stringify(cxCommandOutput));
