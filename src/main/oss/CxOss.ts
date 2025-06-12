@@ -1,4 +1,4 @@
-import { CxManifestStatus } from './CxManifestStatus';
+import { CxRealtimeEngineStatus } from './CxRealtimeEngineStatus';
 
 export interface Location {
   line: number;
@@ -12,7 +12,7 @@ export default class CxOssResult {
   version: string;
   filepath: string;
   locations: Location[];
-  status: CxManifestStatus;
+  status: CxRealtimeEngineStatus;
   vulnerabilities: { cve: string, description: string, severity: string }[];
 
   static parseResult(resultObject: any): CxOssResult[] {
@@ -32,7 +32,7 @@ export default class CxOssResult {
             endIndex: loc.EndIndex
           }))
           : [];
-        ossResult.status = member.Status as CxManifestStatus;
+        ossResult.status = member.Status as CxRealtimeEngineStatus;
         ossResult.vulnerabilities = Array.isArray(member.Vulnerabilities)
           ? member.Vulnerabilities.map((vul: any) => ({
             cve: vul.CVE,
@@ -55,7 +55,7 @@ export default class CxOssResult {
           endIndex: loc.EndIndex
         }))
         : [];
-      ossResult.status = packages.Status as CxManifestStatus;
+      ossResult.status = packages.Status as CxRealtimeEngineStatus;
       ossResult.vulnerabilities = Array.isArray(packages.Vulnerabilities)
     ? packages.Vulnerabilities.map((vul: any) => ({
         cve: vul.CVE,
