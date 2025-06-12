@@ -1,4 +1,4 @@
-export enum CxManifestStatus {
+export enum CxRealtimeEngineStatus {
     malicious = "Malicious",
     ok = "OK",
     unknown = "Unknown",

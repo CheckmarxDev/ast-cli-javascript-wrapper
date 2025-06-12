@@ -1,8 +1,10 @@
+import {CxRealtimeEngineStatus} from "../oss/CxRealtimeEngineStatus";
+
 export default class CxSecretsResult {
     title: string;
     description: string;
     filepath: string;
-    severity: string;
+    severity: CxRealtimeEngineStatus;
     locations: { line: number, startIndex: number, endIndex: number }[];
 
     static parseResult(resultObject: any): CxSecretsResult[] {
@@ -13,7 +15,7 @@ export default class CxSecretsResult {
                 secretsResult.title = member.Title;
                 secretsResult.description = member.Description;
                 secretsResult.filepath = member.FilePath;
-                secretsResult.severity = member.Severity;
+                secretsResult.severity = member.Severity as CxRealtimeEngineStatus;
                 secretsResult.locations = Array.isArray(member.Locations)
                     ? member.Locations.map((l: any) => ({
                         line: l.Line,
