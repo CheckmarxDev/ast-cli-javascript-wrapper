@@ -19,8 +19,10 @@ export default class CxResult {
     data: CxData;
     comments: any = {};
     vulnerabilityDetails:CxVulnerabilityDetails;
+    riskScore:number;
+    traits: { [key: string]: string } = {};
 
-    constructor(type: string,label: string,id: string,status: string, alternateId : string, similarityId: string,state: string,severity: string,created: string,firstFoundAt: string,foundAt: string,firstScanId:string,description: string,data: CxData,comments: any,vulnerabilityDetails: CxVulnerabilityDetails,descriptionHTML: string) {
+    constructor(type: string,label: string,id: string,status: string, alternateId : string, similarityId: string,state: string,severity: string,created: string,firstFoundAt: string,foundAt: string,firstScanId:string,description: string,data: CxData,comments: any,vulnerabilityDetails: CxVulnerabilityDetails,descriptionHTML: string,riskScore: number,traits: { [key: string]: string } = {}) {
         this.type = type;
         this.label = label;
         this.id = id;
@@ -38,6 +40,8 @@ export default class CxResult {
         this.comments = comments;
         this.vulnerabilityDetails = vulnerabilityDetails;
         this.descriptionHTML = descriptionHTML;
+        this.riskScore = riskScore;
+        this.traits = traits;
     }
 }
 
