@@ -1,4 +1,5 @@
 export enum CxConstants {
+    IGNORE__FILE_PATH = "--ignored-file-path",
     SOURCE = "-s",
     VERBOSE = "-v",
     PROJECT_NAME = "--project-name",
