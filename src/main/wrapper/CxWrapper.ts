@@ -459,7 +459,7 @@ export class CxWrapper {
             CxConstants.ENGINE, engine,
             CxConstants.PROBLEM_SEVERITY, problemSeverity
         ];
-        commands.push(...this.initializeCommands(true));
+        commands.push(...this.initializeCommands(false));
         const exec = new ExecutionService();
         return exec.executeCommands(this.config.pathToExecutable, commands);
     }
