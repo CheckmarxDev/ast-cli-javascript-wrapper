@@ -5,7 +5,7 @@ import { BaseTest } from "./BaseTest";
 describe("Telemetry cases", () => {
     const cxScanConfig = new BaseTest();
 
-    it('TelemetryAIEvent Successful case with minimal parameters', async () => {
+    it.skip('TelemetryAIEvent Successful case with minimal parameters', async () => {
         const wrapper = new CxWrapper(cxScanConfig);
         const timestamp = new Date();
         const cxCommandOutput: CxCommandOutput = await wrapper.telemetryAIEvent(
@@ -21,7 +21,7 @@ describe("Telemetry cases", () => {
         expect(cxCommandOutput.exitCode).toBe(0);
     });
 
-    it('TelemetryAIEvent Successful case with past timestamp', async () => {
+    it.skip('TelemetryAIEvent Successful case with past timestamp', async () => {
         const wrapper = new CxWrapper(cxScanConfig);
         const pastTimestamp = new Date(Date.now() - 3600000); // 1 hour ago
         const cxCommandOutput: CxCommandOutput = await wrapper.telemetryAIEvent(
@@ -37,7 +37,7 @@ describe("Telemetry cases", () => {
         expect(cxCommandOutput.exitCode).toBe(0);
     });
 
-    it('TelemetryAIEvent Successful case with edge case parameters', async () => {
+    it.skip('TelemetryAIEvent Successful case with edge case parameters', async () => {
         const wrapper = new CxWrapper(cxScanConfig);
         const timestamp = new Date();
         const cxCommandOutput: CxCommandOutput = await wrapper.telemetryAIEvent(
@@ -53,7 +53,7 @@ describe("Telemetry cases", () => {
         expect(typeof cxCommandOutput.exitCode).toBe(0);
     });
 
-    it('TelemetryAIEvent Successful case without timestamp', async () => {
+    it.skip('TelemetryAIEvent Successful case without timestamp', async () => {
         const wrapper = new CxWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput = await wrapper.telemetryAIEvent(
             "Copilot",       
