@@ -115,7 +115,6 @@ export enum CxConstants {
     TELEMETRY = "telemetry",
     SUB_CMD_TELEMETRY_AI = "ai",
     AI_PROVIDER = "--ai-provider",
-    TIMESTAMP = "--timestamp",
     TYPE = "--type",
     SUB_TYPE = "--sub-type",
     PROBLEM_SEVERITY = "--problem-severity"
