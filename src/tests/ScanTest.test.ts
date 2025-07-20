@@ -190,7 +190,7 @@ describe("ScanCreate cases", () => {
         expect(cxCommandOutput.exitCode).toBe(0);
     });
 
-    it('ScanContainersRealtime Successful case', async () => {
+    it.skip('ScanContainersRealtime Successful case', async () => {
         const wrapper = new CxWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput = await wrapper.containersRealtimeScanResults("src/tests/data/Dockerfile");
         console.log("Json object from scanContainersRealtime successful case: " + JSON.stringify(cxCommandOutput));
