@@ -168,6 +168,13 @@ export class CxWrapper {
     return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.SCAN_OSS);
 }
 
+    async containersRealtimeScanResults(sourceFile: string): Promise<CxCommandOutput> {
+        const commands: string[] = [CxConstants.CMD_SCAN, CxConstants.CMD_CONTAINERS_REALTIME, CxConstants.SOURCE, sourceFile];
+        commands.push(...this.initializeCommands(false));
+        const exec = new ExecutionService();
+        return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.SCAN_CONTAINERS_REALTIME);
+    }
+    
     async secretsScanResults(sourceFile: string, ignoredFilePath?: string): Promise<CxCommandOutput> {
     const commands: string[] = [
         CxConstants.CMD_SCAN,
