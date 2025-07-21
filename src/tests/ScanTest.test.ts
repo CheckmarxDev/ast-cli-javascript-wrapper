@@ -205,9 +205,9 @@ describe("ScanCreate cases", () => {
     expect(hasCOA).toBe(false);
 });
 
-    it.skip('ScanSecrets Successful case', async () => {
+    it('ScanSecrets Successful case', async () => {
         const wrapper = new CxWrapper(cxScanConfig);
-        const cxCommandOutput: CxCommandOutput = await wrapper.secretsScanResults("src/tests/data/secret-exposed.txt");
+        const cxCommandOutput: CxCommandOutput = await wrapper.secretsScanResults("src/tests/data/secret-exposed.txt","");
         console.log("Json object from scanOSS successful case: " + JSON.stringify(cxCommandOutput));
         expect(cxCommandOutput.payload).toBeDefined();
         expect(cxCommandOutput.exitCode).toBe(0);
