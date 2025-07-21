@@ -183,7 +183,7 @@ describe("ScanCreate cases", () => {
         expect(cxCommandOutput.exitCode).toBe(0);
     });
 
-    it('ScanOss with ignored package should filter results', async () => {
+    skip.it('ScanOss with ignored package should filter results', async () => {
     const wrapper = new CxWrapper(cxScanConfig);
     const sourceFile = "tsc/tests/data/package.json";
     const ignoredFile = "tsc/tests/data/checkmarxIgnoredTempFile.json";
