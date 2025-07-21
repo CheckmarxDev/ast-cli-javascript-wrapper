@@ -183,7 +183,7 @@ describe("ScanCreate cases", () => {
         expect(cxCommandOutput.exitCode).toBe(0);
     });
 
-    skip.it('ScanOss with ignored package should filter results', async () => {
+    it.skip('ScanOss with ignored package should filter results', async () => {
     const wrapper = new CxWrapper(cxScanConfig);
     const sourceFile = "tsc/tests/data/package.json";
     const ignoredFile = "tsc/tests/data/checkmarxIgnoredTempFile.json";
@@ -213,4 +213,19 @@ describe("ScanCreate cases", () => {
         expect(cxCommandOutput.exitCode).toBe(0);
     });
 
+    it.skip('ScanSecrets with ignore file filters the result', async () => {
+    const wrapper = new CxWrapper(cxScanConfig);
+    const cxCommandOutput: CxCommandOutput = await wrapper.secretsScanResults(
+        "src/tests/data/secret-exposed.txt",
+        "src/tests/data/ignoreFileSecrets.json"
+    );
+
+    console.log("Json object from scanSecrets with ignore file: " + JSON.stringify(cxCommandOutput));
+    expect(cxCommandOutput.payload).toBeDefined();
+    expect(Array.isArray(cxCommandOutput.payload)).toBe(true);
+    expect(cxCommandOutput.payload.length).toBe(0);
+    expect(cxCommandOutput.exitCode).toBe(0);
 });
+
+});
+
