@@ -57,7 +57,7 @@ export class CxWrapper {
         }
     }
 
-    
+
     initializeCommands(formatRequired: boolean): string[] {
         const list: string[] = [];
         if (this.config.clientId) {
@@ -149,25 +149,48 @@ export class CxWrapper {
         return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.SCAN_ASCA);
     }
 
-    async ossScanResults(sourceFile: string): Promise<CxCommandOutput> {
-        const commands: string[] = [CxConstants.CMD_SCAN, CxConstants.CMD_OSS, CxConstants.SOURCE, sourceFile];
-        commands.push(...this.initializeCommands(false));
-        const exec = new ExecutionService();
-        return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.SCAN_OSS);
+    async ossScanResults(sourceFile: string, ignoredFilePath?: string): Promise<CxCommandOutput> {
+    const commands: string[] = [
+        CxConstants.CMD_SCAN,
+        CxConstants.CMD_OSS,
+        CxConstants.SOURCE,
+        sourceFile
+    ];
+
+    if (ignoredFilePath) {
+        commands.push(CxConstants.IGNORE__FILE_PATH);
+        commands.push(ignoredFilePath);
     }
 
+    commands.push(...this.initializeCommands(false));
+
+    const exec = new ExecutionService();
+    return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.SCAN_OSS);
+}
+
+    async secretsScanResults(sourceFile: string, ignoredFilePath?: string): Promise<CxCommandOutput> {
+    const commands: string[] = [
+        CxConstants.CMD_SCAN,
+        CxConstants.CMD_SECRETS,
+        CxConstants.SOURCE,
+        sourceFile
+    ];
+
+    if (ignoredFilePath) {
+        commands.push(CxConstants.IGNORE__FILE_PATH);
+        commands.push(ignoredFilePath);
+    }
+
+    commands.push(...this.initializeCommands(false));
+
+    const exec = new ExecutionService();
+    return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.SCAN_SECRETS);
+}
     async containersRealtimeScanResults(sourceFile: string): Promise<CxCommandOutput> {
         const commands: string[] = [CxConstants.CMD_SCAN, CxConstants.CMD_CONTAINERS_REALTIME, CxConstants.SOURCE, sourceFile];
         commands.push(...this.initializeCommands(false));
         const exec = new ExecutionService();
         return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.SCAN_CONTAINERS_REALTIME);
-    }
-
-    async secretsScanResults(sourceFile: string): Promise<CxCommandOutput> {
-        const commands: string[] = [CxConstants.CMD_SCAN, CxConstants.CMD_SECRETS, CxConstants.SOURCE, sourceFile];
-        commands.push(...this.initializeCommands(false));
-        const exec = new ExecutionService();
-        return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.SCAN_SECRETS);
     }
 
     async scanCancel(id: string): Promise<CxCommandOutput> {
