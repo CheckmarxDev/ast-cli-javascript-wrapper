@@ -1,14 +1,14 @@
-import {CxConfig} from "./CxConfig";
-import {CxParamType} from "./CxParamType";
-import {CxConstants} from "./CxConstants";
-import {ExecutionService} from "./ExecutionService";
-import {CxCommandOutput} from "./CxCommandOutput";
-import {getLoggerWithFilePath, logger} from "./loggerConfig";
+import { CxConfig } from "./CxConfig";
+import { CxParamType } from "./CxParamType";
+import { CxConstants } from "./CxConstants";
+import { ExecutionService } from "./ExecutionService";
+import { CxCommandOutput } from "./CxCommandOutput";
+import { getLoggerWithFilePath, logger } from "./loggerConfig";
 import * as fs from "fs"
 import * as os from "os";
 import CxBFL from "../bfl/CxBFL";
 import path = require('path');
-import {getTrimmedMapValue} from "./utils";
+import { getTrimmedMapValue } from "./utils";
 
 type ParamTypeMap = Map<CxParamType, string>;
 
@@ -84,8 +84,8 @@ export class CxWrapper {
             list.push(CxConstants.TENANT);
             list.push(this.config.tenant);
         }
-        if(this.config.additionalParameters){
-            this.prepareAdditionalParams(this.config.additionalParameters).forEach(function (param){
+        if (this.config.additionalParameters) {
+            this.prepareAdditionalParams(this.config.additionalParameters).forEach(function (param) {
                 list.push(param)
             })
         }
@@ -246,9 +246,9 @@ export class CxWrapper {
         return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.PREDICATE_TYPE);
     }
 
-    async triageUpdate(projectId: string, similarityId: string, scanType: string, state: string, comment: string, severity: string, stateId:number|null = null): Promise<CxCommandOutput> {
+    async triageUpdate(projectId: string, similarityId: string, scanType: string, state: string, comment: string, severity: string, stateId: number | null = null): Promise<CxCommandOutput> {
         const commands: string[] = [CxConstants.CMD_TRIAGE, CxConstants.SUB_CMD_UPDATE, CxConstants.PROJECT_ID, projectId, CxConstants.SIMILARITY_ID, similarityId, CxConstants.SCAN_TYPES_SUB_CMD, scanType, CxConstants.STATE, state, CxConstants.COMMENT, comment, CxConstants.SEVERITY, severity];
-        if(stateId) {
+        if (stateId) {
             commands.push(CxConstants.STATE_ID)
             commands.push(stateId.toString())
         }
@@ -275,7 +275,7 @@ export class CxWrapper {
         return exec.executeResultsCommandsFile(scanId, CxConstants.FORMAT_JSON, CxConstants.FORMAT_JSON_FILE, commands, this.config.pathToExecutable, fileName);
     }
 
-    async riskManagementResults(projectId: string, scanId: string, limit?: number):  Promise<CxCommandOutput> {
+    async riskManagementResults(projectId: string, scanId: string, limit?: number): Promise<CxCommandOutput> {
         const commands: string[] = [CxConstants.CMD_RESULT, CxConstants.CMD_RISK_MANAGEMENT];
         commands.push(CxConstants.PROJECT_ID, projectId);
         commands.push(CxConstants.SCAN_ID, scanId);
@@ -343,10 +343,10 @@ export class CxWrapper {
         return response;
     }
 
-    async kicsRealtimeScan(fileSources: string, engine:string, additionalParams: string):Promise<[Promise<CxCommandOutput>,any]>  {
+    async kicsRealtimeScan(fileSources: string, engine: string, additionalParams: string): Promise<[Promise<CxCommandOutput>, any]> {
         const commands: string[] = [CxConstants.CMD_SCAN, CxConstants.CMD_KICS_REALTIME, CxConstants.FILE_SOURCES, fileSources, CxConstants.ADDITONAL_PARAMS, additionalParams];
-        if(engine.length>0){
-            commands.push(CxConstants.ENGINE,engine)
+        if (engine.length > 0) {
+            commands.push(CxConstants.ENGINE, engine)
         }
         commands.push(...this.initializeCommands(false));
         const exec = new ExecutionService();
@@ -365,66 +365,66 @@ export class CxWrapper {
     }
 
 
-    async learnMore(queryId: string){
-        const commands: string[] = [CxConstants.CMD_UTILS,CxConstants.CMD_LEARN_MORE,CxConstants.QUERY_ID,queryId]
+    async learnMore(queryId: string) {
+        const commands: string[] = [CxConstants.CMD_UTILS, CxConstants.CMD_LEARN_MORE, CxConstants.QUERY_ID, queryId]
         commands.push(...this.initializeCommands(true))
         const exec = new ExecutionService();
         return exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.LEARN_MORE_DESCRIPTIONS_TYPE);
     }
 
-    async kicsRemediation(resultsFile: string, kicsFile:string, engine:string,similarityIds?: string):Promise<[Promise<CxCommandOutput>,any]>  {
-        const commands: string[] = [CxConstants.CMD_UTILS, CxConstants.CMD_REMEDIATION,CxConstants.KICS,CxConstants.KICS_REMEDIATION_RESULTS_FILE, resultsFile, CxConstants.KICS_REMEDIATION_KICS_FILE, kicsFile];
-        if(engine.length>0){
-            commands.push(CxConstants.ENGINE,engine)
+    async kicsRemediation(resultsFile: string, kicsFile: string, engine: string, similarityIds?: string): Promise<[Promise<CxCommandOutput>, any]> {
+        const commands: string[] = [CxConstants.CMD_UTILS, CxConstants.CMD_REMEDIATION, CxConstants.KICS, CxConstants.KICS_REMEDIATION_RESULTS_FILE, resultsFile, CxConstants.KICS_REMEDIATION_KICS_FILE, kicsFile];
+        if (engine.length > 0) {
+            commands.push(CxConstants.ENGINE, engine)
         }
-        if(similarityIds){
-            commands.push(CxConstants.KICS_REMEDIATION_SIMILARITY_IDS,similarityIds)
+        if (similarityIds) {
+            commands.push(CxConstants.KICS_REMEDIATION_SIMILARITY_IDS, similarityIds)
         }
         commands.push(...this.initializeCommands(false));
         const exec = new ExecutionService();
         return exec.executeKicsCommands(this.config.pathToExecutable, commands, CxConstants.KICS_REMEDIATION_TYPE);
     }
 
-    async scaRemediation(packageFiles: string, packages:string, packageVersion:string): Promise<CxCommandOutput>  {
-        const commands: string[] = [CxConstants.CMD_UTILS, CxConstants.CMD_REMEDIATION,CxConstants.SUB_CMD_REMEDIATION_SCA,CxConstants.SCA_REMEDIATION_PACKAGE_FILES, packageFiles,CxConstants.SCA_REMEDIATION_PACKAGE, packages,CxConstants.SCA_REMEDIATION_PACKAGE_VERSION,packageVersion];
+    async scaRemediation(packageFiles: string, packages: string, packageVersion: string): Promise<CxCommandOutput> {
+        const commands: string[] = [CxConstants.CMD_UTILS, CxConstants.CMD_REMEDIATION, CxConstants.SUB_CMD_REMEDIATION_SCA, CxConstants.SCA_REMEDIATION_PACKAGE_FILES, packageFiles, CxConstants.SCA_REMEDIATION_PACKAGE, packages, CxConstants.SCA_REMEDIATION_PACKAGE_VERSION, packageVersion];
         commands.push(...this.initializeCommands(false));
         const exec = new ExecutionService();
         return exec.executeCommands(this.config.pathToExecutable, commands);
     }
 
     async ideScansEnabled(): Promise<boolean> {
-    const commands: string[] = [CxConstants.CMD_UTILS, CxConstants.SUB_CMD_TENANT];
-    commands.push(...this.initializeCommands(false));
+        const commands: string[] = [CxConstants.CMD_UTILS, CxConstants.SUB_CMD_TENANT];
+        commands.push(...this.initializeCommands(false));
 
-    const exec = new ExecutionService();
-    const output = await exec.executeMapTenantOutputCommands(this.config.pathToExecutable, commands);
+        const exec = new ExecutionService();
+        const output = await exec.executeMapTenantOutputCommands(this.config.pathToExecutable, commands);
 
-    const value = getTrimmedMapValue(output, CxConstants.IDE_SCANS_KEY);
-    return value?.toLowerCase() === "true";
-}
+        const value = getTrimmedMapValue(output, CxConstants.IDE_SCANS_KEY);
+        return value?.toLowerCase() === "true";
+    }
 
     async guidedRemediationEnabled(): Promise<boolean> {
-    const commands: string[] = [CxConstants.CMD_UTILS, CxConstants.SUB_CMD_TENANT];
-    commands.push(...this.initializeCommands(false));
+        const commands: string[] = [CxConstants.CMD_UTILS, CxConstants.SUB_CMD_TENANT];
+        commands.push(...this.initializeCommands(false));
 
-    const exec = new ExecutionService();
-    const output = await exec.executeMapTenantOutputCommands(this.config.pathToExecutable, commands);
+        const exec = new ExecutionService();
+        const output = await exec.executeMapTenantOutputCommands(this.config.pathToExecutable, commands);
 
-    const value = getTrimmedMapValue(output, CxConstants.AI_GUIDED_REMEDIATION_KEY);
-    return value?.toLowerCase() === "true";
-}
+        const value = getTrimmedMapValue(output, CxConstants.AI_GUIDED_REMEDIATION_KEY);
+        return value?.toLowerCase() === "true";
+    }
 
 
-   async aiMcpServerEnabled(): Promise<boolean> {
-  const commands: string[] = [CxConstants.CMD_UTILS, CxConstants.SUB_CMD_TENANT];
-  commands.push(...this.initializeCommands(false));
+    async aiMcpServerEnabled(): Promise<boolean> {
+        const commands: string[] = [CxConstants.CMD_UTILS, CxConstants.SUB_CMD_TENANT];
+        commands.push(...this.initializeCommands(false));
 
-  const exec = new ExecutionService();
-  const output = await exec.executeMapTenantOutputCommands(this.config.pathToExecutable, commands);
+        const exec = new ExecutionService();
+        const output = await exec.executeMapTenantOutputCommands(this.config.pathToExecutable, commands);
 
-  const value = getTrimmedMapValue(output, CxConstants.AI_MCP_SERVER_KEY);
-  return value?.toLowerCase() === "true";
-}
+        const value = getTrimmedMapValue(output, CxConstants.AI_MCP_SERVER_KEY);
+        return value?.toLowerCase() === "true";
+    }
 
     async kicsChat(apikey: string, file: string, line: number, severity: string, vulnerability: string, input: string, conversationId?: string, model?: string): Promise<CxCommandOutput> {
         const commands: string[] = [
@@ -467,7 +467,7 @@ export class CxWrapper {
         return new ExecutionService().executeCommands(this.config.pathToExecutable, commands, CxConstants.CHAT_TYPE);
     }
 
-    async maskSecrets( file: string): Promise<CxCommandOutput> {
+    async maskSecrets(file: string): Promise<CxCommandOutput> {
         const commands: string[] = [
             CxConstants.CMD_UTILS,
             CxConstants.CMD_MASK_SECRETS,
@@ -478,10 +478,26 @@ export class CxWrapper {
         return new ExecutionService().executeCommands(this.config.pathToExecutable, commands, CxConstants.MASK_TYPE);
     }
 
-    prepareAdditionalParams(additionalParameters: string) : string[] {
+    telemetryAIEvent(aiProvider: string, agent: string, eventType: string, subType: string, engine: string, problemSeverity: string): Promise<CxCommandOutput> {
+        const commands: string[] = [
+            CxConstants.TELEMETRY,
+            CxConstants.SUB_CMD_TELEMETRY_AI,
+            CxConstants.AI_PROVIDER, aiProvider,
+            CxConstants.AGENT, agent,
+            CxConstants.TYPE, eventType,
+            CxConstants.SUB_TYPE, subType,
+            CxConstants.ENGINE, engine,
+            CxConstants.PROBLEM_SEVERITY, problemSeverity
+        ];
+        commands.push(...this.initializeCommands(false));
+        const exec = new ExecutionService();
+        return exec.executeCommands(this.config.pathToExecutable, commands);
+    }
+
+    prepareAdditionalParams(additionalParameters: string): string[] {
         const params: string[] = [];
 
-        if(!additionalParameters) {
+        if (!additionalParameters) {
             return params;
         }
 
