@@ -2,6 +2,7 @@ import { CxWrapper } from '../main/wrapper/CxWrapper';
 import { CxCommandOutput } from "../main/wrapper/CxCommandOutput";
 import { CxParamType } from "../main/wrapper/CxParamType";
 import { BaseTest } from "./BaseTest";
+import {OssPackage} from "./data/ossTypes";
 
 describe("ScanCreate cases", () => {
     const cxScanConfig = new BaseTest();
@@ -173,21 +174,58 @@ describe("ScanCreate cases", () => {
         expect(Number.isInteger(scanObject.scanDetails[0].line)).toBe(true);
         expect(typeof scanObject.scanDetails[0].description).toBe('string');
     });
-    
+
     it('ScanOss Successful case', async () => {
         const wrapper = new CxWrapper(cxScanConfig);
-        const cxCommandOutput: CxCommandOutput = await wrapper.ossScanResults("tsc/tests/data/package.json");
+        const cxCommandOutput: CxCommandOutput = await wrapper.ossScanResults("tsc/tests/data/package.json","");
         console.log("Json object from scanOSS successful case: " + JSON.stringify(cxCommandOutput));
         expect(cxCommandOutput.payload).toBeDefined();
         expect(cxCommandOutput.exitCode).toBe(0);
     });
 
-    it.skip('ScanSecrets Successful case', async () => {
+    it.skip('ScanOss with ignored package should filter results', async () => {
+    const wrapper = new CxWrapper(cxScanConfig);
+    const sourceFile = "tsc/tests/data/package.json";
+    const ignoredFile = "tsc/tests/data/checkmarxIgnoredTempFile.json";
+
+    const cxCommandOutput: CxCommandOutput = await wrapper.ossScanResults(sourceFile, ignoredFile);
+
+    expect(cxCommandOutput.exitCode).toBe(0);
+    expect(cxCommandOutput.payload).toBeDefined();
+
+    const results = cxCommandOutput.payload as OssPackage[];
+
+    console.log("Filtered OSS packages:", results);
+
+    expect(results.length).toBe(1);
+
+    const hasCOA = results.some(pkg =>
+        pkg.PackageManager === "coa" && pkg.PackageVersion === "3.1.3"
+    );
+    expect(hasCOA).toBe(false);
+});
+
+    it('ScanSecrets Successful case', async () => {
         const wrapper = new CxWrapper(cxScanConfig);
-        const cxCommandOutput: CxCommandOutput = await wrapper.secretsScanResults("src/tests/data/secret-exposed.txt");
+        const cxCommandOutput: CxCommandOutput = await wrapper.secretsScanResults("src/tests/data/secret-exposed.txt","");
         console.log("Json object from scanOSS successful case: " + JSON.stringify(cxCommandOutput));
         expect(cxCommandOutput.payload).toBeDefined();
         expect(cxCommandOutput.exitCode).toBe(0);
     });
+
+    it.skip('ScanSecrets with ignore file filters the result', async () => {
+    const wrapper = new CxWrapper(cxScanConfig);
+    const cxCommandOutput: CxCommandOutput = await wrapper.secretsScanResults(
+        "src/tests/data/secret-exposed.txt",
+        "src/tests/data/ignoreFileSecrets.json"
+    );
+
+    console.log("Json object from scanSecrets with ignore file: " + JSON.stringify(cxCommandOutput));
+    expect(cxCommandOutput.payload).toBeDefined();
+    expect(Array.isArray(cxCommandOutput.payload)).toBe(true);
+    expect(cxCommandOutput.payload.length).toBe(0);
+    expect(cxCommandOutput.exitCode).toBe(0);
+});
 
 });
+
