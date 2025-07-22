@@ -4,6 +4,7 @@ on:
   pull_request_target:
     types: [ready_for_review, opened, reopened, review_requested, edited]
 
+
 permissions:
   contents: read
   issues: write
