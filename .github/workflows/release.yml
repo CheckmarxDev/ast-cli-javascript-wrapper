@@ -93,13 +93,13 @@ jobs:
       - name: Check if CLI version is latest
         id: check_latest_cli_version
         run: |
-          if [ "${{ inputs.dev }}" == "false" ] || [ -n "${{ inputs.cliTag }}" ] || [ "${{ github.ref }}" != "refs/heads/main" ]; then
-            exit 0
-          fi
+      #    if [ "${{ inputs.dev }}" == "false" ] || [ -n "${{ inputs.cliTag }}" ] || [ "${{ github.ref }}" != "refs/heads/main" ]; then
+      #      exit 0
+      #    fi
           
-          API_RESPONSE=$(curl -s -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/Checkmarx/ast-cli/releases/latest)
-          LATEST_CLI_VERSION=$(echo "$API_RESPONSE" | grep -o '"tag_name"[[:space:]]*:[[:space:]]*"[^"]*"' | sed 's/"tag_name"[[:space:]]*:[[:space:]]*"\([^"]*\)"/\1/' | sed 's/^v//')
-          
+    #      API_RESPONSE=$(curl -s -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/Checkmarx/ast-cli/releases/latest)
+      #    LATEST_CLI_VERSION=$(echo "$API_RESPONSE" | grep -o '"tag_name"[[:space:]]*:[[:space:]]*"[^"]*"' | sed 's/"tag_name"[[:space:]]*:[[:space:]]*"\([^"]*\)"/\1/' | sed 's/^v//')
+          LATEST_CLI_VERSION=$(curl -s https://api.github.com/repos/Checkmarx/ast-cli/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
           if [ "$CLI_VERSION" = "$LATEST_CLI_VERSION" ]; then
             echo "Confirm that the CLI version in the repository is up-to-date with the most recent release: $CLI_VERSION"
           else
