@@ -25,6 +25,7 @@ import CxMask from "../mask/CxMask";
 import CxAsca from "../asca/CxAsca";
 import CxOssResult from "../oss/CxOss";
 import CxSecretsResult from "../secrets/CxSecrets";
+import CxContainerRealtimeResult from "../containersRealtime/CxContainerRealtime";
 
 let skipValue = false;
 const fileSourceFlag = "--file-source"
@@ -210,6 +211,10 @@ export class ExecutionService {
                     case CxConstants.SCAN_OSS:
                         const oss = CxOssResult.parseResult(resultObject);
                         cxCommandOutput.payload = [oss];
+                        break;
+                    case CxConstants.SCAN_CONTAINERS_REALTIME:
+                        const images = CxContainerRealtimeResult.parseResult(resultObject);
+                        cxCommandOutput.payload = [images];
                         break;
                     case CxConstants.SCAN_SECRETS:
                         const secrets = CxSecretsResult.parseResult(resultObject);
