@@ -3,6 +3,7 @@ import {CxRealtimeEngineStatus} from "../oss/CxRealtimeEngineStatus";
 export default class CxSecretsResult {
     title: string;
     description: string;
+    secretValue: string;
     filepath: string;
     severity: CxRealtimeEngineStatus;
     locations: { line: number, startIndex: number, endIndex: number }[];
@@ -14,6 +15,7 @@ export default class CxSecretsResult {
                 const secretsResult = new CxSecretsResult();
                 secretsResult.title = member.Title;
                 secretsResult.description = member.Description;
+                secretsResult.secretValue = member.SecretValue;
                 secretsResult.filepath = member.FilePath;
                 secretsResult.severity = member.Severity as CxRealtimeEngineStatus;
                 secretsResult.locations = Array.isArray(member.Locations)
