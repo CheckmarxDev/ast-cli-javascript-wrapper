@@ -235,5 +235,13 @@ describe("ScanCreate cases", () => {
         expect(cxCommandOutput.exitCode).toBe(0);
     });
 
+    it.skip('ScanIacRealtime Successful case', async () => {
+        const wrapper = new CxWrapper(cxScanConfig);
+        const cxCommandOutput: CxCommandOutput = await wrapper.iacRealtimeScanResults("src/tests/data/Dockerfile", "docker");
+        console.log("Json object from scanIacRealtime successful case: " + JSON.stringify(cxCommandOutput));
+        expect(cxCommandOutput.payload).toBeDefined();
+        expect(cxCommandOutput.exitCode).toBe(0);
+    });
+
 });
 
