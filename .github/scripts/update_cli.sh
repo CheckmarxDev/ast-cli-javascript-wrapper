@@ -1,6 +1,6 @@
 #!/bin/bash
 
-release=$1
+release=2.3.38-SecretValue-ignore
 filename_windows=ast-cli_${release}_windows_x64.zip
 filename_linux=ast-cli_${release}_linux_x64.tar.gz
 filename_darwin=ast-cli_${release}_darwin_x64.tar.gz
