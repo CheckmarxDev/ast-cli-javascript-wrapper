@@ -175,6 +175,13 @@ export class CxWrapper {
         return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.SCAN_CONTAINERS_REALTIME);
     }
 
+    async iacRealtimeScanResults(sourceFile: string, engine: string): Promise<CxCommandOutput> {
+        const commands: string[] = [CxConstants.CMD_SCAN, CxConstants.CMD_IAC_REALTIME, CxConstants.SOURCE, sourceFile, CxConstants.ENGINE, engine];
+        commands.push(...this.initializeCommands(false));
+        const exec = new ExecutionService();
+        return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.SCAN_IAC);
+    }
+
     async secretsScanResults(sourceFile: string, ignoredFilePath?: string): Promise<CxCommandOutput> {
     const commands: string[] = [
         CxConstants.CMD_SCAN,
