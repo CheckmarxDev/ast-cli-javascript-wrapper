@@ -1,0 +1,17 @@
+[
+  {
+    "FilePath": "src/tests/data/Dockerfile",
+    "SimilarityID": "204fc29cbec21db48abe962c6ede10cfeced76de22128c5ffdde928f3a0455d3",
+    "Title": "APT-GET Missing Flags To Avoid Manual Input"
+  },
+   {
+    "ImageName": "openjdk",
+    "ImageTag": "11.0.1-jre-slim-stretch",
+    "FilePath": "Dockerfile"
+  },
+  {
+    "FileName": "python-vul-file.py",
+    "Line": 56,
+    "RuleID": 4009
+  }
+]

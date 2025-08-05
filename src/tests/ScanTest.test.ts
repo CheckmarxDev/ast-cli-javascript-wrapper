@@ -3,6 +3,9 @@ import { CxCommandOutput } from "../main/wrapper/CxCommandOutput";
 import { CxParamType } from "../main/wrapper/CxParamType";
 import { BaseTest } from "./BaseTest";
 import {OssPackage} from "./data/ossTypes";
+import CxIacResult from "../main/iacRealtime/CxIac";
+import CxContainerRealtimeResult from "../main/containersRealtime/CxContainerRealtime";
+import CxAsca from '../main/asca/CxAsca';
 
 describe("ScanCreate cases", () => {
     const cxScanConfig = new BaseTest();
@@ -229,7 +232,7 @@ describe("ScanCreate cases", () => {
 
     it('ScanContainersRealtime Successful case', async () => {
         const wrapper = new CxWrapper(cxScanConfig);
-        const cxCommandOutput: CxCommandOutput = await wrapper.containersRealtimeScanResults("src/tests/data/Dockerfile");
+        const cxCommandOutput: CxCommandOutput = await wrapper.containersRealtimeScanResults("src/tests/data/Dockerfile", "");
         console.log("Json object from scanContainersRealtime successful case: " + JSON.stringify(cxCommandOutput));
         expect(cxCommandOutput.payload).toBeDefined();
         expect(cxCommandOutput.exitCode).toBe(0);
@@ -237,11 +240,76 @@ describe("ScanCreate cases", () => {
 
     it.skip('ScanIacRealtime Successful case', async () => {
         const wrapper = new CxWrapper(cxScanConfig);
-        const cxCommandOutput: CxCommandOutput = await wrapper.iacRealtimeScanResults("src/tests/data/Dockerfile", "docker");
+        const cxCommandOutput: CxCommandOutput = await wrapper.iacRealtimeScanResults("src/tests/data/Dockerfile", "docker","");
         console.log("Json object from scanIacRealtime successful case: " + JSON.stringify(cxCommandOutput));
         expect(cxCommandOutput.payload).toBeDefined();
         expect(cxCommandOutput.exitCode).toBe(0);
     });
+
+
+
+    it.skip('ScanIacRealtime with ignore file should filter results', async () => {
+    const wrapper = new CxWrapper(cxScanConfig);
+    const sourceFile = "src/tests/data/Dockerfile";
+    const ignoredFile = "src/tests/data/ignoredIacContainersAsca";
+
+    const cxCommandOutput: CxCommandOutput = await wrapper.iacRealtimeScanResults(sourceFile, "docker", ignoredFile);
+
+    expect(cxCommandOutput.exitCode).toBe(0);
+    expect(cxCommandOutput.payload).toBeDefined();
+
+    const findings = CxIacResult.parseResult(cxCommandOutput.payload);
+
+    console.log("Filtered IAC findings:", findings);
+
+    expect(findings.length).toBe(3);
+});
+
+
+it.skip('ScanContainersRealtime with ignored image should filter result', async () => {
+    const wrapper = new CxWrapper(cxScanConfig);
+    const sourceFile = "tsc/tests/data/Dockerfile";
+    const ignoredFile = "tsc/tests/data/ignoredIacContainersAsca.json";
+
+    const cxCommandOutput: CxCommandOutput = await wrapper.containersRealtimeScanResults(sourceFile, ignoredFile);
+
+    expect(cxCommandOutput.exitCode).toBe(0);
+    expect(cxCommandOutput.payload).toBeDefined();
+
+    const parsedResults = CxContainerRealtimeResult.parseResult(cxCommandOutput.payload[0]);
+
+    console.log("Filtered container results:", parsedResults);
+
+    expect(parsedResults.length).toBe(0);
+});
+
+it.skip('ScanAsca with ignore file should filter one result', async () => {
+    const wrapper = new CxWrapper(cxScanConfig);
+
+    const sourcePath = "tsc/tests/data/python-vul-file.py";
+    const ignoreFile = "tsc/tests/data/ignoredIacContainersAsca.json";
+
+    const cxCommandOutput: CxCommandOutput = await wrapper.scanAsca(
+        sourcePath,
+        false,
+        null,
+        ignoreFile
+    );
+
+    expect(cxCommandOutput.exitCode).toBe(0);
+    expect(cxCommandOutput.payload).toBeDefined();
+
+    const parsed = CxAsca.parseScan(cxCommandOutput.payload[0]);
+    console.log("Filtered ASCA results:", parsed.scanDetails);
+
+    expect(parsed.status).toBe(true);
+    expect(Array.isArray(parsed.scanDetails)).toBe(true);
+
+
+    expect(parsed.scanDetails.length).toBe(5);
+});
+
+
 
 });
 
