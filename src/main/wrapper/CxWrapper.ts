@@ -127,27 +127,38 @@ export class CxWrapper {
         return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.SCAN_TYPE);
     }
 
-    async scanAsca(sourceFile: string, updateVersion = false, agent?: string | null): Promise<CxCommandOutput> {
-        const commands: string[] = [CxConstants.CMD_SCAN, CxConstants.CMD_ASCA, CxConstants.SOURCE_FILE, sourceFile];
+   async scanAsca(
+    sourceFile: string,
+    updateVersion = false,
+    agent?: string | null,
+    ignoredFilePath?: string
+): Promise<CxCommandOutput> {
+    const commands: string[] = [
+        CxConstants.CMD_SCAN,
+        CxConstants.CMD_ASCA,
+        CxConstants.SOURCE_FILE,
+        sourceFile
+    ];
 
-        if (updateVersion) {
-            commands.push(CxConstants.ASCA_UPDATE_VERSION);
-        }
-        if (agent) {
-            commands.push(CxConstants.AGENT);
-            commands.push(agent);
-        }
-        else {
-            commands.push(CxConstants.AGENT);
-            // if we don't send any parameter in the flag
-            // then in the cli takes the default and this is not true
-            commands.push('"js-wrapper"');
-        }
-
-        commands.push(...this.initializeCommands(false));
-        const exec = new ExecutionService();
-        return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.SCAN_ASCA);
+    if (updateVersion) {
+        commands.push(CxConstants.ASCA_UPDATE_VERSION);
     }
+
+    if (agent) {
+        commands.push(CxConstants.AGENT, agent);
+    } else {
+        commands.push(CxConstants.AGENT, '"js-wrapper"');
+    }
+
+    if (ignoredFilePath) {
+        commands.push(CxConstants.IGNORE__FILE_PATH, ignoredFilePath);
+    }
+
+    commands.push(...this.initializeCommands(false));
+
+    const exec = new ExecutionService();
+    return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.SCAN_ASCA);
+}
 
     async ossScanResults(sourceFile: string, ignoredFilePath?: string): Promise<CxCommandOutput> {
     const commands: string[] = [
@@ -168,19 +179,52 @@ export class CxWrapper {
     return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.SCAN_OSS);
 }
 
-    async containersRealtimeScanResults(sourceFile: string): Promise<CxCommandOutput> {
-        const commands: string[] = [CxConstants.CMD_SCAN, CxConstants.CMD_CONTAINERS_REALTIME, CxConstants.SOURCE, sourceFile];
-        commands.push(...this.initializeCommands(false));
-        const exec = new ExecutionService();
-        return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.SCAN_CONTAINERS_REALTIME);
+  async containersRealtimeScanResults(
+    sourceFile: string,
+    ignoredFilePath?: string
+): Promise<CxCommandOutput> {
+    const commands: string[] = [
+        CxConstants.CMD_SCAN,
+        CxConstants.CMD_CONTAINERS_REALTIME,
+        CxConstants.SOURCE,
+        sourceFile
+    ];
+
+    if (ignoredFilePath) {
+        commands.push(CxConstants.IGNORE__FILE_PATH);
+        commands.push(ignoredFilePath);
     }
 
-    async iacRealtimeScanResults(sourceFile: string, engine: string): Promise<CxCommandOutput> {
-        const commands: string[] = [CxConstants.CMD_SCAN, CxConstants.CMD_IAC_REALTIME, CxConstants.SOURCE, sourceFile, CxConstants.ENGINE, engine];
-        commands.push(...this.initializeCommands(false));
-        const exec = new ExecutionService();
-        return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.SCAN_IAC);
+    commands.push(...this.initializeCommands(false));
+
+    const exec = new ExecutionService();
+    return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.SCAN_CONTAINERS_REALTIME);
+}
+
+  async iacRealtimeScanResults(
+    sourceFile: string,
+    engine: string,
+    ignoredFilePath?: string
+): Promise<CxCommandOutput> {
+    const commands: string[] = [
+        CxConstants.CMD_SCAN,
+        CxConstants.CMD_IAC_REALTIME,
+        CxConstants.SOURCE,
+        sourceFile,
+        CxConstants.ENGINE,
+        engine
+    ];
+
+    if (ignoredFilePath) {
+        commands.push(CxConstants.IGNORE__FILE_PATH);
+        commands.push(ignoredFilePath);
     }
+
+    commands.push(...this.initializeCommands(false));
+
+    const exec = new ExecutionService();
+    return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.SCAN_IAC);
+}
 
     async secretsScanResults(sourceFile: string, ignoredFilePath?: string): Promise<CxCommandOutput> {
     const commands: string[] = [
