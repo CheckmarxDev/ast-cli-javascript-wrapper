@@ -6,8 +6,6 @@ export default class CxIacResult {
     similarityID: string;
     filepath: string;
     severity: CxRealtimeEngineStatus;
-    expectedValue: string;
-    actualValue: string;
     locations: { line: number, startIndex: number, endIndex: number }[];
 
     static parseResult(resultObject: any): CxIacResult[] {
@@ -20,8 +18,6 @@ export default class CxIacResult {
                 iacResult.similarityID = member.SimilarityID;
                 iacResult.filepath = member.FilePath;
                 iacResult.severity = member.Severity as CxRealtimeEngineStatus;
-                iacResult.expectedValue = member.ExpectedValue;
-                iacResult.actualValue = member.ActualValue;
                 iacResult.locations = Array.isArray(member.Locations)
                     ? member.Locations.map((l: any) => ({
                         line: l.Line,
