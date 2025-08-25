@@ -216,7 +216,7 @@ describe("ScanCreate cases", () => {
         expect(cxCommandOutput.exitCode).toBe(0);
     });
 
-    it.('ScanSecrets with ignore file filters the result', async () => {
+    it('ScanSecrets with ignore file filters the result', async () => {
     const wrapper = new CxWrapper(cxScanConfig);
     const cxCommandOutput: CxCommandOutput = await wrapper.secretsScanResults(
         "src/tests/data/secret-exposed.txt",
