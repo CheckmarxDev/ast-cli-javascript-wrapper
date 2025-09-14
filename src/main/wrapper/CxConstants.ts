@@ -122,5 +122,8 @@ export enum CxConstants {
     AI_PROVIDER = "--ai-provider",
     TYPE = "--type",
     SUB_TYPE = "--sub-type",
-    PROBLEM_SEVERITY = "--problem-severity"
+    PROBLEM_SEVERITY = "--problem-severity",
+    SCAN_TYPE_FLAG = "--scan-type",
+    STATUS = "--status",
+    TOTAL_COUNT = "--total-count",
 }

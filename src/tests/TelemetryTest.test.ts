@@ -5,7 +5,7 @@ import { BaseTest } from "./BaseTest";
 describe("Telemetry cases", () => {
     const cxScanConfig = new BaseTest();
 
-    it.skip('TelemetryAIEvent Successful case with minimal parameters', async () => {
+    it('TelemetryAIEvent Successful case with minimal parameters - ai log', async () => {
         const wrapper = new CxWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput = await wrapper.telemetryAIEvent(
             "Cursor", 
@@ -13,14 +13,34 @@ describe("Telemetry cases", () => {
             "click",  
             "ast-results.viewPackageDetails",
             "secrets",   
-            "high"    
+            "high",
+            "",
+            "",
+            0
+        );
+        console.log("Json object from telemetryAIEvent successful case: " + JSON.stringify(cxCommandOutput));
+        expect(cxCommandOutput.exitCode).toBe(0);
+    });
+
+    it('TelemetryAIEvent Successful case with minimal parameters - detection log', async () => {
+        const wrapper = new CxWrapper(cxScanConfig);
+        const cxCommandOutput: CxCommandOutput = await wrapper.telemetryAIEvent(
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "asca",
+            "Critical",
+            10
         );
         console.log("Json object from telemetryAIEvent successful case: " + JSON.stringify(cxCommandOutput));
         expect(cxCommandOutput.exitCode).toBe(0);
     });
 
 
-    it.skip('TelemetryAIEvent Successful case with edge case parameters', async () => {
+    it('TelemetryAIEvent Successful case with edge case parameters', async () => {
         const wrapper = new CxWrapper(cxScanConfig);
         const cxCommandOutput: CxCommandOutput = await wrapper.telemetryAIEvent(
             "",              
@@ -28,9 +48,12 @@ describe("Telemetry cases", () => {
             "",
             "",             
             "",          
-            ""       
+            "",
+            "",
+            "",
+            0
         );
         console.log("Json object from telemetryAIEvent with empty parameters: " + JSON.stringify(cxCommandOutput));
-        expect(typeof cxCommandOutput.exitCode).toBe(0);
+        expect(cxCommandOutput.exitCode).toBe(0);
     });
 });
