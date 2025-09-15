@@ -530,7 +530,7 @@ export class CxWrapper {
         return new ExecutionService().executeCommands(this.config.pathToExecutable, commands, CxConstants.MASK_TYPE);
     }
 
-    telemetryAIEvent(aiProvider: string, agent: string, eventType: string, subType: string, engine: string, problemSeverity: string): Promise<CxCommandOutput> {
+    telemetryAIEvent(aiProvider: string, agent: string, eventType: string, subType: string, engine: string, problemSeverity: string, scanType: string, status: string, totalCount: number): Promise<CxCommandOutput> {
         const commands: string[] = [
             CxConstants.TELEMETRY,
             CxConstants.SUB_CMD_TELEMETRY_AI,
@@ -539,7 +539,10 @@ export class CxWrapper {
             CxConstants.TYPE, eventType,
             CxConstants.SUB_TYPE, subType,
             CxConstants.ENGINE, engine,
-            CxConstants.PROBLEM_SEVERITY, problemSeverity
+            CxConstants.PROBLEM_SEVERITY, problemSeverity,
+            CxConstants.SCAN_TYPE_FLAG, scanType,
+            CxConstants.STATUS, status,
+            CxConstants.TOTAL_COUNT, totalCount.toString()
         ];
         commands.push(...this.initializeCommands(false));
         const exec = new ExecutionService();
