@@ -38,6 +38,7 @@ It contains technology neutral repository interfaces as well as a metadata model
 
 Add the following dependency:
 
+
 ```     
 "dependencies": {
     "@checkmarxdev/ast-cli-javascript-wrapper": "{version}"
