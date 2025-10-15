@@ -194,6 +194,7 @@ export class ExecutionService {
         cxCommandOutput.exitCode = code;
         if (stderr) {
             cxCommandOutput.status = stderr;
+            cxCommandOutput.stderr = stderr;
         }
         if (stdout) {
             const stdoutSplit = stdout.split('\n');

@@ -16,6 +16,6 @@ describe("LearnMoreDescriptions cases",() => {
         const auth = new CxWrapper(cxScanConfig);
         const data = await auth.learnMore("")
         const cxCommandOutput: CxCommandOutput = data;
-        expect(cxCommandOutput.status).toBe("Value of query-id is invalid");
+        expect(cxCommandOutput.stderr).toBe("Value of query-id is invalid");
     })
 })
