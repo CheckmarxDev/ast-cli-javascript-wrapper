@@ -14,9 +14,8 @@ describe("LearnMoreDescriptions cases",() => {
     
     it('LearnMoreDescriptions Failure case', async () => {
         const auth = new CxWrapper(cxScanConfig);
-        const queryId = "";
-        const data = await auth.learnMore(queryId !== undefined? queryId : "")
+        const data = await auth.learnMore("")
         const cxCommandOutput: CxCommandOutput = data;
-        expect(cxCommandOutput.status).toBe("Value of query-id is invalid\n");
+        expect(cxCommandOutput.status).toBe("Value of query-id is invalid");
     })
 })
