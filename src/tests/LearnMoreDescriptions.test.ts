@@ -19,6 +19,6 @@ describe("LearnMoreDescriptions cases",() => {
         const data = await auth.learnMore("")
         const cxCommandOutput: CxCommandOutput = data;
         console.log("cxCommandOutput (failure case):", cxCommandOutput);
-        expect(cxCommandOutput.status).toBe("Value of query-id is invalid");
+        expect(cxCommandOutput.status.trim()).toBe("Value of query-id is invalid");
     })
 })
