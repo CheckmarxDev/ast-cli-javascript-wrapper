@@ -26,6 +26,7 @@ import CxAsca from "../asca/CxAsca";
 
 let skipValue = false;
 const fileSourceFlag = "--file-source"
+const scaResolverParamsFlag = "--sca-resolver-params"
 
 function isJsonString(s: string) {
     try {
@@ -53,12 +54,14 @@ function transform(n:string) {
         return r;
     }
     // If the current string is "--file-source", set the flag
-    if (n === fileSourceFlag) {
+     if (n === fileSourceFlag || n === "-s" || n === scaResolverParamsFlag) {
+        skipValue = true;
+    } {
         skipValue = true;
     }
 
     let r = "";
-    if(n) r = n.replace(/"/g, "").replace("/[, ]/g",",");
+    if(n) r = n.replace(/"'/g, "").replace("/[, ]/g",",");
     return r;
 }
 
