@@ -275,6 +275,16 @@ export class CxWrapper {
         return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.PROJECT_TYPE);
     }
 
+    async dastEnvironmentsList(filters: string): Promise<CxCommandOutput> {
+        const validated_filters = this.filterArguments(filters);
+        const commands: string[] = ([CxConstants.CMD_DAST_ENVIRONMENTS, CxConstants.SUB_CMD_LIST] as string[]).concat(
+          validated_filters
+        );
+        commands.push(...this.initializeCommands(true));
+        const exec = new ExecutionService();
+        return await exec.executeCommands(this.config.pathToExecutable, commands, CxConstants.DAST_ENVIRONMENT_TYPE);
+    }
+
     async projectBranches(projectId: string, filters: string): Promise<CxCommandOutput> {
         // Verify and add possible branch filter by name
         const validated_filters = this.filterArguments(CxConstants.BRANCH_NAME + filters)
